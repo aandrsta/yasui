@@ -130,4 +130,18 @@ class OrderController extends Controller
 
         return view('orders.show', compact('order', 'snapToken'));
     }
+
+    /**
+     * Display a listing of the user's orders.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
+    {
+        $orders = Order::where('user_id', auth()->id())
+            ->latest()
+            ->paginate(10);
+
+        return view('orders.index', compact('orders'));
+    }
 }

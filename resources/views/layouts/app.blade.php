@@ -268,14 +268,14 @@
                                 
                                 @if(auth()->user()->isAdmin())
                                     <li>
-                                        <a class="dropdown-item fw-semibold text-danger" href="{{ url('/admin') }}">
-                                            <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+                                        <a class="dropdown-item fw-semibold text-danger" href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-speedometer2 me-2"></i>Kelola Toko (Admin)
                                         </a>
                                     </li>
                                 @endif
                                 
                                 <li>
-                                    <a class="dropdown-item" href="{{ url('/orders') }}">
+                                    <a class="dropdown-item" href="{{ route('orders.index') }}">
                                         <i class="bi bi-receipt me-2"></i>Riwayat Pesanan
                                     </a>
                                 </li>

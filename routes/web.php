@@ -53,11 +53,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
-    // Order Routes (Detail pesanan)
+    // Order Routes (Daftar & Detail pesanan)
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
     // Rute Cek Status Pembayaran (Real-time Status Polling dari Midtrans API)
     Route::get('/orders/{order}/check-status', [PaymentController::class, 'checkStatus'])->name('orders.check-status');
+
+    // Rute Khusus Admin (Kelola Toko - Hanya bisa diakses oleh admin)
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
+        
+        // CRUD Produk Sederhana
+        Route::get('/products', [\App\Http\Controllers\Admin\AdminController::class, 'productsIndex'])->name('products.index');
+        Route::get('/products/create', [\App\Http\Controllers\Admin\AdminController::class, 'productsCreate'])->name('products.create');
+        Route::post('/products', [\App\Http\Controllers\Admin\AdminController::class, 'productsStore'])->name('products.store');
+        Route::get('/products/{product}/edit', [\App\Http\Controllers\Admin\AdminController::class, 'productsEdit'])->name('products.edit');
+        Route::put('/products/{product}', [\App\Http\Controllers\Admin\AdminController::class, 'productsUpdate'])->name('products.update');
+        Route::delete('/products/{product}', [\App\Http\Controllers\Admin\AdminController::class, 'productsDestroy'])->name('products.destroy');
+
+        // Kelola Pesanan Sederhana
+        Route::get('/orders', [\App\Http\Controllers\Admin\AdminController::class, 'ordersIndex'])->name('orders.index');
+        Route::patch('/orders/{order}/status', [\App\Http\Controllers\Admin\AdminController::class, 'ordersUpdateStatus'])->name('orders.update-status');
+    });
 });
 
 // Rute Webhook Midtrans (Publik, dipanggil oleh server Midtrans)
