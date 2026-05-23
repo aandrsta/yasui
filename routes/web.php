@@ -8,6 +8,7 @@ use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\OrderController;
+use App\Http\Controllers\Shop\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,4 +55,10 @@ Route::middleware('auth')->group(function () {
 
     // Order Routes (Detail pesanan)
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Rute Cek Status Pembayaran (Real-time Status Polling dari Midtrans API)
+    Route::get('/orders/{order}/check-status', [PaymentController::class, 'checkStatus'])->name('orders.check-status');
 });
+
+// Rute Webhook Midtrans (Publik, dipanggil oleh server Midtrans)
+Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
