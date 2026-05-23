@@ -1,0 +1,333 @@
+@extends('layouts.app')
+
+@section('title', 'Detail Pesanan #' . $order->order_number)
+
+@section('styles')
+<style>
+    /* Premium Minimalist Order Details Styling */
+    .order-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 2.5rem;
+        align-items: start;
+    }
+
+    @media (max-width: 991.98px) {
+        .order-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    .details-card {
+        background-color: var(--bg-main);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 2rem;
+    }
+
+    .badge-status {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge-status.pending {
+        background-color: #fef3c7;
+        color: #d97706;
+    }
+
+    .badge-status.processing {
+        background-color: #dbeafe;
+        color: #2563eb;
+    }
+
+    .badge-status.shipped {
+        background-color: #fae8ff;
+        color: #c026d3;
+    }
+
+    .badge-status.completed {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .badge-status.cancelled {
+        background-color: #fee2e2;
+        color: #dc2626;
+    }
+
+    .badge-payment {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge-payment.unpaid {
+        background-color: #fee2e2;
+        color: #dc2626;
+    }
+
+    .badge-payment.paid {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .badge-payment.failed {
+        background-color: #f3f4f6;
+        color: #4b5563;
+    }
+
+    .order-section-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--primary-color);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+        margin-top: 2rem;
+        margin-bottom: 1.25rem;
+        letter-spacing: -0.02em;
+    }
+
+    .order-section-title:first-of-type {
+        margin-top: 0;
+    }
+
+    .item-list-row {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--bg-subtle);
+    }
+
+    .item-list-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .item-img-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background-color: var(--bg-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .item-fallback-icon {
+        font-size: 1.5rem;
+        color: var(--text-muted);
+    }
+
+    .item-detail-info {
+        flex-grow: 1;
+        min-width: 0;
+    }
+
+    .item-title-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    .item-price-quantity {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 0.15rem;
+    }
+
+    .item-total-sub {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--primary-color);
+        text-align: right;
+    }
+
+    /* Side payment card */
+    .payment-action-card {
+        background-color: var(--bg-main);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 2rem;
+        position: sticky;
+        top: 100px;
+    }
+
+    .meta-data-box {
+        background-color: var(--bg-subtle);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .meta-row:last-child {
+        margin-bottom: 0;
+    }
+</style>
+@endsection
+
+@section('content')
+<!-- Back to Shopping -->
+<div class="mb-4">
+    <a href="{{ url('/products') }}" class="text-secondary small text-decoration-none d-inline-flex align-items-center gap-1">
+        <i class="bi bi-chevron-left small"></i>
+        <span>Kembali Belanja</span>
+    </a>
+</div>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1" style="letter-spacing: -0.03em;">Detail Pesanan</h1>
+        <p class="text-muted small mb-0">Nomor Pesanan: <strong class="text-dark">{{ $order->order_number }}</strong> · Dibuat pada {{ $order->created_at->format('d M Y, H:i') }}</p>
+    </div>
+    
+    <div class="d-flex align-items-center gap-2">
+        <!-- Order status badge -->
+        <span class="badge-status {{ $order->status }}">
+            <span class="indicator-dot" style="width:6px; height:6px; border-radius:50%; background-color:currentColor;"></span>
+            {{ ucfirst($order->status) }}
+        </span>
+        
+        <!-- Payment status badge -->
+        <span class="badge-payment {{ $order->payment_status }}">
+            {{ $order->payment_status === 'paid' ? 'Paid' : 'Unpaid' }}
+        </span>
+    </div>
+</div>
+
+<div class="order-grid">
+    <!-- Left Column: Ordered Items & Shipping Details -->
+    <div class="details-card shadow-sm">
+        <!-- Ordered Items -->
+        <h3 class="order-section-title mt-0"><i class="bi bi-cart3 me-2 text-secondary"></i>Daftar Barang Belanjaan</h3>
+        
+        <div class="mb-2">
+            @foreach($order->items as $item)
+                <div class="item-list-row">
+                    <!-- Image -->
+                    <div class="item-img-box">
+                        @if($item->product && $item->product->image && file_exists(public_path($item->product->image)))
+                            <img src="{{ asset($item->product->image) }}" alt="{{ $item->product_name }}" class="w-100 h-100 object-fit-cover">
+                        @else
+                            <div class="item-fallback-icon">
+                                @if($item->product && $item->product->category->slug === 'figures')
+                                    <i class="bi bi-box-seam"></i>
+                                @elseif($item->product && $item->product->category->slug === 'model-kits')
+                                    <i class="bi bi-tools"></i>
+                                @elseif($item->product && $item->product->category->slug === 'character-goods')
+                                    <i class="bi bi-gem"></i>
+                                @else
+                                    <i class="bi bi-hearts"></i>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="item-detail-info">
+                        @if($item->product)
+                            <a href="{{ url('/products/' . $item->product->slug) }}" class="item-title-name">{{ $item->product_name }}</a>
+                        @else
+                            <span class="item-title-name text-muted">{{ $item->product_name }}</span>
+                        @endif
+                        <div class="item-price-quantity">
+                            {{ 'Rp ' . number_format($item->price, 0, ',', '.') }} × {{ $item->quantity }}
+                        </div>
+                    </div>
+                    
+                    <!-- Subtotal -->
+                    <div class="item-total-sub">
+                        {{ $item->formatted_subtotal }}
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        
+        <!-- Shipping Details -->
+        <h3 class="order-section-title"><i class="bi bi-geo-alt me-2 text-secondary"></i>Informasi Pengiriman</h3>
+        
+        <div class="row g-3" style="font-size: 0.9rem;">
+            <div class="col-sm-6">
+                <span class="d-block text-muted small fw-semibold uppercase tracking-wider mb-1">Nama Penerima</span>
+                <span class="text-dark fw-bold">{{ $order->shipping_name }}</span>
+            </div>
+            
+            <div class="col-sm-6">
+                <span class="d-block text-muted small fw-semibold uppercase tracking-wider mb-1">Nomor Telepon</span>
+                <span class="text-dark">{{ $order->shipping_phone }}</span>
+            </div>
+            
+            <div class="col-12">
+                <span class="d-block text-muted small fw-semibold uppercase tracking-wider mb-1">Alamat Lengkap</span>
+                <span class="text-dark d-block bg-light p-3 rounded" style="line-height: 1.6; border: 1px solid var(--border-color);">{{ $order->shipping_address }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Total Price and Payment Actions (Midtrans integration ready) -->
+    <div class="payment-action-card shadow-sm">
+        <h3 class="summary-title">Ringkasan Pembayaran</h3>
+        
+        <div class="meta-data-box">
+            <div class="meta-row">
+                <span class="text-muted">Total Harga Barang</span>
+                <span class="fw-bold text-dark">{{ $order->formatted_total_price }}</span>
+            </div>
+            <div class="meta-row">
+                <span class="text-muted">Ongkos Pengiriman</span>
+                <span class="text-success fw-bold">Gratis</span>
+            </div>
+            <hr class="my-2" style="border-color: var(--border-color);">
+            <div class="meta-row" style="font-size: 1rem; font-weight: 700;">
+                <span class="text-dark">Total Tagihan</span>
+                <span class="text-dark">{{ $order->formatted_total_price }}</span>
+            </div>
+        </div>
+
+        @if($order->payment_status === 'unpaid')
+            <!-- Placeholder for Phase 5 Midtrans Snap Payment -->
+            <div class="text-center p-3 border border-warning rounded mb-4" style="background-color: #fffbeb; border-style: dashed !important;">
+                <i class="bi bi-clock-history fs-3 text-warning mb-2 d-block"></i>
+                <span class="small fw-semibold text-warning d-block">Menunggu Pembayaran</span>
+                <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Integrasi gerbang pembayaran Midtrans Snap akan diselesaikan di **Phase 5**.</p>
+            </div>
+            
+            <!-- Dummy Pay Button for simulation / next phase -->
+            <button disabled class="btn-minimal-accent w-100 py-3 d-inline-flex align-items-center justify-content-center gap-2 opacity-75 cursor-not-allowed">
+                <i class="bi bi-credit-card-2-back"></i>
+                <span>Bayar Sekarang (Sandbox)</span>
+            </button>
+        @else
+            <div class="text-center p-4 border border-success rounded bg-success bg-opacity-10 mb-0">
+                <i class="bi bi-patch-check-fill fs-2 text-success mb-2 d-block"></i>
+                <span class="fw-bold text-success d-block">Pembayaran Berhasil!</span>
+                <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Terima kasih atas pembelian Anda. Pesanan Anda akan segera diproses oleh penjual.</p>
+            </div>
+        @endif
+    </div>
+</div>
+@endsection
