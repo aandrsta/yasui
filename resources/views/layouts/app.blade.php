@@ -197,7 +197,7 @@
     </style>
     @yield('styles')
     
-    <!-- Google Analytics 4 (Wajib Dosen) -->
+    <!-- Google Analytics 4 -->
     @if(env('GA4_MEASUREMENT_ID') && env('GA4_MEASUREMENT_ID') !== 'G-placeholder')
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA4_MEASUREMENT_ID') }}"></script>

@@ -80,3 +80,7 @@ Route::middleware('auth')->group(function () {
 
 // Rute Webhook Midtrans (Publik, dipanggil oleh server Midtrans)
 Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
+
+// Rute Halaman Kebijakan Hukum (Wajib Dosen)
+Route::get('/terms-of-service', [\App\Http\Controllers\Shop\HomeController::class, 'terms'])->name('pages.terms');
+Route::get('/privacy-policy', [\App\Http\Controllers\Shop\HomeController::class, 'privacy'])->name('pages.privacy');

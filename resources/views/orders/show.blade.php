@@ -375,4 +375,27 @@
         };
     </script>
 @endif
+
+@if($order->payment_status === 'paid')
+    <script type="text/javascript">
+        // GA4 E-Commerce Tracking: purchase Event
+        if (typeof gtag === 'function') {
+            gtag("event", "purchase", {
+                transaction_id: "{{ $order->order_number }}",
+                value: {{ $order->total_price }},
+                currency: "IDR",
+                items: [
+                    @foreach($order->items as $item)
+                    {
+                        item_id: "{{ $item->product_id }}",
+                        item_name: "{{ $item->product_name }}",
+                        price: {{ $item->price }},
+                        quantity: {{ $item->quantity }}
+                    },
+                    @endforeach
+                ]
+            });
+        }
+    </script>
+@endif
 @endsection
