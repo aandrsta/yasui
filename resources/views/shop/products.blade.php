@@ -178,6 +178,28 @@
         background-color: #ffffff;
         border-color: var(--border-color);
     }
+
+    /* Centered Stacked Pagination */
+    .pagination-wrapper nav {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+    .pagination-wrapper nav > div {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+    }
+
+    .pagination-wrapper .pagination {
+        margin-top: 0.5rem;
+    }
 </style>
 @endsection
 
@@ -320,7 +342,7 @@
 
         <!-- Pagination Section -->
         @if($products->hasPages())
-            <div class="d-flex justify-content-center mt-5 pt-4 border-top border-light">
+            <div class="pagination-wrapper mt-5 pt-4 border-top border-light">
                 {{ $products->links() }}
             </div>
         @endif
