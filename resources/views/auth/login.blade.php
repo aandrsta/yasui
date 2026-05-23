@@ -103,7 +103,7 @@
                     </div>
                     
                     <!-- Submit Button -->
-                    <button type="submit" class="btn-minimal-primary w-100 py-2 fw-medium mb-3">Masuk</button>
+                    <button type="submit" class="btn-minimal-accent text-decoration-none ms-1 w-100 mb-3">Masuk</button>
                 </form>
                 
                 <!-- Footer Links -->
