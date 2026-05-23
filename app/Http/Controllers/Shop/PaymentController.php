@@ -8,10 +8,119 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
+    /**
+     * Check the real-time transaction status of an order directly from Midtrans API.
+     * Updates the database order state based on the fetched status.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function checkStatus(Order $order, \App\Services\MidtransService $midtransService)
+    {
+        // Security check: only allow order owner
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Aksi dilarang.');
+        }
+
+        try {
+            // Fetch transaction status from Midtrans API using the service wrapper
+            $status = $midtransService->getTransactionStatus($order->order_number);
+            
+            // Convert status object to array or get properties directly
+            $transactionStatus = isset($status->transaction_status) ? $status->transaction_status : null;
+            $paymentType = isset($status->payment_type) ? $status->payment_type : null;
+            $transactionId = isset($status->transaction_id) ? $status->transaction_id : null;
+            $fraudStatus = isset($status->fraud_status) ? $status->fraud_status : null;
+
+            if (!$transactionStatus) {
+                return redirect()->route('orders.show', $order->id)
+                    ->with('warning', 'Transaksi belum dibuat di Midtrans.');
+            }
+
+            // Map and update status
+            $paymentStatus = 'pending';
+            $flashType = 'success';
+            $flashMessage = 'Status pembayaran Anda sedang diverifikasi.';
+
+            DB::transaction(function () use ($transactionStatus, $paymentType, $transactionId, $fraudStatus, $order, $status, &$paymentStatus, &$flashType, &$flashMessage) {
+                if ($transactionStatus == 'capture') {
+                    if ($paymentType == 'credit_card') {
+                        if ($fraudStatus == 'accept') {
+                            $order->update([
+                                'payment_status' => Order::PAYMENT_PAID,
+                                'status' => Order::STATUS_PROCESSING
+                            ]);
+                            $paymentStatus = 'paid';
+                            $flashMessage = 'Pembayaran berhasil dikonfirmasi! Pesanan Anda sedang diproses.';
+                        }
+                    }
+                } elseif ($transactionStatus == 'settlement') {
+                    $order->update([
+                        'payment_status' => Order::PAYMENT_PAID,
+                        'status' => Order::STATUS_PROCESSING
+                    ]);
+                    $paymentStatus = 'paid';
+                    $flashMessage = 'Pembayaran berhasil dikonfirmasi! Pesanan Anda sedang diproses.';
+                } elseif ($transactionStatus == 'pending') {
+                    $order->update([
+                        'payment_status' => Order::PAYMENT_UNPAID,
+                        'status' => Order::STATUS_PENDING
+                    ]);
+                    $paymentStatus = 'pending';
+                    $flashType = 'warning';
+                    $flashMessage = 'Pembayaran masih tertunda. Segera selesaikan pembayaran Anda.';
+                } elseif (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
+                    // Only revert stock if the order wasn't already cancelled
+                    if ($order->status !== Order::STATUS_CANCELLED) {
+                        $order->load('items.product');
+                        foreach ($order->items as $item) {
+                            if ($item->product) {
+                                $item->product->increment('stock', $item->quantity);
+                            }
+                        }
+                    }
+
+                    $order->update([
+                        'payment_status' => Order::PAYMENT_FAILED,
+                        'status' => Order::STATUS_CANCELLED
+                    ]);
+                    $paymentStatus = 'failed';
+                    $flashType = 'error';
+                    $flashMessage = 'Pembayaran gagal, dibatalkan, atau kadaluwarsa.';
+                }
+
+                // Save or update payment details
+                Payment::updateOrCreate(
+                    ['order_id' => $order->id],
+                    [
+                        'transaction_id' => $transactionId,
+                        'payment_type' => $paymentType,
+                        'amount' => $order->total_price,
+                        'status' => $paymentStatus,
+                        'raw_response' => (array) $status,
+                    ]
+                );
+            });
+
+            $alertKey = $flashType === 'error' ? 'error' : ($flashType === 'warning' ? 'warning' : 'success');
+            return redirect()->route('orders.show', $order->id)->with($alertKey, $flashMessage);
+
+        } catch (\Exception $e) {
+            // Check if it is a 404 from Midtrans (Transaction not found)
+            if (str_contains($e->getMessage(), '404') || str_contains($e->getMessage(), 'does not exist')) {
+                return redirect()->route('orders.show', $order->id)
+                    ->with('warning', 'Silakan klik "Bayar Sekarang" terlebih dahulu untuk memulai pembayaran.');
+            }
+            
+            Log::error('Midtrans Check Status Error: ' . $e->getMessage());
+            return redirect()->route('orders.show', $order->id)
+                ->with('error', 'Gagal memeriksa status pembayaran ke Midtrans.');
+        }
+    }
+
     /**
      * Handle automated payment notifications (Webhook) from Midtrans.
      *
@@ -118,96 +227,6 @@ class PaymentController extends Controller
                 'status' => 'error',
                 'message' => 'Kesalahan internal server.'
             ], 500);
-        }
-    }
-
-    /**
-     * Local Simulator: Force trigger simulated successful payment webhook.
-     * Only works in local environment.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function simulateSuccess(Order $order)
-    {
-        // Security check: only allow in local development
-        if (config('app.env') !== 'local') {
-            abort(403, 'Aksi simulator ini dilarang di lingkungan produksi.');
-        }
-
-        try {
-            DB::transaction(function () use ($order) {
-                $order->update([
-                    'payment_status' => Order::PAYMENT_PAID,
-                    'status' => Order::STATUS_PROCESSING
-                ]);
-
-                Payment::updateOrCreate(
-                    ['order_id' => $order->id],
-                    [
-                        'transaction_id' => 'SIM-SUCCESS-' . strtoupper(Str::random(8)),
-                        'payment_type' => 'local_simulation',
-                        'amount' => $order->total_price,
-                        'status' => 'paid',
-                        'raw_response' => ['simulation' => 'success'],
-                    ]
-                );
-            });
-
-            return redirect()->route('orders.show', $order->id)->with('success', 'Simulasi Pembayaran Berhasil! Status pesanan kini LUNAS dan SEDANG DIPROSES.');
-
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal mensimulasikan pembayaran: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Local Simulator: Force trigger simulated failed/cancelled payment webhook.
-     * Only works in local environment.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function simulateFailure(Order $order)
-    {
-        // Security check: only allow in local development
-        if (config('app.env') !== 'local') {
-            abort(403, 'Aksi simulator ini dilarang di lingkungan produksi.');
-        }
-
-        try {
-            DB::transaction(function () use ($order) {
-                // Revert stock if not already cancelled
-                if ($order->status !== Order::STATUS_CANCELLED) {
-                    $order->load('items.product');
-                    foreach ($order->items as $item) {
-                        if ($item->product) {
-                            $item->product->increment('stock', $item->quantity);
-                        }
-                    }
-                }
-
-                $order->update([
-                    'payment_status' => Order::PAYMENT_FAILED,
-                    'status' => Order::STATUS_CANCELLED
-                ]);
-
-                Payment::updateOrCreate(
-                    ['order_id' => $order->id],
-                    [
-                        'transaction_id' => 'SIM-FAILED-' . strtoupper(Str::random(8)),
-                        'payment_type' => 'local_simulation',
-                        'amount' => $order->total_price,
-                        'status' => 'failed',
-                        'raw_response' => ['simulation' => 'failure'],
-                    ]
-                );
-            });
-
-            return redirect()->route('orders.show', $order->id)->with('error', 'Simulasi Pembayaran Gagal! Status pesanan kini BATAL dan stok barang dikembalikan.');
-
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal mensimulasikan kegagalan: ' . $e->getMessage());
         }
     }
 }

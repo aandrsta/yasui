@@ -56,9 +56,8 @@ Route::middleware('auth')->group(function () {
     // Order Routes (Detail pesanan)
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
-    // Rute Simulator Webhook Lokal (Hanya diaktifkan ketika APP_ENV=local)
-    Route::get('/orders/{order}/simulate-success', [PaymentController::class, 'simulateSuccess'])->name('orders.simulate-success');
-    Route::get('/orders/{order}/simulate-failure', [PaymentController::class, 'simulateFailure'])->name('orders.simulate-failure');
+    // Rute Cek Status Pembayaran (Real-time Status Polling dari Midtrans API)
+    Route::get('/orders/{order}/check-status', [PaymentController::class, 'checkStatus'])->name('orders.check-status');
 });
 
 // Rute Webhook Midtrans (Publik, dipanggil oleh server Midtrans)

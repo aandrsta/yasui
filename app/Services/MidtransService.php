@@ -65,4 +65,16 @@ class MidtransService
 
         return Snap::getSnapToken($params);
     }
+
+    /**
+     * Retrieve the transaction status from Midtrans API.
+     *
+     * @param  string  $orderNumber
+     * @return object
+     * @throws \Exception
+     */
+    public function getTransactionStatus($orderNumber)
+    {
+        return \Midtrans\Transaction::status($orderNumber);
+    }
 }

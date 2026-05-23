@@ -8,8 +8,10 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Services\MidtransService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Mockery;
 
 class ShopPaymentTest extends TestCase
 {
@@ -72,10 +74,28 @@ class ShopPaymentTest extends TestCase
     }
 
     /**
+     * Clean up Mockery after each test.
+     */
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
+    /**
      * Test that order detail page loads successfully even if Midtrans API fails (graceful degradation).
      */
     public function test_payment_page_loads_resiliently_on_token_failures(): void
     {
+        // Mock MidtransService to throw exceptions
+        $mockService = Mockery::mock(MidtransService::class);
+        $mockService->shouldReceive('getTransactionStatus')
+            ->andThrow(new \Exception('Midtrans API is down'));
+        $mockService->shouldReceive('getSnapToken')
+            ->andThrow(new \Exception('Token generation failed'));
+
+        $this->app->instance(MidtransService::class, $mockService);
+
         $response = $this->actingAs($this->user)
             ->get('/orders/' . $this->order->id);
 
@@ -83,6 +103,95 @@ class ShopPaymentTest extends TestCase
         $response->assertViewIs('orders.show');
         $response->assertSee($this->order->order_number);
         $response->assertSee('Menunggu Pembayaran');
+    }
+
+    /**
+     * Test that checking status of a successful payment updates order to Paid.
+     */
+    public function test_check_status_successful_payment_update(): void
+    {
+        // Mock MidtransService to return settlement status
+        $mockService = Mockery::mock(MidtransService::class);
+        $mockService->shouldReceive('getTransactionStatus')
+            ->with($this->order->order_number)
+            ->once()
+            ->andReturn((object)[
+                'transaction_status' => 'settlement',
+                'payment_type' => 'bank_transfer',
+                'transaction_id' => 'midtrans-tx-12345',
+                'fraud_status' => null,
+                'gross_amount' => '700000.00'
+            ]);
+
+        $this->app->instance(MidtransService::class, $mockService);
+
+        $response = $this->actingAs($this->user)
+            ->get('/orders/' . $this->order->id . '/check-status');
+
+        // Assert redirect with success flash message
+        $response->assertStatus(302);
+        $response->assertRedirect(route('orders.show', $this->order->id));
+        $response->assertSessionHas('success');
+
+        // Assert order status in database was updated
+        $this->order->refresh();
+        $this->assertEquals(Order::PAYMENT_PAID, $this->order->payment_status);
+        $this->assertEquals(Order::STATUS_PROCESSING, $this->order->status);
+
+        // Assert payment record was logged
+        $this->assertDatabaseHas('payments', [
+            'order_id' => $this->order->id,
+            'transaction_id' => 'midtrans-tx-12345',
+            'payment_type' => 'bank_transfer',
+            'status' => 'paid',
+        ]);
+    }
+
+    /**
+     * Test that checking status of a failed payment updates status and reverts stock.
+     */
+    public function test_check_status_failed_payment_updates_status_and_reverts_stock(): void
+    {
+        // Assert initial stock is 5
+        $this->assertEquals(5, $this->product->stock);
+
+        // Mock MidtransService to return expire status
+        $mockService = Mockery::mock(MidtransService::class);
+        $mockService->shouldReceive('getTransactionStatus')
+            ->with($this->order->order_number)
+            ->once()
+            ->andReturn((object)[
+                'transaction_status' => 'expire',
+                'payment_type' => 'bank_transfer',
+                'transaction_id' => 'midtrans-tx-12345',
+                'fraud_status' => null,
+                'gross_amount' => '700000.00'
+            ]);
+
+        $this->app->instance(MidtransService::class, $mockService);
+
+        $response = $this->actingAs($this->user)
+            ->get('/orders/' . $this->order->id . '/check-status');
+
+        // Assert redirect with error flash message
+        $response->assertStatus(302);
+        $response->assertRedirect(route('orders.show', $this->order->id));
+        $response->assertSessionHas('error');
+
+        // Assert order status updated to failed and cancelled
+        $this->order->refresh();
+        $this->assertEquals(Order::PAYMENT_FAILED, $this->order->payment_status);
+        $this->assertEquals(Order::STATUS_CANCELLED, $this->order->status);
+
+        // Assert stock was reverted back (+1 because quantity was 1)
+        $this->product->refresh();
+        $this->assertEquals(6, $this->product->stock);
+
+        // Assert payment record logged
+        $this->assertDatabaseHas('payments', [
+            'order_id' => $this->order->id,
+            'status' => 'failed',
+        ]);
     }
 
     /**
