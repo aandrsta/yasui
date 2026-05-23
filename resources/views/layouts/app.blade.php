@@ -20,6 +20,8 @@
         :root {
             --primary-color: #0f172a; /* Slate 900 - Obsidian */
             --primary-hover: #1e293b; /* Slate 800 */
+            --accent-color: #f43f5e; /* Sakura Rose - Elegant & Sophisticated, not norak */
+            --accent-hover: #e11d48; /* Deep Sakura Rose */
             --text-main: #1e293b; /* Slate 800 */
             --text-muted: #64748b; /* Slate 500 */
             --border-color: #e2e8f0; /* Slate 200 */
@@ -65,7 +67,7 @@
         }
 
         .nav-link:hover, .nav-link.active {
-            color: var(--primary-color) !important;
+            color: var(--accent-color) !important;
         }
 
         /* Minimalist Buttons */
@@ -86,6 +88,23 @@
             color: #ffffff;
         }
 
+        .btn-minimal-accent {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: 1px solid var(--accent-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            padding: 8px 18px;
+            transition: var(--transition-base);
+        }
+
+        .btn-minimal-accent:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            color: #ffffff;
+        }
+
         .btn-minimal-secondary {
             background-color: transparent;
             color: var(--text-main);
@@ -102,6 +121,7 @@
             border-color: #cbd5e1;
             color: var(--text-main);
         }
+
 
         /* Search input */
         .search-input {
@@ -196,7 +216,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
-                <i class="bi bi-shop text-dark"></i>
+                <i class="bi bi-shop" style="color: var(--accent-color);"></i>
                 <span>YASUI</span>
             </a>
             
@@ -228,7 +248,7 @@
                                 $cartCount = \App\Models\Cart::where('user_id', auth()->id())->sum('quantity');
                             @endphp
                             @if($cartCount > 0)
-                                <span class="position-absolute top-1 start-75 translate-middle badge rounded-circle bg-dark" style="font-size: 0.65rem; padding: 3px 6px;">
+                                <span class="position-absolute top-1 start-75 translate-middle badge rounded-circle" style="font-size: 0.65rem; padding: 3px 6px; background-color: var(--accent-color) !important; color: white;">
                                     {{ $cartCount }}
                                 </span>
                             @endif
@@ -274,7 +294,7 @@
                         </div>
                     @else
                         <a href="{{ url('/login') }}" class="btn-minimal-secondary text-decoration-none">Masuk</a>
-                        <a href="{{ url('/register') }}" class="btn-minimal-primary text-decoration-none ms-1">Daftar</a>
+                        <a href="{{ url('/register') }}" class="btn-minimal-accent text-decoration-none ms-1">Daftar</a>
                     @endauth
                 </div>
             </div>
