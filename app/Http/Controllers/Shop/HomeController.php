@@ -27,4 +27,24 @@ class HomeController extends Controller
 
         return view('shop.home', compact('categories', 'featuredProducts'));
     }
+
+    /**
+     * Display the Terms of Service page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function terms()
+    {
+        return view('pages.terms');
+    }
+
+    /**
+     * Display the Privacy Policy page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function privacy()
+    {
+        return view('pages.privacy');
+    }
 }

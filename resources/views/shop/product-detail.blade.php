@@ -260,7 +260,7 @@
         <div>
             @if($product->stock > 0)
                 @auth
-                    <form action="{{ url('/cart') }}" method="POST" class="d-flex flex-column gap-3">
+                    <form id="add-to-cart-form" action="{{ url('/cart') }}" method="POST" class="d-flex flex-column gap-3">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         
@@ -353,3 +353,40 @@
     </section>
 @endif
 @endsection
+
+@section('scripts')
+<script>
+    // GA4 E-Commerce Tracking: view_item Event
+    if (typeof gtag === 'function') {
+        gtag("event", "view_item", {
+            currency: "IDR",
+            value: {{ $product->price }},
+            items: [{
+                item_id: "{{ $product->id }}",
+                item_name: "{{ $product->name }}",
+                price: {{ $product->price }},
+                item_category: "{{ $product->category->name }}",
+                quantity: 1
+            }]
+        });
+    }
+
+    // GA4 E-Commerce Tracking: add_to_cart Event
+    document.getElementById('add-to-cart-form')?.addEventListener('submit', function() {
+        if (typeof gtag === 'function') {
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            gtag("event", "add_to_cart", {
+                currency: "IDR",
+                value: {{ $product->price }} * quantity,
+                items: [{
+                    item_id: "{{ $product->id }}",
+                    item_name: "{{ $product->name }}",
+                    price: {{ $product->price }},
+                    item_category: "{{ $product->category->name }}",
+                    quantity: quantity
+                }]
+            });
+        }
+    });
+</script>
+
