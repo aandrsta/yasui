@@ -8,6 +8,7 @@ use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\OrderController;
+use App\Http\Controllers\Shop\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,4 +55,11 @@ Route::middleware('auth')->group(function () {
 
     // Order Routes (Detail pesanan)
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Rute Simulator Webhook Lokal (Hanya diaktifkan ketika APP_ENV=local)
+    Route::get('/orders/{order}/simulate-success', [PaymentController::class, 'simulateSuccess'])->name('orders.simulate-success');
+    Route::get('/orders/{order}/simulate-failure', [PaymentController::class, 'simulateFailure'])->name('orders.simulate-failure');
 });
+
+// Rute Webhook Midtrans (Publik, dipanggil oleh server Midtrans)
+Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');

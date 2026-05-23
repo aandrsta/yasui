@@ -308,19 +308,32 @@
             </div>
         </div>
 
-        @if($order->payment_status === 'unpaid')
-            <!-- Placeholder for Phase 5 Midtrans Snap Payment -->
+        @if($order->payment_status === 'unpaid' && $order->status !== \App\Models\Order::STATUS_CANCELLED)
+            <!-- Midtrans Snap Payment Box -->
             <div class="text-center p-3 border border-warning rounded mb-4" style="background-color: #fffbeb; border-style: dashed !important;">
                 <i class="bi bi-clock-history fs-3 text-warning mb-2 d-block"></i>
                 <span class="small fw-semibold text-warning d-block">Menunggu Pembayaran</span>
-                <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Integrasi gerbang pembayaran Midtrans Snap akan diselesaikan di **Phase 5**.</p>
+                <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Lakukan pembayaran aman menggunakan simulator Midtrans Sandbox di bawah ini.</p>
             </div>
             
-            <!-- Dummy Pay Button for simulation / next phase -->
-            <button disabled class="btn-minimal-accent w-100 py-3 d-inline-flex align-items-center justify-content-center gap-2 opacity-75 cursor-not-allowed">
-                <i class="bi bi-credit-card-2-back"></i>
-                <span>Bayar Sekarang (Sandbox)</span>
-            </button>
+            @if($snapToken)
+                <!-- Pay Button (Live Snap) -->
+                <button id="pay-button" class="btn-minimal-accent w-100 py-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm">
+                    <i class="bi bi-credit-card-2-back"></i>
+                    <span>Bayar Sekarang (Sandbox)</span>
+                </button>
+            @else
+                <button disabled class="btn-minimal-secondary w-100 py-3 d-inline-flex align-items-center justify-content-center gap-2 opacity-75 cursor-not-allowed">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <span>Gagal memuat pembayaran</span>
+                </button>
+            @endif
+        @elseif($order->status === \App\Models\Order::STATUS_CANCELLED)
+            <div class="text-center p-4 border border-danger rounded bg-danger bg-opacity-10 mb-0">
+                <i class="bi bi-x-circle-fill fs-2 text-danger mb-2 d-block"></i>
+                <span class="fw-bold text-danger d-block">Pesanan Dibatalkan</span>
+                <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Pesanan ini telah dibatalkan karena kegagalan pembayaran atau pembatalan manual.</p>
+            </div>
         @else
             <div class="text-center p-4 border border-success rounded bg-success bg-opacity-10 mb-0">
                 <i class="bi bi-patch-check-fill fs-2 text-success mb-2 d-block"></i>
@@ -328,6 +341,59 @@
                 <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Terima kasih atas pembelian Anda. Pesanan Anda akan segera diproses oleh penjual.</p>
             </div>
         @endif
+
+        <!-- Developer Local Webhook Simulator (Only visible in Local Environment) -->
+        @if(config('app.env') === 'local')
+            <div class="mt-4 p-3 border border-dark rounded" style="background-color: var(--bg-subtle); border-radius: 8px;">
+                <span class="d-block text-muted small fw-bold text-uppercase tracking-wider mb-2 text-center" style="font-size: 0.7rem;">
+                    <i class="bi bi-cpu"></i> Simulator Lokal (Admin Dev)
+                </span>
+                <p class="small text-muted text-center mb-3" style="font-size: 0.725rem; line-height: 1.3;">Gunakan tombol di bawah untuk mensimulasikan notifikasi Webhook Midtrans secara lokal tanpa Ngrok.</p>
+                
+                <div class="d-flex flex-column gap-2">
+                    @if($order->payment_status === 'unpaid' && $order->status !== \App\Models\Order::STATUS_CANCELLED)
+                        <a href="{{ route('orders.simulate-success', $order->id) }}" class="btn btn-outline-success btn-sm py-2 fw-semibold d-flex align-items-center justify-content-center gap-1">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Simulasi Bayar Lunas</span>
+                        </a>
+                        <a href="{{ route('orders.simulate-failure', $order->id) }}" class="btn btn-outline-danger btn-sm py-2 fw-semibold d-flex align-items-center justify-content-center gap-1">
+                            <i class="bi bi-x-circle"></i>
+                            <span>Simulasi Bayar Gagal</span>
+                        </a>
+                    @else
+                        <button disabled class="btn btn-outline-secondary btn-sm py-2 opacity-50 cursor-not-allowed text-center">
+                            Simulasi Tidak Aktif
+                        </button>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+@if($order->payment_status === 'unpaid' && $snapToken)
+    <!-- Midtrans Snap.js official library -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+    <script type="text/javascript">
+        document.getElementById('pay-button').onclick = function(){
+            // Trigger Snap popup window
+            snap.pay('{{ $snapToken }}', {
+                onSuccess: function(result){
+                    window.location.reload();
+                },
+                onPending: function(result){
+                    window.location.reload();
+                },
+                onError: function(result){
+                    window.location.reload();
+                },
+                onClose: function(){
+                    // User closed the popup without paying
+                }
+            });
+        };
+    </script>
+@endif
 @endsection
