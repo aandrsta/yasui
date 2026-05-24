@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
         // Set paginator to use Bootstrap 5 styling
         Paginator::useBootstrapFive();
 
+        // Paksa HTTPS di environment production agar berjalan sempurna di belakang Cloudflare Proxy
+        if (config('app.env') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Bypass SSL verification untuk Socialite Google di env local (mengatasi cURL error 60 di Windows/Laragon)
         if (config('app.env') === 'local') {
             $socialite = $this->app->make(\Laravel\Socialite\Contracts\Factory::class);
