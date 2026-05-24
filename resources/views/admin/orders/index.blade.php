@@ -79,9 +79,6 @@
         </div>
     </div>
 
-    <!-- Feedback Alerts -->
-    @include('components.flash-message')
-
     <!-- Orders List Card -->
     <div class="card shadow-sm border border-slate-200">
         <div class="card-header bg-white py-3">

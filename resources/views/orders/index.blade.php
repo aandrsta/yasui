@@ -51,9 +51,6 @@
     <h1 class="h3 fw-bold text-dark mb-1" style="letter-spacing: -0.03em;">Riwayat Pesanan Saya</h1>
     <p class="text-muted small mb-4">Pantau riwayat belanja merchandise anime Anda dan selesaikan pembayaran tertunda di sini.</p>
 
-    <!-- Include global flash message alerts -->
-    @include('components.flash-message')
-
     @if($orders->count() > 0)
         <div class="d-flex flex-column gap-3 mb-4">
             @foreach($orders as $order)

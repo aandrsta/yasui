@@ -73,8 +73,6 @@
         </div>
     </div>
 
-    <!-- Feedback Alerts -->
-    @include('components.flash-message')
 
     <!-- Products List Card -->
     <div class="card shadow-sm border border-slate-200">
