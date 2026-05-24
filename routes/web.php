@@ -64,6 +64,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
         
+        // CRUD Kategori
+        Route::get('/categories', [\App\Http\Controllers\Admin\AdminController::class, 'categoriesIndex'])->name('categories.index');
+        Route::get('/categories/create', [\App\Http\Controllers\Admin\AdminController::class, 'categoriesCreate'])->name('categories.create');
+        Route::post('/categories', [\App\Http\Controllers\Admin\AdminController::class, 'categoriesStore'])->name('categories.store');
+        Route::get('/categories/{category}/edit', [\App\Http\Controllers\Admin\AdminController::class, 'categoriesEdit'])->name('categories.edit');
+        Route::put('/categories/{category}', [\App\Http\Controllers\Admin\AdminController::class, 'categoriesUpdate'])->name('categories.update');
+        Route::delete('/categories/{category}', [\App\Http\Controllers\Admin\AdminController::class, 'categoriesDestroy'])->name('categories.destroy');
+
         // CRUD Produk Sederhana
         Route::get('/products', [\App\Http\Controllers\Admin\AdminController::class, 'productsIndex'])->name('products.index');
         Route::get('/products/create', [\App\Http\Controllers\Admin\AdminController::class, 'productsCreate'])->name('products.create');

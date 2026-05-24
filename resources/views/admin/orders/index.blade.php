@@ -28,6 +28,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Request::is('admin/categories*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
+                        <i class="bi bi-tags me-1"></i> Kelola Kategori
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link active" href="{{ route('admin.orders.index') }}">
                         <i class="bi bi-receipt me-1"></i> Kelola Pesanan
                     </a>

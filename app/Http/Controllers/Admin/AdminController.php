@@ -240,4 +240,132 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Status pesanan #' . $order->order_number . ' berhasil diubah menjadi: ' . ucfirst($newStatus));
     }
+
+    /**
+     * Display a listing of all categories for admin management.
+     */
+    public function categoriesIndex(Request $request)
+    {
+        $query = Category::withCount('products');
+
+        // Sort
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc'); // newest / default
+        }
+
+        $categories = $query->paginate(10)->withQueryString();
+
+        return view('admin.categories.index', compact('categories', 'sort'));
+    }
+
+    /**
+     * Show the form for creating a new category.
+     */
+    public function categoriesCreate()
+    {
+        return view('admin.categories.create');
+    }
+
+    /**
+     * Store a newly created category in database.
+     */
+    public function categoriesStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $data = $request->only(['name', 'description']);
+        $data['slug'] = Str::slug($request->name);
+
+        // Handle Image Upload
+        if ($request->hasFile('image')) {
+            $imageFile = $request->file('image');
+            $imageName = time() . '_' . Str::slug($request->name) . '.' . $imageFile->getClientOriginalExtension();
+            
+            // Ensure categories folder exists in public/images
+            $destinationPath = public_path('images/categories');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $imageFile->move($destinationPath, $imageName);
+            $data['image'] = 'images/categories/' . $imageName;
+        }
+
+        Category::create($data);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori baru berhasil ditambahkan!');
+    }
+
+    /**
+     * Show the form for editing the specified category.
+     */
+    public function categoriesEdit(Category $category)
+    {
+        return view('admin.categories.edit', compact('category'));
+    }
+
+    /**
+     * Update the specified category in database.
+     */
+    public function categoriesUpdate(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $data = $request->only(['name', 'description']);
+        $data['slug'] = Str::slug($request->name);
+
+        // Handle Image Upload
+        if ($request->hasFile('image')) {
+            // Delete old image file if exists
+            if ($category->image && file_exists(public_path($category->image))) {
+                @unlink(public_path($category->image));
+            }
+
+            $imageFile = $request->file('image');
+            $imageName = time() . '_' . Str::slug($request->name) . '.' . $imageFile->getClientOriginalExtension();
+            
+            $destinationPath = public_path('images/categories');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $imageFile->move($destinationPath, $imageName);
+            $data['image'] = 'images/categories/' . $imageName;
+        }
+
+        $category->update($data);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diperbarui!');
+    }
+
+    /**
+     * Remove the specified category from database.
+     */
+    public function categoriesDestroy(Category $category)
+    {
+        // Check if category has any products
+        if ($category->products()->count() > 0) {
+            return redirect()->back()->with('error', 'Kategori tidak dapat dihapus karena masih memiliki produk yang terkait!');
+        }
+
+        // Delete image file if exists
+        if ($category->image && file_exists(public_path($category->image))) {
+            @unlink(public_path($category->image));
+        }
+
+        $category->delete();
+
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus!');
+    }
 }
