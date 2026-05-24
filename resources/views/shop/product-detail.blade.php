@@ -10,7 +10,7 @@
         padding-top: 100%; /* 1:1 Aspect Ratio */
         background-color: var(--bg-subtle);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         overflow: hidden;
     }
 
@@ -34,11 +34,11 @@
         justify-content: center;
         color: var(--text-muted);
         font-size: 5rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        background: var(--bg-subtle);
     }
 
     .product-meta-category {
-        font-size: 0.8rem;
+        font-size: 0.725rem;
         font-weight: 700;
         text-transform: uppercase;
         color: var(--text-muted);
@@ -46,16 +46,17 @@
     }
 
     .product-detail-title {
-        font-weight: 800;
-        font-size: 2.25rem;
-        letter-spacing: -0.04em;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 2.8rem;
+        letter-spacing: -0.01em;
         color: var(--primary-color);
         line-height: 1.1;
     }
 
     .product-detail-price {
         font-weight: 700;
-        font-size: 1.75rem;
+        font-size: 1.6rem;
         color: var(--primary-color);
         letter-spacing: -0.02em;
     }
@@ -64,7 +65,7 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        font-size: 0.875rem;
+        font-size: 0.85rem;
         font-weight: 500;
     }
 
@@ -88,22 +89,22 @@
         text-align: center;
         border: 1px solid var(--border-color);
         background-color: var(--bg-subtle);
-        border-radius: 6px;
+        border-radius: 3px;
         font-weight: 600;
         font-size: 0.95rem;
     }
 
     .qty-input:focus {
         outline: none;
-        border-color: #94a3b8;
-        background-color: #ffffff;
+        border-color: var(--primary-color);
+        background-color: var(--bg-main);
     }
 
     /* Related Products Grid */
     .product-grid-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         overflow: hidden;
         transition: var(--transition-base);
         height: 100%;
@@ -112,7 +113,7 @@
     }
 
     .product-grid-card:hover {
-        border-color: #94a3b8;
+        border-color: var(--primary-color);
         transform: translateY(-2px);
     }
 
@@ -143,7 +144,7 @@
         justify-content: center;
         color: var(--text-muted);
         font-size: 2rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        background: var(--bg-subtle);
     }
 
     .product-card-body {
@@ -155,8 +156,8 @@
     }
 
     .product-category-label {
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.725rem;
+        font-weight: 700;
         text-transform: uppercase;
         color: var(--text-muted);
         letter-spacing: 0.05em;
@@ -178,12 +179,20 @@
     }
 
     .product-title-link:hover {
-        color: var(--primary-hover);
+        color: var(--accent-color);
     }
 
     .product-price {
         font-weight: 700;
         font-size: 1.05rem;
+        color: var(--primary-color);
+    }
+
+    .related-products-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 2.2rem;
+        letter-spacing: -0.01em;
         color: var(--primary-color);
     }
 </style>
@@ -303,7 +312,7 @@
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <span class="text-uppercase text-muted fw-semibold small letter-spacing-1">Produk Sejenis</span>
-                <h3 class="fw-bold text-dark mt-1 mb-0" style="letter-spacing: -0.03em;">Produk Terkait</h3>
+                <h3 class="related-products-title mt-1 mb-0">Produk Terkait</h3>
             </div>
         </div>
 

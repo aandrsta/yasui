@@ -6,7 +6,7 @@
 <style>
     /* Clean stark hero */
     .hero-section {
-        padding: 5rem 0;
+        padding: 6rem 0 5rem 0;
         background-color: var(--bg-main);
         border-bottom: 1px solid var(--border-color);
         margin-bottom: 4rem;
@@ -14,26 +14,34 @@
     }
 
     .hero-title {
-        font-weight: 800;
-        font-size: 3rem;
-        letter-spacing: -0.04em;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        font-size: 4rem;
+        letter-spacing: -0.01em;
         color: var(--primary-color);
-        line-height: 1.1;
+        line-height: 1.05;
+    }
+
+    .hero-title em {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 400;
+        color: var(--accent-color);
     }
 
     .hero-subtitle {
-        font-size: 1.125rem;
+        font-size: 1.1rem;
         color: var(--text-muted);
-        line-height: 1.6;
+        line-height: 1.7;
         font-weight: 400;
         max-width: 600px;
     }
 
     /* Minimalist Category Cards */
     .category-card {
-        background-color: var(--bg-main);
+        background-color: var(--bg-subtle);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         transition: var(--transition-base);
         height: 100%;
         display: flex;
@@ -42,27 +50,28 @@
     }
 
     .category-card:hover {
-        border-color: #94a3b8;
+        border-color: var(--primary-color);
         transform: translateY(-2px);
     }
 
     .category-icon-box {
         width: 48px;
         height: 48px;
-        border-radius: 6px;
-        background-color: var(--bg-subtle);
+        border-radius: 3px;
+        background-color: var(--bg-main);
         color: var(--primary-color);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
+        border: 1px solid var(--border-color);
     }
 
     /* Product Grid Cards */
     .product-grid-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         overflow: hidden;
         transition: var(--transition-base);
         height: 100%;
@@ -71,7 +80,7 @@
     }
 
     .product-grid-card:hover {
-        border-color: #94a3b8;
+        border-color: var(--primary-color);
         transform: translateY(-2px);
     }
 
@@ -101,8 +110,8 @@
         align-items: center;
         justify-content: center;
         color: var(--text-muted);
-        font-size: 2.5rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        font-size: 2rem;
+        background: var(--bg-subtle);
     }
 
     .product-card-body {
@@ -114,8 +123,8 @@
     }
 
     .product-category-label {
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.725rem;
+        font-weight: 700;
         text-transform: uppercase;
         color: var(--text-muted);
         letter-spacing: 0.05em;
@@ -123,7 +132,7 @@
     }
 
     .product-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--primary-color);
         margin-bottom: 0.5rem;
@@ -137,19 +146,20 @@
     }
 
     .product-title:hover {
-        color: var(--primary-hover);
+        color: var(--accent-color);
     }
 
     .product-price {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         color: var(--primary-color);
     }
 
     .section-title {
-        font-weight: 700;
-        font-size: 1.5rem;
-        letter-spacing: -0.03em;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 2.2rem;
+        letter-spacing: -0.01em;
         color: var(--primary-color);
     }
 </style>
@@ -161,7 +171,7 @@
     <div class="row align-items-center py-4">
         <div class="col-lg-7">
             <span class="text-uppercase text-muted fw-bold small letter-spacing-2" style="color: var(--accent-color) !important;">#YasuiHobbyShop</span>
-            <h1 class="hero-title mb-4 mt-2">Destinasi Pop Culture<br>Original & Premium.</h1>
+            <h1 class="hero-title mb-4 mt-2">Destinasi Pop Culture<br><em>Original</em> &amp; <em>Premium</em>.</h1>
             <p class="hero-subtitle mb-4">
                 Temukan koleksi kurasi anime figures, model kits, character goods, dan plushies otentik Jepang dengan standar kualitas terbaik untuk koleksi premium Anda.
             </p>

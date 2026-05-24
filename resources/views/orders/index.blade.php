@@ -7,19 +7,25 @@
     .order-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         transition: var(--transition-base);
     }
     .order-card:hover {
-        border-color: #cbd5e1;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 20px -5px rgba(30, 30, 29, 0.05);
+    }
+    .orders-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 2.2rem;
+        letter-spacing: -0.01em;
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container py-4" style="max-width: 900px;">
-    <h1 class="h3 fw-bold text-dark mb-1" style="letter-spacing: -0.03em;">Riwayat Pesanan Saya</h1>
+    <h1 class="orders-title text-dark mb-1">Riwayat Pesanan Saya</h1>
     <p class="text-muted small mb-4">Pantau riwayat belanja merchandise anime Anda dan selesaikan pembayaran tertunda di sini.</p>
 
     @if($orders->count() > 0)

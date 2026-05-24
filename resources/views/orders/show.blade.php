@@ -22,12 +22,13 @@
     .details-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         padding: 2rem;
     }
     .order-section-title {
-        font-weight: 700;
-        font-size: 1.05rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 1.3rem;
         color: var(--primary-color);
         border-bottom: 1px solid var(--border-color);
         padding-bottom: 0.5rem;
@@ -56,7 +57,7 @@
     .item-img-box {
         width: 60px;
         height: 60px;
-        border-radius: 6px;
+        border-radius: 3px;
         border: 1px solid var(--border-color);
         background-color: var(--bg-subtle);
         display: flex;
@@ -100,7 +101,7 @@
     .payment-action-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         padding: 2rem;
         position: sticky;
         top: 100px;
@@ -109,7 +110,7 @@
     .meta-data-box {
         background-color: var(--bg-subtle);
         border: 1px solid var(--border-color);
-        border-radius: 6px;
+        border-radius: 3px;
         padding: 1rem;
         margin-bottom: 1.5rem;
         font-size: 0.875rem;
@@ -123,6 +124,13 @@
 
     .meta-row:last-child {
         margin-bottom: 0;
+    }
+
+    .order-detail-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 2.2rem;
+        letter-spacing: -0.01em;
     }
 </style>
 @endsection
@@ -138,7 +146,7 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
     <div>
-        <h1 class="h3 fw-bold text-dark mb-1" style="letter-spacing: -0.03em;">Detail Pesanan</h1>
+        <h1 class="order-detail-title text-dark mb-1">Detail Pesanan</h1>
         <p class="text-muted small mb-0">Nomor Pesanan: <strong class="text-dark">{{ $order->order_number }}</strong> · Dibuat pada {{ $order->created_at->format('d M Y, H:i') }}</p>
     </div>
     

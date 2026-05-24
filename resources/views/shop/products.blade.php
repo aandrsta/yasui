@@ -22,9 +22,9 @@
 
     .filter-title {
         font-weight: 700;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
         color: var(--primary-color);
         margin-bottom: 1.25rem;
     }
@@ -41,7 +41,7 @@
     }
 
     .category-filter-link:hover, .category-filter-link.active {
-        color: var(--primary-color);
+        color: var(--accent-color);
         font-weight: 600;
     }
 
@@ -49,7 +49,7 @@
     .product-grid-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         overflow: hidden;
         transition: var(--transition-base);
         height: 100%;
@@ -58,7 +58,7 @@
     }
 
     .product-grid-card:hover {
-        border-color: #94a3b8;
+        border-color: var(--primary-color);
         transform: translateY(-2px);
     }
 
@@ -88,8 +88,8 @@
         align-items: center;
         justify-content: center;
         color: var(--text-muted);
-        font-size: 2.5rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        font-size: 2rem;
+        background: var(--bg-subtle);
     }
 
     .product-card-body {
@@ -101,8 +101,8 @@
     }
 
     .product-category-label {
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.725rem;
+        font-weight: 700;
         text-transform: uppercase;
         color: var(--text-muted);
         letter-spacing: 0.05em;
@@ -110,7 +110,7 @@
     }
 
     .product-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--primary-color);
         margin-bottom: 0.5rem;
@@ -124,12 +124,12 @@
     }
 
     .product-title:hover {
-        color: var(--primary-hover);
+        color: var(--accent-color);
     }
 
     .product-price {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         color: var(--primary-color);
     }
 
@@ -137,16 +137,29 @@
     .minimal-select {
         border: 1px solid var(--border-color);
         background-color: var(--bg-subtle);
-        border-radius: 6px;
-        font-size: 0.875rem;
+        border-radius: 3px;
+        font-size: 0.85rem;
         padding: 8px 12px;
         transition: var(--transition-base);
     }
 
     .minimal-select:focus {
         outline: none;
-        border-color: #94a3b8;
-        background-color: #ffffff;
+        border-color: var(--primary-color);
+        background-color: var(--bg-main);
+    }
+
+    .filter-sidebar h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        letter-spacing: -0.01em;
+    }
+    .col-lg-9 h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 2.2rem;
+        letter-spacing: -0.01em;
     }
 </style>
 @endsection

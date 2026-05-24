@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Yasui') — E-Commerce</title>
     
-    <!-- Google Fonts: Inter (Sangat bersih & profesional, standar industri) -->
+    <!-- Google Fonts: Cormorant Garamond & Instrument Sans & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Instrument+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,74 +18,80 @@
     
     <style>
         :root {
-            --primary-color: #0f172a; /* Slate 900 - Obsidian */
-            --primary-hover: #1e293b; /* Slate 800 */
-            --accent-color: #f43f5e; /* Sakura Rose - Elegant & Sophisticated, not norak */
-            --accent-hover: #e11d48; /* Deep Sakura Rose */
-            --text-main: #1e293b; /* Slate 800 */
-            --text-muted: #64748b; /* Slate 500 */
-            --border-color: #e2e8f0; /* Slate 200 */
-            --bg-main: #ffffff;
-            --bg-subtle: #f8fafc; /* Slate 50 */
-            --transition-base: all 0.2s ease-in-out;
+            --primary-color: #1e1e1d; /* Obsidian */
+            --primary-hover: #2f2f2e;
+            --accent-color: #a2384a; /* Sakura Rose / Deep Wine */
+            --accent-hover: #852b3a;
+            --text-main: #2b2a27; /* Charcoal */
+            --text-muted: #75726a; /* Warm Gray */
+            --border-color: #e7e4dc; /* Soft Hairline */
+            --bg-main: #fbfaf7; /* Warm Paper */
+            --bg-subtle: #f6f4ee; /* Subtle Cream */
+            --transition-base: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Instrument Sans', sans-serif;
             color: var(--text-main);
             background-color: var(--bg-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            letter-spacing: -0.011em;
+            letter-spacing: -0.01em;
+            line-height: 1.6;
         }
 
         /* Minimalist Navbar */
         .navbar {
             background-color: var(--bg-main);
             border-bottom: 1px solid var(--border-color);
-            padding-top: 1.25rem;
-            padding-bottom: 1.25rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
         .navbar-brand {
+            font-family: 'Cormorant Garamond', serif;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.6rem;
             color: var(--primary-color) !important;
-            letter-spacing: -0.03em;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
         .nav-link {
             font-weight: 500;
             color: var(--text-muted) !important;
-            font-size: 0.925rem;
+            font-size: 0.9rem;
             transition: var(--transition-base);
             padding: 6px 12px !important;
+            letter-spacing: -0.01em;
         }
 
         .nav-link:hover, .nav-link.active {
             color: var(--accent-color) !important;
         }
 
-        /* Minimalist Buttons */
+        /* Minimalist Buttons - Stark Flat & Sharp */
         .btn-minimal-primary {
             background-color: var(--primary-color);
-            color: #ffffff;
+            color: var(--bg-main);
             border: 1px solid var(--primary-color);
-            font-weight: 500;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 3px;
+            padding: 10px 22px;
             transition: var(--transition-base);
         }
 
         .btn-minimal-primary:hover {
             background-color: var(--primary-hover);
             border-color: var(--primary-hover);
-            color: #ffffff;
+            color: var(--bg-main);
         }
 
         .btn-minimal-accent {
@@ -93,9 +99,11 @@
             color: #ffffff;
             border: 1px solid var(--accent-color);
             font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            padding: 8px 18px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 3px;
+            padding: 10px 22px;
             transition: var(--transition-base);
         }
 
@@ -109,25 +117,27 @@
             background-color: transparent;
             color: var(--text-main);
             border: 1px solid var(--border-color);
-            font-weight: 500;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 3px;
+            padding: 10px 22px;
             transition: var(--transition-base);
         }
 
         .btn-minimal-secondary:hover {
             background-color: var(--bg-subtle);
-            border-color: #cbd5e1;
+            border-color: var(--text-main);
             color: var(--text-main);
         }
 
 
-        /* Search input */
+        /* Search input - Flat, Crisp */
         .search-input {
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.875rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
             padding: 8px 12px;
             background-color: var(--bg-subtle);
             transition: var(--transition-base);
@@ -135,18 +145,20 @@
         }
 
         .search-input:focus {
-            border-color: #94a3b8;
-            background-color: #ffffff;
+            border-color: var(--primary-color);
+            background-color: var(--bg-main);
             box-shadow: none;
             outline: none;
         }
 
-        /* Dropdown styling */
+        /* Dropdown styling - Flat, Zero Heavy Shadows */
         .dropdown-menu {
-            border-radius: 8px;
+            border-radius: 4px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            font-size: 0.875rem;
+            background-color: var(--bg-main);
+            box-shadow: 0 4px 20px -5px rgba(30, 30, 29, 0.08);
+            font-size: 0.85rem;
+            padding: 4px 0;
         }
 
         .dropdown-item {
@@ -157,16 +169,16 @@
 
         .dropdown-item:hover {
             background-color: var(--bg-subtle);
-            color: var(--primary-color);
+            color: var(--accent-color);
         }
 
-        /* Footer styling */
+        /* Footer styling - Editorial Stark */
         footer {
             margin-top: auto;
             background-color: var(--bg-subtle);
             border-top: 1px solid var(--border-color);
             color: var(--text-muted);
-            font-size: 0.875rem;
+            font-size: 0.85rem;
         }
 
         footer a {
@@ -179,20 +191,20 @@
             color: var(--primary-color);
         }
 
-        /* Custom Scrollbar */
+        /* Custom Scrollbar - Editorial Minimal */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #ffffff;
+            background: var(--bg-main);
         }
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: var(--border-color);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: var(--text-muted);
         }
 
         /* Unified Custom Pagination Style */
