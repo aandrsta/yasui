@@ -139,9 +139,9 @@
     </div>
 
         <!-- Pagination Section -->
-        @if($products->hasPages())
+        @if($orders->hasPages())
             <div class="pagination-wrapper mt-5 pt-4 border-top border-light">
-                {{ $products->links() }}
+                {{ $orders->links() }}
             </div>
         @endif
 </div>
