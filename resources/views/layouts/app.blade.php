@@ -198,15 +198,15 @@
     @yield('styles')
     
     <!-- Google Analytics 4 -->
-    @if(env('GA4_MEASUREMENT_ID') && env('GA4_MEASUREMENT_ID') !== 'G-placeholder')
+    @if(config('services.google.analytics_id') && config('services.google.analytics_id') !== 'G-placeholder')
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA4_MEASUREMENT_ID') }}"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', '{{ env('GA4_MEASUREMENT_ID') }}');
+            gtag('config', '{{ config('services.google.analytics_id') }}');
         </script>
     @endif
 </head>
