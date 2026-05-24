@@ -278,10 +278,16 @@
                             <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $product->stock }}" class="form-control qty-input px-2 py-2">
                         </div>
 
-                        <button type="submit" class="btn-minimal-accent py-3 w-100 d-inline-flex align-items-center justify-content-center gap-2">
-                            <i class="bi bi-bag-plus fs-5"></i>
-                            <span class="fw-semibold">Tambah ke Keranjang</span>
-                        </button>
+                        <div class="d-flex flex-column flex-sm-row gap-2 mt-2">
+                            <button type="submit" class="btn-minimal-secondary py-3 flex-fill d-inline-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-bag-plus fs-5"></i>
+                                <span class="fw-semibold">Tambah ke Keranjang</span>
+                            </button>
+                            <button type="submit" name="buy_now" value="1" class="btn-minimal-accent py-3 flex-fill d-inline-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-lightning-charge fs-5"></i>
+                                <span class="fw-semibold">Beli Sekarang</span>
+                            </button>
+                        </div>
                     </form>
                 @else
                     <div class="d-flex flex-column gap-3">

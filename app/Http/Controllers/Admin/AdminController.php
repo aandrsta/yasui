@@ -39,10 +39,27 @@ class AdminController extends Controller
     /**
      * Display a listing of all products for admin management.
      */
-    public function productsIndex()
+    public function productsIndex(Request $request)
     {
-        $products = Product::with('category')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $query = Product::with('category');
+
+        // Filter by Category
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_id', $request->category);
+        }
+
+        // Sort
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc'); // newest / default
+        }
+
+        $products = $query->paginate(10)->withQueryString();
+        $categories = Category::all();
+
+        return view('admin.products.index', compact('products', 'categories', 'sort'));
     }
 
     /**
@@ -163,10 +180,26 @@ class AdminController extends Controller
     /**
      * Display a listing of all customer orders.
      */
-    public function ordersIndex()
+    public function ordersIndex(Request $request)
     {
-        $orders = Order::with('user')->latest()->paginate(10);
-        return view('admin.orders.index', compact('orders'));
+        $query = Order::with('user');
+
+        // Filter by Status
+        if ($request->has('status') && in_array($request->status, ['pending', 'processing', 'shipped', 'completed', 'cancelled'])) {
+            $query->where('status', $request->status);
+        }
+
+        // Sort
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc'); // newest / default
+        }
+
+        $orders = $query->paginate(10)->withQueryString();
+        
+        return view('admin.orders.index', compact('orders', 'sort'));
     }
 
     /**

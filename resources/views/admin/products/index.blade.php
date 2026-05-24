@@ -61,6 +61,34 @@
         </div>
     </div>
 
+    <!-- Filters & Sorting Card -->
+    <div class="card mb-4 shadow-sm border border-slate-200">
+        <div class="card-body py-3">
+            <form action="{{ route('admin.products.index') }}" method="GET" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label for="category" class="form-label small fw-semibold text-muted mb-1">Filter Kategori</label>
+                    <select name="category" id="category" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                        <option value="">Semua Kategori</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label for="sort" class="form-label small fw-semibold text-muted mb-1">Urutan Produk</label>
+                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                        <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Terbaru (Newest / Latest)</option>
+                        <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Terlama (Oldest)</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-sm fw-semibold" style="font-size: 0.8rem; border-radius: 4px; padding: 7px 12px;">
+                        Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Products List Card -->
     <div class="card shadow-sm border border-slate-200">

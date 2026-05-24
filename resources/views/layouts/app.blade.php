@@ -314,23 +314,27 @@
                 
                 <div class="d-flex align-items-center gap-3">
                     <!-- Search Bar Minimal -->
+                    @if(!auth()->user()->isAdmin())
                     <form action="{{ url('/products') }}" method="GET" class="d-none d-md-flex">
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control search-input" placeholder="Cari produk...">
                     </form>
+                    @endif
                     
                     @auth
-                        <!-- Shopping Cart Link -->
-                        <a href="{{ url('/cart') }}" class="text-secondary position-relative p-2 hover-opacity" style="transition: var(--transition-base);">
-                            <i class="bi bi-bag fs-5 text-dark"></i>
-                            @php
-                                $cartCount = \App\Models\Cart::where('user_id', auth()->id())->sum('quantity');
-                            @endphp
-                            @if($cartCount > 0)
-                                <span class="position-absolute top-1 start-75 translate-middle badge rounded-circle" style="font-size: 0.65rem; padding: 3px 6px; background-color: var(--accent-color) !important; color: white;">
-                                    {{ $cartCount }}
-                                </span>
-                            @endif
-                        </a>
+                        @if(!auth()->user()->isAdmin())
+                            <!-- Shopping Cart Link -->
+                            <a href="{{ url('/cart') }}" class="text-secondary position-relative p-2 hover-opacity" style="transition: var(--transition-base);">
+                                <i class="bi bi-bag fs-5 text-dark"></i>
+                                @php
+                                    $cartCount = \App\Models\Cart::where('user_id', auth()->id())->sum('quantity');
+                                @endphp
+                                @if($cartCount > 0)
+                                    <span class="position-absolute top-1 start-75 translate-middle badge rounded-circle" style="font-size: 0.65rem; padding: 3px 6px; background-color: var(--accent-color) !important; color: white;">
+                                        {{ $cartCount }}
+                                    </span>
+                                @endif
+                            </a>
+                        @endif
                         
                         <!-- User Dropdown Menu -->
                         <div class="dropdown">
@@ -352,11 +356,13 @@
                                     </li>
                                 @endif
                                 
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('orders.index') }}">
-                                        <i class="bi bi-receipt me-2"></i>Riwayat Pesanan
-                                    </a>
-                                </li>
+                                @if(!auth()->user()->isAdmin())
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('orders.index') }}">
+                                            <i class="bi bi-receipt me-2"></i>Riwayat Pesanan
+                                        </a>
+                                    </li>
+                                @endif
                                 
                                 <li><hr class="dropdown-divider my-1"></li>
                                 

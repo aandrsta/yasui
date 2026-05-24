@@ -36,6 +36,37 @@
         </div>
     </div>
 
+    <!-- Filters & Sorting Card -->
+    <div class="card mb-4 shadow-sm border border-slate-200">
+        <div class="card-body py-3">
+            <form action="{{ route('admin.orders.index') }}" method="GET" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label for="status" class="form-label small fw-semibold text-muted mb-1">Filter Status Pengiriman</label>
+                    <select name="status" id="status" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Processing</option>
+                        <option value="shipped" {{ request('status') === 'shipped' ? 'selected' : '' }}>Shipped</option>
+                        <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label for="sort" class="form-label small fw-semibold text-muted mb-1">Urutan Pesanan</label>
+                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                        <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Terbaru (Newest / Latest)</option>
+                        <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Terlama (Oldest)</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary btn-sm fw-semibold" style="font-size: 0.8rem; border-radius: 4px; padding: 7px 12px;">
+                        Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Orders List Card -->
     <div class="card shadow-sm border border-slate-200">
         <div class="card-header bg-white py-3">

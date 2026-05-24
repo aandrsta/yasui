@@ -254,10 +254,17 @@
         </div>
 
         @if($order->payment_status === 'unpaid' && $order->status !== \App\Models\Order::STATUS_CANCELLED)
-            <!-- Midtrans Snap Payment Box -->
+            <!-- Midtrans Snap Payment Box with Countdown Timer -->
             <div class="text-center p-3 border border-warning rounded mb-4" style="background-color: #fffbeb; border-style: dashed !important;">
                 <i class="bi bi-clock-history fs-3 text-warning mb-2 d-block"></i>
                 <span class="small fw-semibold text-warning d-block">Menunggu Pembayaran</span>
+                
+                <!-- Countdown Timer -->
+                <div class="my-3 p-2 bg-white rounded border border-warning border-opacity-35 shadow-sm">
+                    <span class="d-block small text-muted text-uppercase tracking-wider" style="font-size: 0.7rem; letter-spacing: 0.05em; font-weight: 500;">Batas Waktu Pembayaran</span>
+                    <span id="countdown" class="fs-4 fw-bold" style="color: var(--accent-color); font-family: 'Space Grotesk', sans-serif;">00:00:00</span>
+                </div>
+
                 <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Lakukan pembayaran aman menggunakan simulator Midtrans Sandbox. Jika sudah membayar, klik tombol cek status di bawah.</p>
             </div>
             
@@ -297,27 +304,64 @@
 @endsection
 
 @section('scripts')
-@if($order->payment_status === 'unpaid' && $snapToken)
-    <!-- Midtrans Snap.js official library -->
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+@if($order->payment_status === 'unpaid')
+    @if($snapToken)
+        <!-- Midtrans Snap.js official library -->
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+        <script type="text/javascript">
+            document.getElementById('pay-button').onclick = function(){
+                // Trigger Snap popup window
+                snap.pay('{{ $snapToken }}', {
+                    onSuccess: function(result){
+                        window.location.href = "{{ route('orders.check-status', $order->id) }}";
+                    },
+                    onPending: function(result){
+                        window.location.href = "{{ route('orders.check-status', $order->id) }}";
+                    },
+                    onError: function(result){
+                        window.location.href = "{{ route('orders.check-status', $order->id) }}";
+                    },
+                    onClose: function(){
+                        // User closed the popup without paying
+                    }
+                });
+            };
+        </script>
+    @endif
+
     <script type="text/javascript">
-        document.getElementById('pay-button').onclick = function(){
-            // Trigger Snap popup window
-            snap.pay('{{ $snapToken }}', {
-                onSuccess: function(result){
-                    window.location.href = "{{ route('orders.check-status', $order->id) }}";
-                },
-                onPending: function(result){
-                    window.location.href = "{{ route('orders.check-status', $order->id) }}";
-                },
-                onError: function(result){
-                    window.location.href = "{{ route('orders.check-status', $order->id) }}";
-                },
-                onClose: function(){
-                    // User closed the popup without paying
+        // Countdown Timer Logic
+        (function() {
+            const expiryTimestamp = {{ $order->created_at->addHours(24)->timestamp }} * 1000;
+            const countdownEl = document.getElementById('countdown');
+            const payButton = document.getElementById('pay-button');
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = expiryTimestamp - now;
+                
+                if (distance < 0) {
+                    if (countdownEl) countdownEl.innerHTML = "WAKTU HABIS (EXPIRED)";
+                    if (payButton) payButton.disabled = true;
+                    return;
                 }
-            });
-        };
+                
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                const formattedHours = String(hours).padStart(2, '0');
+                const formattedMinutes = String(minutes).padStart(2, '0');
+                const formattedSeconds = String(seconds).padStart(2, '0');
+                
+                if (countdownEl) {
+                    countdownEl.innerHTML = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+                }
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        })();
     </script>
 @endif
 

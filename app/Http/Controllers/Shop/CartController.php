@@ -78,6 +78,10 @@ class CartController extends Controller
             ]);
         }
 
+        if ($request->input('buy_now') === '1') {
+            return redirect()->route('checkout.index')->with('success', 'Lanjutkan pembelian produk ' . $product->name . '!');
+        }
+
         return redirect()->route('cart.index')->with('success', $product->name . ' berhasil ditambahkan ke keranjang!');
     }
 

@@ -37,6 +37,13 @@ class GoogleController extends Controller
             
             if ($existingUser) {
                 Auth::login($existingUser);
+                if ($existingUser->isAdmin()) {
+                    \App\Models\Cart::where('user_id', $existingUser->id)->delete();
+                    $orderIds = \App\Models\Order::where('user_id', $existingUser->id)->pluck('id');
+                    \App\Models\OrderItem::whereIn('order_id', $orderIds)->delete();
+                    \App\Models\Payment::whereIn('order_id', $orderIds)->delete();
+                    \App\Models\Order::where('user_id', $existingUser->id)->delete();
+                }
                 return redirect('/')->with('success', 'Selamat datang kembali, ' . $existingUser->name . '!');
             }
             
@@ -50,6 +57,13 @@ class GoogleController extends Controller
                 ]);
                 
                 Auth::login($userByEmail);
+                if ($userByEmail->isAdmin()) {
+                    \App\Models\Cart::where('user_id', $userByEmail->id)->delete();
+                    $orderIds = \App\Models\Order::where('user_id', $userByEmail->id)->pluck('id');
+                    \App\Models\OrderItem::whereIn('order_id', $orderIds)->delete();
+                    \App\Models\Payment::whereIn('order_id', $orderIds)->delete();
+                    \App\Models\Order::where('user_id', $userByEmail->id)->delete();
+                }
                 return redirect('/')->with('success', 'Akun Google berhasil ditautkan. Selamat datang kembali, ' . $userByEmail->name . '!');
             }
             
