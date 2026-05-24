@@ -314,7 +314,7 @@
                 
                 <div class="d-flex align-items-center gap-3">
                     <!-- Search Bar Minimal -->
-                    @if(!auth()->user()->isAdmin())
+                    @if(!auth()->check() || !auth()->user()->isAdmin())
                     <form action="{{ url('/products') }}" method="GET" class="d-none d-md-flex">
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control search-input" placeholder="Cari produk...">
                     </form>
