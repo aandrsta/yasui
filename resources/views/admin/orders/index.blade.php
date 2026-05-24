@@ -138,9 +138,11 @@
         </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="d-flex justify-content-center mt-4">
-        {{ $orders->links() }}
-    </div>
+        <!-- Pagination Section -->
+        @if($products->hasPages())
+            <div class="pagination-wrapper mt-5 pt-4 border-top border-light">
+                {{ $products->links() }}
+            </div>
+        @endif
 </div>
 @endsection
