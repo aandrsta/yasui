@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Yasui') — E-Commerce</title>
+    <title>@yield('title', 'Yassui') — E-Commerce</title>
     
-    <!-- Google Fonts: Cormorant Garamond & Instrument Sans & Space Grotesk -->
+    <!-- Google Fonts: Cormorant Garamond & Instrument Sans & Space Grotesk & Zen Old Mincho -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Instrument+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Instrument+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Zen+Old+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -295,7 +295,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
                 <i class="bi bi-shop" style="color: var(--accent-color);"></i>
-                <span>YASUI</span>
+                <span>YAS<span style="color: var(--accent-color);">SUI</span></span>
             </a>
             
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -395,7 +395,7 @@
             <div class="row g-4 justify-content-between">
                 <div class="col-lg-5">
                     <h6 class="text-dark fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-shop"></i> YASUI
+                        <i class="bi bi-shop"></i> YASSUI
                     </h6>
                     <p class="small text-muted mb-0" style="line-height: 1.6;">Platform belanja e-commerce minimalis yang dirancang untuk kesederhanaan, kecepatan, dan kenyamanan bertransaksi.</p>
                 </div>
@@ -421,7 +421,7 @@
             
             <div class="row align-items-center justify-content-between g-2">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="small mb-0 text-muted">&copy; {{ date('Y') }} Yasui. Hak cipta dilindungi.</p>
+                    <p class="small mb-0 text-muted">&copy; {{ date('Y') }} Yassui. Hak cipta dilindungi.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <p class="small text-muted mb-0">Project Akhir E-Commerce Monolithic MVC.</p>

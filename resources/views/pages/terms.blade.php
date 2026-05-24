@@ -50,10 +50,10 @@
         <p class="last-updated mb-4">Pembaruan Terakhir: {{ date('d M Y') }}</p>
 
         <div class="legal-content">
-            <p>Selamat datang di <strong>YASUI</strong>. Sebelum Anda menggunakan layanan e-commerce kami, harap baca Ketentuan Layanan ini dengan saksama. Dengan mengakses dan berbelanja di platform kami, Anda menyetujui seluruh ketentuan yang tercantum di bawah ini.</p>
+            <p>Selamat datang di <strong>YASSUI</strong>. Sebelum Anda menggunakan layanan e-commerce kami, harap baca Ketentuan Layanan ini dengan saksama. Dengan mengakses dan berbelanja di platform kami, Anda menyetujui seluruh ketentuan yang tercantum di bawah ini.</p>
 
             <h3>1. Ketentuan Umum</h3>
-            <p>YASUI adalah platform e-commerce yang didedikasikan untuk penjualan produk merchandise anime premium, action figures, model kits, plushies, dan barang karakter koleksi lainnya. Seluruh transaksi di platform ini diselenggarakan di bawah pengawasan sistem simulasi lokal untuk kepentingan akademis.</p>
+            <p>YASSUI adalah platform e-commerce yang didedikasikan untuk penjualan produk merchandise anime premium, action figures, model kits, plushies, dan barang karakter koleksi lainnya. Seluruh transaksi di platform ini diselenggarakan di bawah pengawasan sistem simulasi lokal untuk kepentingan akademis.</p>
 
             <h3>2. Akun Pengguna & Keamanan</h3>
             <ul>
@@ -73,7 +73,7 @@
             <p>Barang yang dibeli dalam aplikasi ini bersifat simulasi akademis. Untuk pengujian aliran logistik, status pengiriman dikontrol sepenuhnya secara internal oleh pengelola toko melalui halaman kendali admin (Pending, Processing, Shipped, Completed, Cancelled).</p>
 
             <h3>5. Hak Cipta & Lisensi</h3>
-            <p>Seluruh kekayaan intelektual, gambar merchandise, logo, nama merek, dan desain antarmuka YASUI dilindungi oleh hak cipta. Penggunaan aset secara tidak sah untuk tujuan komersial di luar lingkup akademik dilarang keras.</p>
+            <p>Seluruh kekayaan intelektual, gambar merchandise, logo, nama merek, dan desain antarmuka YASSUI dilindungi oleh hak cipta. Penggunaan aset secara tidak sah untuk tujuan komersial di luar lingkup akademik dilarang keras.</p>
 
             <h3>6. Perubahan Ketentuan</h3>
             <p>Kami berhak memperbarui Ketentuan Layanan ini kapan saja demi kepatuhan akademis atau pengembangan sistem. Perubahan akan langsung berlaku setelah dipublikasikan di halaman ini.</p>
@@ -85,7 +85,7 @@
             <a href="{{ url('/') }}" class="btn-minimal-secondary text-decoration-none py-2 px-3 small">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda
             </a>
-            <span class="small text-muted">© {{ date('Y') }} YASUI. All rights reserved.</span>
+            <span class="small text-muted">© {{ date('Y') }} YASSUI. All rights reserved.</span>
         </div>
     </div>
 </div>

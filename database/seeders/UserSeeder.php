@@ -15,12 +15,12 @@ class UserSeeder extends Seeder
     {
         // Admin
         User::create([
-            'name' => 'Admin Yasui',
-            'email' => 'admin@yasui.com',
+            'name' => 'Admin Yassui',
+            'email' => 'admin@yassui.com',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
             'phone' => '081234567890',
-            'address' => 'Gedung Admin Yasui Lantai 3, Jakarta',
+            'address' => 'Gedung Admin Yassui Lantai 3, Jakarta',
         ]);
 
         // Buyers

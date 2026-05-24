@@ -50,7 +50,7 @@
         <p class="last-updated mb-4">Pembaruan Terakhir: {{ date('d M Y') }}</p>
 
         <div class="legal-content">
-            <p>Di <strong>YASUI</strong>, kami sangat menghormati privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi Anda saat Anda mengunjungi platform belanja anime online kami.</p>
+            <p>Di <strong>YASSUI</strong>, kami sangat menghormati privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi Anda saat Anda mengunjungi platform belanja anime online kami.</p>
 
             <h3>1. Informasi yang Kami Kumpulkan</h3>
             <p>Kami mengumpulkan data pribadi Anda untuk mendukung kelancaran layanan dan proses pelacakan analitik:</p>
@@ -62,7 +62,7 @@
             </ul>
 
             <h3>2. Penggunaan Informasi</h3>
-            <p>Data yang dikumpulkan di YASUI digunakan untuk tujuan berikut:</p>
+            <p>Data yang dikumpulkan di YASSUI digunakan untuk tujuan berikut:</p>
             <ul>
                 <li>Membuat akun pembeli dan mengelola autentikasi login yang aman.</li>
                 <li>Memproses checkout belanja dan mengelola pengiriman simulasi ke alamat Anda.</li>
@@ -77,7 +77,7 @@
             <p>Website ini menggunakan cookies untuk mengingat barang di keranjang belanja Anda dan mendeteksi sesi masuk. Kami juga memanfaatkan layanan Google Analytics 4 untuk event tracking perilaku belanja yang aman.</p>
 
             <h3>5. Hak Pengguna</h3>
-            <p>Anda berhak memperbarui alamat profil pengiriman Anda atau menghapus data belanja Anda dengan menghubungi Administrator e-commerce YASUI.</p>
+            <p>Anda berhak memperbarui alamat profil pengiriman Anda atau menghapus data belanja Anda dengan menghubungi Administrator e-commerce YASSUI.</p>
         </div>
 
         <hr class="my-4" style="border-color: var(--border-color);">
@@ -86,7 +86,7 @@
             <a href="{{ url('/') }}" class="btn-minimal-secondary text-decoration-none py-2 px-3 small">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda
             </a>
-            <span class="small text-muted">© {{ date('Y') }} YASUI. All rights reserved.</span>
+            <span class="small text-muted">© {{ date('Y') }} YASSUI. All rights reserved.</span>
         </div>
     </div>
 </div>

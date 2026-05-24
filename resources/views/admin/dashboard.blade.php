@@ -30,7 +30,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="h3 fw-bold text-dark mb-1" style="letter-spacing: -0.03em;">Panel Pengelola Toko</h1>
-            <p class="text-muted small mb-0">Halaman khusus Administrator untuk mengelola produk dan pesanan YASUI.</p>
+            <p class="text-muted small mb-0">Halaman khusus Administrator untuk mengelola produk dan pesanan YASSUI.</p>
         </div>
         <span class="badge bg-dark text-white px-3 py-2 fw-semibold" style="font-size: 0.8rem; border-radius: 4px;">Role: Admin</span>
     </div>
