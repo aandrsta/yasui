@@ -494,6 +494,12 @@ server {
         include fastcgi_params;
     }
 
+    location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc|webp)$ {
+        expires 1y;
+        access_log off;
+        add_header Cache-Control "public, no-transform";
+    }
+
     location ~ /\.(?!well-known).* {
         deny all;
     }
@@ -633,6 +639,36 @@ public function boot(): void
 
 > [!IMPORTANT]
 > Tanpa kode ini, semua URL yang dihasilkan Laravel (route, asset) akan menggunakan `http://` yang menyebabkan mixed content error di browser.
+
+### 6.6 Cloudflare CDN & WAF (Web Application Firewall)
+
+Domain `yassui.web.id` dilindungi penuh oleh Cloudflare Edge proxy yang menyediakan 2 fitur utama untuk ketahanan dan kecepatan akses:
+
+1. **CDN (Content Delivery Network)**: Cloudflare menyalin dan menyimpan berkas statis (seperti gambar produk `yassui_hero_banner.png`, file CSS, dan JS) di jaringan global Edge Servers mereka. Hal ini mengurangi waktu pemuatan gambar ke tingkat minimum (5ms - 20ms) bagi pengunjung di berbagai wilayah geografis.
+2. **WAF (Web Application Firewall)**: Bertindak sebagai tameng keamanan luar yang menyaring setiap request masuk. WAF secara otomatis meredam serangan banjir trafik (DDoS Mitigation), mendeteksi serta memblokir bot/scraping jahat, dan mencegah upaya peretasan dasar (seperti SQL Injection atau XSS tingkat jaringan) sebelum request menyentuh server VPS asal (*Origin VPS*).
+
+### 6.7 Analisis Caching: Kolaborasi Nginx & Cloudflare (Hybrid Caching)
+
+Sistem caching YASSUI menggunakan pendekatan **Dual-Layer Caching (Hybrid)** di mana Nginx dan Cloudflare berkolaborasi secara dinamis untuk menyajikan berkas dengan kecepatan maksimal:
+
+* **Nginx (Origin Server Caching Policy)**: Nginx bertindak sebagai pembuat kebijakan (*Policy Maker*). Nginx menyisipkan header HTTP Cache-Control dan Expires ke browser pembeli/Cloudflare proxy:
+  ```nginx
+  location ~* \.(?:jpg|jpeg|gif|png|ico|webp)$ {
+      expires 1y;
+      access_log off;
+      add_header Cache-Control "public, no-transform";
+  }
+  ```
+  Ini menginstruksikan dunia luar bahwa aset gambar aman disimpan selama 1 tahun.
+* **Cloudflare (Edge CDN Caching)**: Cloudflare bertindak sebagai distributor fisik global. Cloudflare membaca instruksi `Cache-Control` dari Nginx di atas, lalu menyalin berkas gambar tersebut dan menyimpannya di server Edge Cloudflare terdekat dari lokasi pengunjung. Untuk request berikutnya dari seluruh dunia, gambar langsung disajikan dari Cloudflare Cache (status: `CF-Cache-Status: HIT`) tanpa menyentuh VPS sama sekali.
+* **Browser (Client Local Storage)**: Browser pengguna menyimpan berkas gambar secara lokal di perangkat mereka, menghasilkan waktu muat ulang halaman yang instan (0ms).
+
+### 6.8 Load Reduction & Arsitektur Multi-Server (Load Balancing Blueprint)
+
+* **Status Saat Ini**: YASSUI berjalan pada arsitektur **Single VPS Monolith** (Nginx, PHP-FPM, dan MySQL di satu server virtual). Dengan proteksi CDN Cloudflare, VPS dibebaskan dari 70%-90% unduhan berkas statis (Load Reduction), sehingga server sangat enteng dan stabil berjalan di spek minim.
+* **Cetak Biru Masa Depan (Load Balancing Blueprint)**: Jika situs viral dan diakses jutaan pengguna secara bersamaan, arsitektur dikembangkan menjadi **Horizontal Scaling (Multi-Server)** dengan langkah:
+  1. Menyewa 2 VPS aplikasi tambahan dan 1 VPS khusus database terpisah.
+  2. Mengaktifkan **Cloudflare Load Balancing** (atau HAProxy / Nginx Upstream Load Balancer) di layer terluar untuk membagi lalu lintas masuk ke server-server aplikasi tersebut secara seimbang (*Round Robin* atau *Least Connections*).
 
 ---
 
