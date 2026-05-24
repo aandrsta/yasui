@@ -148,58 +148,6 @@
         border-color: #94a3b8;
         background-color: #ffffff;
     }
-
-    /* Pagination design styling */
-    .pagination {
-        margin-bottom: 0;
-    }
-
-    .page-link {
-        color: var(--text-muted);
-        border: 1px solid var(--border-color);
-        padding: 8px 16px;
-        font-size: 0.875rem;
-    }
-
-    .page-link:hover {
-        color: var(--primary-color);
-        background-color: var(--bg-subtle);
-        border-color: var(--border-color);
-    }
-
-    .page-item.active .page-link {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-        color: #ffffff;
-    }
-
-    .page-item.disabled .page-link {
-        color: #cbd5e1;
-        background-color: #ffffff;
-        border-color: var(--border-color);
-    }
-
-    /* Centered Stacked Pagination */
-    .pagination-wrapper nav {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-    }
-
-    .pagination-wrapper nav > div {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 0.75rem !important;
-        width: 100% !important;
-    }
-
-    .pagination-wrapper .pagination {
-        margin-top: 0.5rem;
-    }
 </style>
 @endsection
 

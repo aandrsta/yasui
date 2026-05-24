@@ -25,69 +25,6 @@
         border-radius: 8px;
         padding: 2rem;
     }
-
-    .badge-status {
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 6px 12px;
-        border-radius: 50px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .badge-status.pending {
-        background-color: #fef3c7;
-        color: #d97706;
-    }
-
-    .badge-status.processing {
-        background-color: #dbeafe;
-        color: #2563eb;
-    }
-
-    .badge-status.shipped {
-        background-color: #fae8ff;
-        color: #c026d3;
-    }
-
-    .badge-status.completed {
-        background-color: #dcfce7;
-        color: #16a34a;
-    }
-
-    .badge-status.cancelled {
-        background-color: #fee2e2;
-        color: #dc2626;
-    }
-
-    .badge-payment {
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 6px 12px;
-        border-radius: 50px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .badge-payment.unpaid {
-        background-color: #fee2e2;
-        color: #dc2626;
-    }
-
-    .badge-payment.paid {
-        background-color: #dcfce7;
-        color: #16a34a;
-    }
-
-    .badge-payment.failed {
-        background-color: #f3f4f6;
-        color: #4b5563;
-    }
-
     .order-section-title {
         font-weight: 700;
         font-size: 1.05rem;

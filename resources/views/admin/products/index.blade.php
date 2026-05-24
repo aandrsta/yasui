@@ -4,18 +4,6 @@
 
 @section('styles')
 <style>
-    .admin-nav .nav-link {
-        font-weight: 600;
-        font-size: 0.95rem;
-        padding: 0.75rem 1.25rem;
-        border-bottom: 2px solid transparent;
-        color: var(--text-muted);
-    }
-    .admin-nav .nav-link.active {
-        color: var(--accent-color);
-        border-bottom-color: var(--accent-color);
-        background: transparent;
-    }
     .product-thumb {
         width: 45px;
         height: 45px;

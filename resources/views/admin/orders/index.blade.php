@@ -2,49 +2,6 @@
 
 @section('title', 'Kelola Pesanan')
 
-@section('styles')
-<style>
-    .admin-nav .nav-link {
-        font-weight: 600;
-        font-size: 0.95rem;
-        padding: 0.75rem 1.25rem;
-        border-bottom: 2px solid transparent;
-        color: var(--text-muted);
-    }
-    .admin-nav .nav-link.active {
-        color: var(--accent-color);
-        border-bottom-color: var(--accent-color);
-        background: transparent;
-    }
-    .badge-status {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 4px 8px;
-        border-radius: 50px;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .badge-status.pending { background-color: #fef3c7; color: #d97706; }
-    .badge-status.processing { background-color: #dbeafe; color: #2563eb; }
-    .badge-status.shipped { background-color: #fae8ff; color: #c026d3; }
-    .badge-status.completed { background-color: #dcfce7; color: #16a34a; }
-    .badge-status.cancelled { background-color: #fee2e2; color: #dc2626; }
-
-    .badge-payment {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 4px 8px;
-        border-radius: 50px;
-    }
-    .badge-payment.unpaid { background-color: #fee2e2; color: #dc2626; }
-    .badge-payment.paid { background-color: #dcfce7; color: #16a34a; }
-    .badge-payment.failed { background-color: #f3f4f6; color: #4b5563; }
-</style>
-@endsection
-
 @section('content')
 <div class="container py-4">
     <!-- Admin Header -->
@@ -117,7 +74,7 @@
                                 </td>
                                 <td>
                                     <span class="badge-status {{ $order->status }}">
-                                        <i class="bi bi-circle-fill" style="font-size: 0.35rem; color: currentColor;"></i>
+                                        <i class="bi " style="font-size: 0.35rem; color: currentColor;"></i>
                                         {{ ucfirst($order->status) }}
                                     </span>
                                 </td>

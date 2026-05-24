@@ -194,6 +194,72 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
+        /* Unified Custom Pagination Style */
+        .pagination {
+            margin-bottom: 0;
+        }
+
+        .page-link {
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 0.875rem;
+        }
+
+        .page-link:hover {
+            color: var(--primary-color);
+            background-color: var(--bg-subtle);
+            border-color: var(--border-color);
+        }
+
+        .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .page-item.disabled .page-link {
+            color: #cbd5e1;
+            background-color: #ffffff;
+            border-color: var(--border-color);
+        }
+
+        /* Unified Admin Navigation Styling */
+        .admin-nav .nav-link {
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+        }
+        .admin-nav .nav-link.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+            background: transparent;
+        }
+
+        /* Unified Status Badges & Payment Badges */
+        .badge-status, .badge-payment {
+            font-size: 0.725rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1;
+        }
+        .badge-status.pending { background-color: #fef3c7; color: #d97706; }
+        .badge-status.processing { background-color: #dbeafe; color: #2563eb; }
+        .badge-status.shipped { background-color: #fae8ff; color: #c026d3; }
+        .badge-status.completed { background-color: #dcfce7; color: #16a34a; }
+        .badge-status.cancelled { background-color: #fee2e2; color: #dc2626; }
+
+        .badge-payment.unpaid { background-color: #fee2e2; color: #dc2626; }
+        .badge-payment.paid { background-color: #dcfce7; color: #16a34a; }
+        .badge-payment.failed { background-color: #f3f4f6; color: #4b5563; }
     </style>
     @yield('styles')
     

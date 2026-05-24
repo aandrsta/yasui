@@ -14,35 +14,6 @@
         border-color: #cbd5e1;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
-    .badge-status {
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 5px 10px;
-        border-radius: 50px;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .badge-status.pending { background-color: #fef3c7; color: #d97706; }
-    .badge-status.processing { background-color: #dbeafe; color: #2563eb; }
-    .badge-status.shipped { background-color: #fae8ff; color: #c026d3; }
-    .badge-status.completed { background-color: #dcfce7; color: #16a34a; }
-    .badge-status.cancelled { background-color: #fee2e2; color: #dc2626; }
-
-    .badge-payment {
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        padding: 5px 10px;
-        border-radius: 50px;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .badge-payment.unpaid { background-color: #fee2e2; color: #dc2626; }
-    .badge-payment.paid { background-color: #dcfce7; color: #16a34a; }
-    .badge-payment.failed { background-color: #f3f4f6; color: #4b5563; }
 </style>
 @endsection
 
@@ -70,7 +41,7 @@
                         <div class="col-md-6 col-12">
                             <div class="d-flex gap-2 align-items-center">
                                 <span class="badge-status {{ $order->status }}">
-                                    <i class="bi bi-circle-fill" style="font-size: 0.4rem; color: currentColor;"></i>
+                                    <i class="bi " style="font-size: 0.4rem; color: currentColor;"></i>
                                     {{ ucfirst($order->status) }}
                                 </span>
                                 <span class="badge-payment {{ $order->payment_status }}">
