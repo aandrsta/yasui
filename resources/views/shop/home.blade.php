@@ -213,12 +213,13 @@
     }
 
     .newsletter-form .form-control {
-        background-color: transparent;
-        border: 1px solid rgba(251, 250, 247, 0.2);
+        background-color: rgba(251, 250, 247, 0.06);
+        border: 1px solid rgba(251, 250, 247, 0.25);
         color: var(--bg-main);
         border-radius: 3px;
         padding: 0.75rem 1rem;
         font-size: 0.9rem;
+        transition: var(--transition-base);
     }
 
     .newsletter-form .form-control::placeholder {
@@ -226,9 +227,10 @@
     }
 
     .newsletter-form .form-control:focus {
-        background-color: rgba(251, 250, 247, 0.05);
+        background-color: rgba(251, 250, 247, 0.1);
         border-color: var(--bg-main);
         box-shadow: none;
+        color: var(--bg-main);
     }
 
     .newsletter-form .btn-newsletter {
@@ -587,7 +589,7 @@
         <div class="col-lg-5">
             <div class="p-4 border border-light border-opacity-10 rounded bg-white bg-opacity-5">
                 <h4 class="h5 fw-bold mb-2 font-mincho text-white">Bergabung ke Guild Kolektor</h4>
-                <p class="small text-light mb-4" style="opacity: 0.9; color: var(--border-color) !important;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
+                <p class="small text-light mb-4" style="opacity: 0.75;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
                 <form action="#" class="newsletter-form" onsubmit="event.preventDefault(); alert('Terima kasih! Anda telah bergabung ke newsletter guild YASSUI.');">
                     <div class="mb-3">
                         <input type="email" class="form-control" placeholder="Masukkan alamat email Anda" required>
