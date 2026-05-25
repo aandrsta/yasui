@@ -213,9 +213,9 @@
     }
 
     .newsletter-form .form-control {
-        background-color: rgba(251, 250, 247, 0.06);
-        border: 1px solid rgba(251, 250, 247, 0.25);
-        color: var(--bg-main);
+        background-color: var(--bg-main);
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
         border-radius: 3px;
         padding: 0.75rem 1rem;
         font-size: 0.9rem;
@@ -223,14 +223,14 @@
     }
 
     .newsletter-form .form-control::placeholder {
-        color: rgba(251, 250, 247, 0.5) !important;
+        color: var(--text-muted) !important;
     }
 
     .newsletter-form .form-control:focus {
-        background-color: rgba(251, 250, 247, 0.1);
-        border-color: var(--bg-main);
+        background-color: #ffffff;
+        border-color: var(--accent-color);
         box-shadow: none;
-        color: var(--bg-main);
+        color: var(--primary-color);
     }
 
     .newsletter-form .btn-newsletter {
@@ -245,7 +245,7 @@
     }
 
     .newsletter-form .btn-newsletter:hover {
-        background-color: transparent;
+        background-color: var(--primary-color);
         color: var(--bg-main);
         border-color: var(--bg-main);
     }
@@ -588,8 +588,8 @@
         </div>
         <div class="col-lg-5">
             <div class="p-4 border border-light border-opacity-10 rounded bg-white bg-opacity-5">
-                <h4 class="h5 fw-bold mb-2 font-mincho text-white">Bergabung ke Guild Kolektor</h4>
-                <p class="small text-light mb-4" style="opacity: 0.75;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
+                <h4 class="h5 fw-bold mb-2 font-mincho text-dark">Bergabung ke Guild Kolektor</h4>
+                <p class="small text-dark mb-4" style="opacity: 0.75;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
                 <form action="#" class="newsletter-form" onsubmit="event.preventDefault(); alert('Terima kasih! Anda telah bergabung ke newsletter guild YASSUI.');">
                     <div class="mb-3">
                         <input type="email" class="form-control" placeholder="Masukkan alamat email Anda" required>

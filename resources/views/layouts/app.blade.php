@@ -401,7 +401,7 @@
                         <a class="nav-link {{ Request::is('/') ? 'active text-dark fw-semibold' : '' }}" href="{{ url('/') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('products') ? 'active text-dark fw-semibold' : '' }}" href="{{ url('/products') }}">Produk</a>
+                        <a class="nav-link {{ Request::is('products*') ? 'active text-dark fw-semibold' : '' }}" href="{{ url('/products') }}">Produk</a>
                     </li>
                 </ul>
                 
@@ -489,41 +489,62 @@
     </main>
 
     <!-- Minimalist Footer -->
-    <footer class="py-5 mt-auto">
+    <footer class="py-5 mt-auto" style="background-color: var(--bg-subtle); border-top: 1px solid var(--border-color); position: relative;">
+        <!-- Delicate poetry stamp on footer background (right aligned, subtle watermarked) -->
+        <div class="d-none d-lg-block" style="position: absolute; right: 4rem; top: 3rem; font-family: 'Zen Old Mincho', serif; font-size: 4rem; color: rgba(162, 56, 74, 0.02); writing-mode: vertical-rl; pointer-events: none; user-select: none;">
+            美意識を蒐集する
+        </div>
+
         <div class="container">
-            <div class="row g-4 justify-content-between">
-                <div class="col-lg-5">
-                    <h6 class="text-dark fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-shop"></i> YASSUI
-                    </h6>
-                    <p class="small text-muted mb-0" style="line-height: 1.6;">Platform belanja e-commerce minimalis yang dirancang untuk kesederhanaan, kecepatan, dan kenyamanan bertransaksi.</p>
+            <div class="row g-5 justify-content-between">
+                <div class="col-lg-5 animate-fade-in">
+                    <!-- Premium Serif Title identical to header -->
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-3 text-decoration-none" href="{{ url('/') }}" style="font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.8rem; letter-spacing: 0.05em; color: var(--primary-color) !important;">
+                        <i class="bi bi-shop" style="color: var(--accent-color);"></i>
+                        <span>YAS<span style="color: var(--accent-color);">SUI</span></span>
+                    </a>
+                    
+                    <p class="small text-muted mb-4" style="line-height: 1.8; font-size: 0.85rem; max-width: 440px;">
+                        美意識を蒐集する — Menghadirkan kurasi merchandise pop-kultur Jepang berstandar museum langsung ke genggaman Anda. Kami percaya pada keindahan detail yang abadi, keaslian rancangan, dan apresiasi karya yang mendalam.
+                    </p>
+
+                    <!-- Small Authentic Red Seal Stamp -->
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1.5 border border-1" style="border-radius: 3px; background-color: var(--bg-main); border-color: rgba(162, 56, 74, 0.2) !important;">
+                        <span class="d-block bg-danger rounded-circle animate-pulse" style="width: 8px; height: 8px; background-color: var(--accent-color) !important;"></span>
+                        <span class="small font-mincho fw-bold text-uppercase" style="font-size: 0.65rem; color: var(--accent-color); letter-spacing: 0.1em;">Yasui Curated Guild</span>
+                    </div>
                 </div>
                 
-                <div class="col-md-3">
-                    <h6 class="text-dark fw-semibold mb-3 small uppercase">Tautan</h6>
+                <div class="col-md-3 col-lg-2 animate-fade-in stagger-1">
+                    <h6 class="text-dark fw-bold mb-3 small" style="font-family: 'Zen Old Mincho', serif; letter-spacing: 0.1em; font-size: 0.85rem; text-transform: uppercase; line-height: 1.4;">
+                        ナビゲーション<br>
+                        <span style="font-family: 'Instrument Sans', sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-top: 2px;">Navigasi</span>
+                    </h6>
                     <ul class="list-unstyled d-flex flex-column gap-2 small">
-                        <li><a href="{{ url('/') }}">Beranda</a></li>
-                        <li><a href="{{ url('/products') }}">Produk</a></li>
+                        <li><a href="{{ url('/') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Beranda</a></li>
+                        <li><a href="{{ url('/products') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Katalog Produk</a></li>
                     </ul>
                 </div>
                 
-                <div class="col-md-3">
-                    <h6 class="text-dark fw-semibold mb-3 small uppercase">Kebijakan</h6>
+                <div class="col-md-3 col-lg-2 animate-fade-in stagger-2">
+                    <h6 class="text-dark fw-bold mb-3 small" style="font-family: 'Zen Old Mincho', serif; letter-spacing: 0.1em; font-size: 0.85rem; text-transform: uppercase; line-height: 1.4;">
+                        ポリシー<br>
+                        <span style="font-family: 'Instrument Sans', sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-top: 2px;">Kebijakan</span>
+                    </h6>
                     <ul class="list-unstyled d-flex flex-column gap-2 small">
-                        <li><a href="{{ url('/terms-of-service') }}">Terms of Service</a></li>
-                        <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
+                        <li><a href="{{ url('/terms-of-service') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Terms of Service</a></li>
+                        <li><a href="{{ url('/privacy-policy') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>
             
-            <hr class="my-4" style="border-color: var(--border-color);">
+            <hr class="my-4" style="border-color: var(--border-color); opacity: 0.6;">
             
-            <div class="row align-items-center justify-content-between g-2">
+            <div class="row align-items-center justify-content-between g-3">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="small mb-0 text-muted">&copy; {{ date('Y') }} Yassui. Hak cipta dilindungi.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <p class="small text-muted mb-0">Project Akhir E-Commerce Monolithic MVC.</p>
+                    <p class="small mb-0 text-muted" style="font-size: 0.775rem;">
+                        &copy; {{ date('Y') }} Yassui. Hak cipta dilindungi. — 創立二〇二六
+                    </p>
                 </div>
             </div>
         </div>

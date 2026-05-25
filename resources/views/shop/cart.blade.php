@@ -211,7 +211,7 @@
 
 @if($cartItems->isEmpty())
     <div class="card border border-light text-center py-5 px-4 shadow-sm animate-fade-in-up" style="border-radius: 3px;">
-        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 bg-light text-muted" style="width: 72px; height: 72px;">
+        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 bg-light text-muted mx-auto" style="width: 72px; height: 72px;">
             <i class="bi bi-bag-x fs-2"></i>
         </div>
         <h3 class="h5 fw-bold text-dark mb-2">Keranjang Belanja Anda Kosong</h3>

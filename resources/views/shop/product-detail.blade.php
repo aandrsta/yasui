@@ -289,11 +289,11 @@
 
                         <div class="d-flex flex-column flex-sm-row gap-2 mt-2">
                             <button type="submit" class="btn-minimal-secondary py-3 flex-fill d-inline-flex align-items-center justify-content-center gap-2">
-                                <i class="bi bi-bag-plus fs-5"></i>
+
                                 <span class="fw-semibold">Tambah ke Keranjang</span>
                             </button>
                             <button type="submit" name="buy_now" value="1" class="btn-minimal-accent py-3 flex-fill d-inline-flex align-items-center justify-content-center gap-2">
-                                <i class="bi bi-lightning-charge fs-5"></i>
+                          
                                 <span class="fw-semibold">Beli Sekarang</span>
                             </button>
                         </div>
