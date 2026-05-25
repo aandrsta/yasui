@@ -221,6 +221,10 @@
         font-size: 0.9rem;
     }
 
+    .newsletter-form .form-control::placeholder {
+        color: rgba(251, 250, 247, 0.5) !important;
+    }
+
     .newsletter-form .form-control:focus {
         background-color: rgba(251, 250, 247, 0.05);
         border-color: var(--bg-main);
@@ -387,7 +391,6 @@
 
     <div class="row align-items-center py-4">
         <div class="col-lg-7 mb-5 mb-lg-0 position-relative">
-            <span class="text-uppercase text-muted fw-bold small letter-spacing-2" style="color: var(--accent-color) !important;">#YassuiHobbyShop</span>
             <h1 class="hero-title mb-4 mt-2 font-mincho">Destinasi Pop Culture<br><em>Original</em> &amp; <em>Premium</em>.</h1>
             <p class="hero-subtitle mb-4">
                 Temukan koleksi kurasi anime figures, model kits, character goods, dan plushies otentik Jepang dengan standar kualitas terbaik untuk koleksi premium Anda.
@@ -584,7 +587,7 @@
         <div class="col-lg-5">
             <div class="p-4 border border-light border-opacity-10 rounded bg-white bg-opacity-5">
                 <h4 class="h5 fw-bold mb-2 font-mincho text-white">Bergabung ke Guild Kolektor</h4>
-                <p class="small text-dark mb-4" style="opacity: 0.75;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
+                <p class="small text-light mb-4" style="opacity: 0.9; color: var(--border-color) !important;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
                 <form action="#" class="newsletter-form" onsubmit="event.preventDefault(); alert('Terima kasih! Anda telah bergabung ke newsletter guild YASSUI.');">
                     <div class="mb-3">
                         <input type="email" class="form-control" placeholder="Masukkan alamat email Anda" required>
