@@ -22,7 +22,7 @@
     .form-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         padding: 2rem;
     }
 
@@ -40,7 +40,7 @@
     .order-summary-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         padding: 2rem;
         position: sticky;
         top: 100px;
@@ -64,7 +64,7 @@
     .summary-item-img {
         width: 50px;
         height: 50px;
-        border-radius: 4px;
+        border-radius: 3px;
         overflow: hidden;
         border: 1px solid var(--border-color);
         background-color: var(--bg-subtle);
@@ -135,7 +135,7 @@
 <form action="{{ route('checkout.store') }}" method="POST">
     @csrf
     
-    <div class="checkout-wrapper">
+    <div class="checkout-wrapper animate-fade-in-up">
         <!-- Left Side: Shipping Address Form -->
         <div class="form-card shadow-sm">
             <h3 class="section-subtitle"><i class="bi bi-truck me-2 text-secondary"></i>Informasi Pengiriman</h3>
@@ -143,7 +143,7 @@
             <!-- Shipping Name -->
             <div class="mb-3">
                 <label for="shipping_name" class="form-label small fw-semibold text-secondary">Nama Lengkap Penerima</label>
-                <input type="text" name="shipping_name" id="shipping_name" class="form-control @error('shipping_name') is-invalid @enderror" value="{{ old('shipping_name', auth()->user()->name) }}" required placeholder="Masukkan nama lengkap penerima" style="border-radius: 6px; padding: 10px; border-color: var(--border-color); font-size: 0.9rem;">
+                <input type="text" name="shipping_name" id="shipping_name" class="form-control @error('shipping_name') is-invalid @enderror" value="{{ old('shipping_name', auth()->user()->name) }}" required placeholder="Masukkan nama lengkap penerima" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
                 @error('shipping_name')
                     <div class="invalid-feedback small">{{ $message }}</div>
                 @enderror
@@ -152,7 +152,7 @@
             <!-- Shipping Phone -->
             <div class="mb-3">
                 <label for="shipping_phone" class="form-label small fw-semibold text-secondary">Nomor Telepon Penerima</label>
-                <input type="text" name="shipping_phone" id="shipping_phone" class="form-control @error('shipping_phone') is-invalid @enderror" value="{{ old('shipping_phone') }}" required placeholder="Contoh: 081234567890" style="border-radius: 6px; padding: 10px; border-color: var(--border-color); font-size: 0.9rem;">
+                <input type="text" name="shipping_phone" id="shipping_phone" class="form-control @error('shipping_phone') is-invalid @enderror" value="{{ old('shipping_phone') }}" required placeholder="Contoh: 081234567890" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
                 @error('shipping_phone')
                     <div class="invalid-feedback small">{{ $message }}</div>
                 @enderror
@@ -161,7 +161,7 @@
             <!-- Shipping Address -->
             <div class="mb-3">
                 <label for="shipping_address" class="form-label small fw-semibold text-secondary">Alamat Lengkap Pengiriman</label>
-                <textarea name="shipping_address" id="shipping_address" rows="4" class="form-control @error('shipping_address') is-invalid @enderror" required placeholder="Tuliskan alamat jalan, RT/RW, kelurahan, kecamatan, kota/kabupaten, provinsi, dan kode pos" style="border-radius: 6px; padding: 10px; border-color: var(--border-color); font-size: 0.9rem;">{{ old('shipping_address') }}</textarea>
+                <textarea name="shipping_address" id="shipping_address" rows="4" class="form-control @error('shipping_address') is-invalid @enderror" required placeholder="Tuliskan alamat jalan, RT/RW, kelurahan, kecamatan, kota/kabupaten, provinsi, dan kode pos" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">{{ old('shipping_address') }}</textarea>
                 @error('shipping_address')
                     <div class="invalid-feedback small">{{ $message }}</div>
                 @enderror
@@ -173,7 +173,7 @@
             <h3 class="summary-title mb-4">Tinjau Pesanan</h3>
             
             <!-- Items summary list -->
-            <div class="mb-4" style="max-height: 240px; overflow-y: auto; border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; background-color: var(--bg-subtle);">
+            <div class="mb-4" style="max-height: 240px; overflow-y: auto; border: 1px solid var(--border-color); padding: 1rem; border-radius: 3px; background-color: var(--bg-subtle);">
                 @foreach($cartItems as $item)
                     <div class="summary-item-row">
                         <!-- Tiny image -->

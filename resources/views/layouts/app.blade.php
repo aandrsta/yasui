@@ -272,6 +272,99 @@
         .badge-payment.unpaid { background-color: #fee2e2; color: #dc2626; }
         .badge-payment.paid { background-color: #dcfce7; color: #16a34a; }
         .badge-payment.failed { background-color: #f3f4f6; color: #4b5563; }
+
+        /* Elegant Global Animations & Transitions */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Improved Navigation Link Styles */
+        .navbar-nav .nav-link {
+            position: relative;
+            padding: 6px 0 !important;
+            margin: 0 12px;
+        }
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--accent-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .navbar-nav .nav-link:hover::after, 
+        .navbar-nav .nav-link.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Stark flat buttons micro-interactions */
+        .btn-minimal-primary, .btn-minimal-accent, .btn-minimal-secondary {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 3px !important; /* Standard sharp */
+        }
+        .btn-minimal-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 30, 29, 0.08);
+        }
+        .btn-minimal-primary:active {
+            transform: translateY(0);
+        }
+        .btn-minimal-accent:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(162, 56, 74, 0.15);
+        }
+        .btn-minimal-accent:active {
+            transform: translateY(0);
+        }
+        .btn-minimal-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(117, 114, 106, 0.06);
+        }
+        .btn-minimal-secondary:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive and animated search input */
+        .search-input {
+            width: 180px;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, background-color 0.3s;
+        }
+        .search-input:focus {
+            width: 240px;
+            border-color: var(--accent-color) !important;
+        }
+
+        /* Staggered load animation helper */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
     </style>
     @yield('styles')
     

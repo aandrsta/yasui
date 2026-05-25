@@ -22,7 +22,7 @@
     .cart-items-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
     }
 
     .cart-item-row {
@@ -45,7 +45,7 @@
     .cart-image-wrapper {
         width: 90px;
         height: 90px;
-        border-radius: 6px;
+        border-radius: 3px;
         overflow: hidden;
         border: 1px solid var(--border-color);
         background-color: var(--bg-subtle);
@@ -103,23 +103,24 @@
         width: 65px;
         text-align: center;
         font-weight: 600;
-        border-radius: 6px;
+        border-radius: 3px;
         border: 1px solid var(--border-color);
         padding: 6px;
         font-size: 0.875rem;
-        background-color: #ffffff;
+        background-color: var(--bg-subtle);
     }
 
     .cart-qty-input:focus {
         outline: none;
-        border-color: #94a3b8;
+        border-color: var(--primary-color);
+        background-color: var(--bg-main);
     }
 
     .btn-update-qty {
         border: 1px solid var(--border-color);
-        background-color: #ffffff;
+        background-color: var(--bg-subtle);
         color: var(--text-main);
-        border-radius: 6px;
+        border-radius: 3px;
         width: 34px;
         height: 34px;
         display: flex;
@@ -131,7 +132,7 @@
     .btn-update-qty:hover {
         background-color: var(--primary-color);
         border-color: var(--primary-color);
-        color: #ffffff;
+        color: var(--bg-main);
     }
 
     .cart-subtotal-price {
@@ -163,7 +164,7 @@
     .summary-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: 3px;
         padding: 2rem;
         position: sticky;
         top: 100px;
@@ -209,7 +210,7 @@
 <h1 class="h3 fw-bold text-dark mb-4 pb-2" style="letter-spacing: -0.03em;">Keranjang Belanja</h1>
 
 @if($cartItems->isEmpty())
-    <div class="card border border-light text-center py-5 px-4 shadow-sm" style="border-radius: 8px;">
+    <div class="card border border-light text-center py-5 px-4 shadow-sm animate-fade-in-up" style="border-radius: 3px;">
         <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 bg-light text-muted" style="width: 72px; height: 72px;">
             <i class="bi bi-bag-x fs-2"></i>
         </div>
@@ -222,7 +223,7 @@
         </div>
     </div>
 @else
-    <div class="cart-wrapper">
+    <div class="cart-wrapper animate-fade-in-up">
         <!-- Left Side: Cart Items List -->
         <div class="cart-items-card">
             @foreach($cartItems as $item)

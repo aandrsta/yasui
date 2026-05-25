@@ -25,6 +25,14 @@
         justify-content: center;
     }
 
+    .product-detail-image-container img {
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-detail-image-wrapper:hover .product-detail-image-container img {
+        transform: scale(1.04);
+    }
+
     .detail-fallback-img {
         width: 100%;
         height: 100%;
@@ -55,9 +63,10 @@
     }
 
     .product-detail-price {
+        font-family: 'Zen Old Mincho', serif;
         font-weight: 700;
-        font-size: 1.6rem;
-        color: var(--primary-color);
+        font-size: 1.75rem;
+        color: var(--accent-color);
         letter-spacing: -0.02em;
     }
 
@@ -209,8 +218,8 @@
 
 <div class="row g-5 mb-5 pb-4">
     <!-- Left Column: Product Image -->
-    <div class="col-md-6">
-        <div class="product-detail-image-wrapper">
+    <div class="col-md-6 animate-fade-in-up">
+        <div class="product-detail-image-wrapper shadow-sm">
             <div class="product-detail-image-container">
                 @if($product->image && file_exists(public_path($product->image)))
                     <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-100 h-100 object-fit-cover">
@@ -233,7 +242,7 @@
     </div>
 
     <!-- Right Column: Product Info & Add to Cart -->
-    <div class="col-md-6 d-flex flex-column justify-content-between">
+    <div class="col-md-6 d-flex flex-column justify-content-between animate-fade-in-up stagger-1">
         <div>
             <!-- Category and Availability Badge -->
             <div class="d-flex justify-content-between align-items-center mb-3">

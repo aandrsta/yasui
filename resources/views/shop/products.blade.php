@@ -30,19 +30,22 @@
     }
 
     .category-filter-link {
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         color: var(--text-muted);
         text-decoration: none;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(231, 228, 220, 0.4);
         transition: var(--transition-base);
     }
 
     .category-filter-link:hover, .category-filter-link.active {
         color: var(--accent-color);
         font-weight: 600;
+        border-bottom-color: var(--accent-color);
+        padding-left: 4px;
     }
 
     /* Product Grid Cards */
@@ -60,6 +63,7 @@
     .product-grid-card:hover {
         border-color: var(--primary-color);
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px -8px rgba(30, 30, 29, 0.06);
     }
 
     .product-image-wrapper {
@@ -67,6 +71,7 @@
         padding-top: 100%; /* 1:1 Aspect Ratio */
         background-color: var(--bg-subtle);
         border-bottom: 1px solid var(--border-color);
+        overflow: hidden;
     }
 
     .product-image-container {
@@ -78,6 +83,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .product-image-container img {
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-grid-card:hover .product-image-container img {
+        transform: scale(1.04);
     }
 
     .product-fallback-img {
@@ -121,6 +134,7 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         height: 2.8rem;
+        transition: var(--transition-base);
     }
 
     .product-title:hover {
@@ -240,7 +254,7 @@
 
         <div class="row g-4">
             @forelse($products as $product)
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-4 animate-fade-in-up stagger-{{ ($loop->index % 3) + 1 }}">
                     <div class="card product-grid-card">
                         <div class="product-image-wrapper">
                             <a href="{{ url('/products/' . $product->slug) }}" class="product-image-container">
