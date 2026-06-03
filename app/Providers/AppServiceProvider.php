@@ -28,9 +28,10 @@ class AppServiceProvider extends ServiceProvider
         // Set paginator to use Bootstrap 5 styling
         Paginator::useBootstrapFive();
 
-        // Paksa HTTPS di environment production agar berjalan sempurna di belakang Cloudflare Proxy
-        if (config('app.env') === 'production') {
+        // Paksa HTTPS dan Secure Cookies di environment production (agar berjalan sempurna di belakang Cloudflare/Reverse Proxy)
+        if (config('app.env') === 'production' || env('APP_ENV') === 'production') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
+            config(['session.secure' => true]);
         }
 
 
