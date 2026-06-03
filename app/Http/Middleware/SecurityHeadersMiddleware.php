@@ -16,22 +16,26 @@ class SecurityHeadersMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // 1. HTTPS Redirection if configured
-        if (env('ENFORCE_HTTPS', false) && !$request->secure()) {
-            return redirect()->secure($request->getRequestUri());
-        }
-
-        // 2. Generate and store CSP nonce if it does not exist yet
-        if (!app()->bound('csp-nonce')) {
-            app()->instance('csp-nonce', Str::random(32));
-        }
+        // 1. Determine if we should redirect to HTTPS
+        $enforceHttps = env('ENFORCE_HTTPS', env('APP_ENV') === 'production');
         
-        $nonce = app('csp-nonce');
+        if ($enforceHttps && !$request->secure()) {
+            $response = redirect()->secure($request->getRequestUri());
+        } else {
+            // 2. Generate and store CSP nonce if it does not exist yet
+            if (!app()->bound('csp-nonce')) {
+                app()->instance('csp-nonce', Str::random(32));
+            }
+            
+            // 3. Force session cookie to be secure if request is secure
+            if ($request->secure()) {
+                config(['session.secure' => true]);
+            }
 
-        // Proceed with the request
-        $response = $next($request);
+            $response = $next($request);
+        }
 
-        // 3. Add security headers to the response
+        // 4. Add security headers to the response (both redirect and normal responses)
         if ($response instanceof Response) {
             $isFilamentOrLivewire = $request->is('admin*') || $request->is('livewire*');
 
@@ -51,10 +55,11 @@ class SecurityHeadersMiddleware
                     "upgrade-insecure-requests"
                 ];
             } else {
-                // Strict Nonce-based CSP for public front-end
+                // Strict Nonce-based CSP for public front-end (Removed 'unsafe-eval')
+                $nonce = app()->bound('csp-nonce') ? app('csp-nonce') : '';
                 $cspDirectives = [
                     "default-src 'self'",
-                    "script-src 'self' 'nonce-{$nonce}' 'unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://app.sandbox.midtrans.com https://app.midtrans.com",
+                    "script-src 'self' 'nonce-{$nonce}' https://cdn.jsdelivr.net https://www.googletagmanager.com https://app.sandbox.midtrans.com https://app.midtrans.com",
                     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
                     "img-src 'self' data: https://www.google-analytics.com https://*.google-analytics.com",
                     "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
@@ -71,8 +76,8 @@ class SecurityHeadersMiddleware
             $response->headers->set('Content-Security-Policy', implode('; ', $cspDirectives));
             $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
             
-            // Send HSTS header (only over HTTPS or if configured)
-            if ($request->secure() || env('APP_ENV') === 'production') {
+            // Send HSTS header (only over HTTPS, or if in production, or if redirecting to HTTPS)
+            if ($request->secure() || env('APP_ENV') === 'production' || ($enforceHttps && !$request->secure())) {
                 $maxAge = env('HSTS_MAX_AGE', 31536000);
                 $response->headers->set('Strict-Transport-Security', "max-age={$maxAge}; includeSubDomains; preload");
             }
