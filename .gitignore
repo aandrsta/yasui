@@ -22,3 +22,4 @@ yarn-error.log
 /setup.sh
 /materi
 /.agents
+nmap_scan.xml

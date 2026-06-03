@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Yassui') — E-Commerce</title>
+    <title>@hasSection('title')@yield('title') - Yassui@elseYassui@endif</title>
     
     <!-- Google Fonts: Cormorant Garamond & Instrument Sans & Space Grotesk & Zen Old Mincho -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
