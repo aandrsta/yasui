@@ -307,8 +307,8 @@
 @if($order->payment_status === 'unpaid')
     @if($snapToken)
         <!-- Midtrans Snap.js official library -->
-        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
-        <script type="text/javascript">
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}" nonce="{{ app('csp-nonce') }}"></script>
+        <script type="text/javascript" nonce="{{ app('csp-nonce') }}">
             document.getElementById('pay-button').onclick = function(){
                 // Trigger Snap popup window
                 snap.pay('{{ $snapToken }}', {
@@ -329,7 +329,7 @@
         </script>
     @endif
 
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ app('csp-nonce') }}">
         // Countdown Timer Logic
         (function() {
             const expiryTimestamp = {{ $order->created_at->addHours(24)->timestamp }} * 1000;
@@ -366,7 +366,7 @@
 @endif
 
 @if($order->payment_status === 'paid')
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ app('csp-nonce') }}">
         // GA4 E-Commerce Tracking: purchase Event
         if (typeof gtag === 'function') {
             gtag("event", "purchase", {

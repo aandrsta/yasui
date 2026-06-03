@@ -379,7 +379,7 @@
 @endsection
 
 @section('scripts')
-<script>
+<script nonce="{{ app('csp-nonce') }}">
     // GA4 E-Commerce Tracking: view_item Event
     if (typeof gtag === 'function') {
         gtag("event", "view_item", {
@@ -413,4 +413,5 @@
         }
     });
 </script>
+
 

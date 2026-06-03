@@ -152,7 +152,7 @@
             <!-- Shipping Phone -->
             <div class="mb-3">
                 <label for="shipping_phone" class="form-label small fw-semibold text-secondary">Nomor Telepon Penerima</label>
-                <input type="text" name="shipping_phone" id="shipping_phone" class="form-control @error('shipping_phone') is-invalid @enderror" value="{{ old('shipping_phone') }}" required placeholder="Contoh: 081234567890" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
+                <input type="number" name="shipping_phone" id="shipping_phone" class="form-control @error('shipping_phone') is-invalid @enderror" value="{{ old('shipping_phone') }}" required placeholder="Contoh: 081234567890" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
                 @error('shipping_phone')
                     <div class="invalid-feedback small">{{ $message }}</div>
                 @enderror

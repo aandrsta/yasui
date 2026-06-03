@@ -20,6 +20,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Inisialisasi CSP Nonce agar selalu tersedia di container dan seluruh view
+        if (!app()->bound('csp-nonce')) {
+            app()->instance('csp-nonce', \Illuminate\Support\Str::random(32));
+        }
+
         // Set paginator to use Bootstrap 5 styling
         Paginator::useBootstrapFive();
 
@@ -27,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
+
 
         // Bypass SSL verification untuk Socialite Google di env local (mengatasi cURL error 60 di Windows/Laragon)
         if (config('app.env') === 'local') {
