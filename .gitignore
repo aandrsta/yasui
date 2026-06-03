@@ -17,9 +17,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/Dokumentasi_Teknis_Yasui.md
-/Panduan_Setup_Lokal.md
+/*.md
+!/README.md
 /setup.sh
-/walkthrough_setup.md
 /materi
 /.agents
