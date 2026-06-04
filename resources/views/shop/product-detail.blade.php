@@ -400,6 +400,7 @@
         if (typeof gtag === 'function') {
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
             gtag("event", "add_to_cart", {
+                transport: "beacon",
                 currency: "IDR",
                 value: {{ $product->price }} * quantity,
                 items: [{
@@ -413,5 +414,6 @@
         }
     });
 </script>
+@endsection
 
 
