@@ -118,6 +118,53 @@
         font-size: 1.1rem;
         color: var(--primary-color);
     }
+
+    /* Checkout Loading Overlay */
+    #checkout-loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(251, 250, 247, 0.96); /* Warm paper with slight transparency */
+        z-index: 10100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+    }
+    #checkout-loading-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .loading-floral-icon {
+        width: 60px;
+        height: 60px;
+        color: var(--accent-color);
+        animation: spin 4s linear infinite;
+        margin-bottom: 2rem;
+    }
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .loading-text {
+        font-family: 'Zen Old Mincho', serif;
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 0.75rem;
+        text-align: center;
+    }
+    .loading-subtext {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        text-align: center;
+        max-width: 320px;
+        line-height: 1.6;
+    }
 </style>
 @endsection
 
@@ -132,7 +179,7 @@
 
 <h1 class="h3 fw-bold text-dark mb-4 pb-2" style="letter-spacing: -0.03em;">Checkout Pesanan</h1>
 
-<form action="{{ route('checkout.store') }}" method="POST">
+<form action="{{ route('checkout.store') }}" method="POST" id="checkout-form">
     @csrf
     @foreach($selectedIds as $selectedId)
         <input type="hidden" name="items[]" value="{{ $selectedId }}">
@@ -237,4 +284,31 @@
         </div>
     </div>
 </form>
+
+<!-- Secure Gateway Loading Overlay -->
+<div id="checkout-loading-overlay">
+    <!-- Beautiful rotating cherry blossom or custom geometric floral icon using SVG -->
+    <svg class="loading-floral-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        <circle cx="12" cy="12" r="5"/>
+    </svg>
+    <h3 class="loading-text">Menghubungkan Saluran Pembayaran</h3>
+    <p class="loading-subtext font-mincho">美意識を蒐集する — Mohon tunggu sebentar selagi kami mengarahkan Anda ke gerbang pembayaran aman Midtrans.</p>
+</div>
+
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('checkout-form');
+        const overlay = document.getElementById('checkout-loading-overlay');
+        
+        if (form && overlay) {
+            form.addEventListener('submit', function() {
+                overlay.classList.add('active');
+            });
+        }
+    });
+</script>
 @endsection

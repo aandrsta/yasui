@@ -214,6 +214,20 @@
         box-shadow: 0 0 0 3px rgba(162, 56, 74, 0.15) !important;
         border-color: var(--accent-color) !important;
     }
+
+    /* Dynamic deletion animations */
+    .cart-item-fade-out {
+        opacity: 0 !important;
+        transform: translateX(-30px) !important;
+        max-height: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        border-bottom-width: 0 !important;
+        overflow: hidden !important;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
 </style>
 @endsection
 
@@ -356,13 +370,13 @@
 @endif
 
 <!-- Hidden Forms for Update and Delete to avoid nested form tags -->
-<form id="update-form" method="POST" style="display:none;">
+<form id="update-form" method="POST" style="display:none;" data-no-spinner="true">
     @csrf
     @method('PATCH')
     <input type="hidden" name="quantity" id="update-quantity">
 </form>
 
-<form id="delete-form" method="POST" style="display:none;">
+<form id="delete-form" method="POST" style="display:none;" data-no-spinner="true">
     @csrf
     @method('DELETE')
 </form>
@@ -431,9 +445,15 @@
             button.addEventListener('click', function() {
                 const itemId = this.dataset.id;
                 if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
-                    const form = document.getElementById('delete-form');
-                    form.action = "{{ url('/cart') }}/" + itemId;
-                    form.submit();
+                    const row = this.closest('.cart-item-row');
+                    if (row) {
+                        row.classList.add('cart-item-fade-out');
+                    }
+                    setTimeout(() => {
+                        const form = document.getElementById('delete-form');
+                        form.action = "{{ url('/cart') }}/" + itemId;
+                        form.submit();
+                    }, 350);
                 }
             });
         });

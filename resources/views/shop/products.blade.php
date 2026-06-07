@@ -329,7 +329,14 @@
 <script nonce="{{ app('csp-nonce') }}">
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('sort-select')?.addEventListener('change', function() {
-            document.getElementById('filterForm')?.submit();
+            const form = document.getElementById('filterForm');
+            if (form) {
+                if (typeof form.requestSubmit === 'function') {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
+            }
         });
     });
 </script>

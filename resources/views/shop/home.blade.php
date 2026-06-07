@@ -393,11 +393,11 @@
 
     <div class="row align-items-center py-4">
         <div class="col-lg-7 mb-5 mb-lg-0 position-relative">
-            <h1 class="hero-title mb-4 mt-2 font-mincho">Destinasi Pop Culture<br><em>Original</em> &amp; <em>Premium</em>.</h1>
-            <p class="hero-subtitle mb-4">
+            <h1 class="hero-title mb-4 mt-2 font-mincho animate-fade-in-up">Destinasi Pop Culture<br><em>Original</em> &amp; <em>Premium</em>.</h1>
+            <p class="hero-subtitle mb-4 animate-fade-in-up stagger-1">
                 Temukan koleksi kurasi anime figures, model kits, character goods, dan plushies otentik Jepang dengan standar kualitas terbaik untuk koleksi premium Anda.
             </p>
-            <div class="d-flex flex-wrap gap-2">
+            <div class="d-flex flex-wrap gap-2 animate-fade-in-up stagger-2">
                 <a href="{{ url('/products') }}" class="btn-minimal-accent text-decoration-none px-4 py-2">
                     Jelajahi Produk
                 </a>
@@ -406,7 +406,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-5 animate-fade-in stagger-2">
             <!-- Editorial Visual Showcase Card -->
             <div class="editorial-showcase shadow-sm">
                 <div class="editorial-stamp-overlay">
@@ -429,7 +429,7 @@
 <section class="trust-section">
     <div class="container">
         <div class="row g-4 text-center text-md-start">
-            <div class="col-md-4 trust-col">
+            <div class="col-md-4 trust-col animate-fade-in-up stagger-1">
                 <div class="d-flex align-items-center gap-3">
                     <div class="fs-3" style="color: var(--accent-color);"><i class="bi bi-shield-check"></i></div>
                     <div>
@@ -438,7 +438,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 trust-col">
+            <div class="col-md-4 trust-col animate-fade-in-up stagger-2">
                 <div class="d-flex align-items-center gap-3">
                     <div class="fs-3" style="color: var(--accent-color);"><i class="bi bi-box-seam"></i></div>
                     <div>
@@ -447,7 +447,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 trust-col">
+            <div class="col-md-4 trust-col animate-fade-in-up stagger-3">
                 <div class="d-flex align-items-center gap-3">
                     <div class="fs-3" style="color: var(--accent-color);"><i class="bi bi-gem"></i></div>
                     <div>
@@ -471,7 +471,7 @@
     
     <div class="row g-4">
         @foreach($categories as $category)
-            <div class="col-md-3">
+            <div class="col-md-3 animate-fade-in-up stagger-{{ ($loop->index % 4) + 1 }}">
                 <div class="card category-card p-3 shadow-sm">
                     <div>
                         <!-- Category Image Wrapper with Floating Icon Badge -->
@@ -525,7 +525,7 @@
 
     <div class="row g-4">
         @forelse($featuredProducts as $product)
-            <div class="col-sm-6 col-md-4">
+            <div class="col-sm-6 col-md-4 animate-fade-in-up stagger-{{ ($loop->index % 3) + 1 }}">
                 <div class="card product-grid-card shadow-sm">
                     <div class="product-image-wrapper">
                         <a href="{{ url('/products/' . $product->slug) }}" class="product-image-container">
@@ -574,7 +574,7 @@
 </section>
 
 <!-- Brand Manifesto & Newsletter Section -->
-<section class="manifesto-section shadow-sm">
+<section class="manifesto-section shadow-sm animate-fade-in-up stagger-2">
     <div class="row align-items-center justify-content-between g-4">
         <div class="col-lg-6">
             <span class="text-uppercase text-muted fw-bold small letter-spacing-2" style="color: var(--accent-color) !important;">#ManifestoYassui</span>

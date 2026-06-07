@@ -289,11 +289,92 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        @keyframes pulseDot {
+            0% {
+                transform: scale(0.92);
+                box-shadow: 0 0 0 0 rgba(162, 56, 74, 0.4);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(162, 56, 74, 0);
+            }
+            100% {
+                transform: scale(0.92);
+                box-shadow: 0 0 0 0 rgba(162, 56, 74, 0);
+            }
+        }
+        @keyframes popBadge {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .animate-fade-in {
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .animate-fade-in-up {
             animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Pulsing Dot animations for pending status indicators */
+        .indicator-dot,
+        .badge-status.pending .indicator-dot,
+        .badge-status.processing .indicator-dot {
+            animation: pulseDot 2.2s infinite ease-in-out;
+        }
+
+        /* Pop badge scale on page loads */
+        .navbar .badge {
+            animation: popBadge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Form input glows & transitions */
+        .form-control, .form-select {
+            transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 3px rgba(162, 56, 74, 0.12) !important;
+            background-color: #ffffff !important;
+            outline: none;
+        }
+
+        /* Premium Dropdown Transitions */
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            display: block !important;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        /* Chevron/Arrow slide interactions */
+        .btn-minimal-primary i, .btn-minimal-accent i, .btn-minimal-secondary i,
+        a i {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+        }
+        .btn-minimal-primary:hover i.bi-arrow-right, 
+        .btn-minimal-accent:hover i.bi-arrow-right,
+        .btn-minimal-secondary:hover i.bi-arrow-right,
+        .btn-minimal-primary:hover i.bi-chevron-right, 
+        .btn-minimal-accent:hover i.bi-chevron-right,
+        .btn-minimal-secondary:hover i.bi-chevron-right,
+        a:hover i.bi-arrow-right,
+        a:hover i.bi-chevron-right {
+            transform: translateX(4px);
+        }
+        .btn-minimal-primary:hover i.bi-arrow-left,
+        .btn-minimal-secondary:hover i.bi-arrow-left,
+        a:hover i.bi-arrow-left {
+            transform: translateX(-4px);
         }
 
         /* Improved Navigation Link Styles */
@@ -366,6 +447,98 @@
         .stagger-1 { animation-delay: 0.1s; }
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+
+        /* Top Page-Load Progress Bar */
+        #page-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background-color: var(--accent-color);
+            z-index: 10000;
+            width: 0%;
+            opacity: 0;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        /* Submit Button Loading Styles */
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.85;
+            position: relative;
+        }
+
+        /* Active micro-press scale transition */
+        .btn-minimal-primary:active, 
+        .btn-minimal-accent:active, 
+        .btn-minimal-secondary:active,
+        .btn:active {
+            transform: scale(0.97) translateY(0) !important;
+            transition: transform 0.1s ease !important;
+        }
+        
+        /* Floating Toast Styling */
+        #toast-container {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 10050;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 420px;
+            width: calc(100% - 3rem);
+            pointer-events: none;
+        }
+        .premium-toast {
+            pointer-events: auto;
+            background-color: var(--primary-color);
+            color: var(--bg-main);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 3px;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 10px 30px rgba(30, 30, 29, 0.15);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            font-size: 0.875rem;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .premium-toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .premium-toast.hide {
+            opacity: 0;
+            transform: translateX(40px) translateY(-10px);
+        }
+        .premium-toast-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0;
+            cursor: pointer;
+            margin-left: auto;
+            transition: color 0.2s ease;
+        }
+        .premium-toast-close:hover {
+            color: #ffffff;
+        }
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2.5px;
+            background-color: var(--accent-color);
+            width: 100%;
+        }
     </style>
     @yield('styles')
     
@@ -384,6 +557,11 @@
     @endif
 </head>
 <body>
+    <!-- Top Page-Load Progress Bar -->
+    <div id="page-progress-bar"></div>
+
+    <!-- Floating Toast Container -->
+    <div id="toast-container"></div>
 
     <!-- Minimalist Navbar -->
     <nav class="navbar navbar-expand-lg">
@@ -557,5 +735,93 @@
 
     
     @yield('scripts')
+
+    <!-- Global Premium UX Script -->
+    <script nonce="{{ app('csp-nonce') }}">
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Page Load Top Progress Bar Animation
+            const progressBar = document.getElementById('page-progress-bar');
+            if (progressBar) {
+                // Initialize loader animation on page view
+                progressBar.style.opacity = '1';
+                progressBar.style.width = '100%';
+                
+                setTimeout(() => {
+                    progressBar.style.opacity = '0';
+                    setTimeout(() => {
+                        progressBar.style.width = '0%';
+                    }, 400);
+                }, 500);
+            }
+
+            // 2. Pre-trigger Progress Bar on internal link clicks for immediate visual feedback
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link) {
+                    const href = link.getAttribute('href');
+                    const target = link.getAttribute('target');
+                    
+                    if (href && 
+                        !href.startsWith('#') && 
+                        !href.startsWith('javascript:') && 
+                        target !== '_blank' && 
+                        !e.defaultPrevented && 
+                        !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                        
+                        // Ignore form submit elements styled as links
+                        if (link.closest('form')) return;
+                        
+                        if (progressBar) {
+                            progressBar.style.transition = 'width 2s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.2s ease';
+                            progressBar.style.opacity = '1';
+                            progressBar.style.width = '85%';
+                        }
+                    }
+                }
+            });
+
+            // 3. Form Submit Loading Spinner
+            let lastClickedSubmit = null;
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+                if (btn) {
+                    lastClickedSubmit = btn;
+                }
+            });
+
+            document.addEventListener('submit', function(e) {
+                const form = e.target;
+                
+                // Trigger page progress bar on standard submissions (not target _blank)
+                if (progressBar && form.getAttribute('target') !== '_blank') {
+                    progressBar.style.transition = 'width 2s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.2s ease';
+                    progressBar.style.opacity = '1';
+                    progressBar.style.width = '85%';
+                }
+
+                // Skip if form has a data-no-spinner attribute
+                if (form.dataset.noSpinner === 'true') return;
+                
+                let submitBtn = lastClickedSubmit;
+                if (!submitBtn || submitBtn.form !== form) {
+                    submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                }
+                
+                if (submitBtn) {
+                    // Prevent double clicks
+                    submitBtn.classList.add('btn-loading');
+                    
+                    // Render spinner on button
+                    if (submitBtn.tagName.toLowerCase() === 'button' && !submitBtn.querySelector('.spinner-border')) {
+                        const spinner = document.createElement('span');
+                        spinner.className = 'spinner-border spinner-border-sm me-2';
+                        spinner.setAttribute('role', 'status');
+                        spinner.setAttribute('aria-hidden', 'true');
+                        submitBtn.prepend(spinner);
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
