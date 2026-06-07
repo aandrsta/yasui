@@ -21,20 +21,16 @@
     }
 
     .filter-title {
-        font-family: 'Zen Old Mincho', serif;
         font-weight: 700;
-        font-size: 0.775rem;
+        font-size: 0.8rem;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.08em;
         color: var(--primary-color);
         margin-bottom: 1.25rem;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 0.5rem;
-        display: block;
     }
 
     .category-filter-link {
-        font-size: 0.85rem;
+        font-size: 0.875rem;
         color: var(--text-muted);
         text-decoration: none;
         display: flex;
@@ -52,22 +48,7 @@
         padding-left: 4px;
     }
 
-    .category-filter-link .badge {
-        font-weight: 400;
-        font-size: 0.725rem;
-        background-color: var(--bg-subtle) !important;
-        border: 1px solid var(--border-color) !important;
-        color: var(--text-muted) !important;
-        transition: var(--transition-base);
-    }
-
-    .category-filter-link:hover .badge, .category-filter-link.active .badge {
-        border-color: rgba(162, 56, 74, 0.3) !important;
-        color: var(--accent-color) !important;
-        background-color: rgba(162, 56, 74, 0.02) !important;
-    }
-
-    /* Product Grid Cards - Museum Gallery Frame */
+    /* Product Grid Cards */
     .product-grid-card {
         background-color: var(--bg-main);
         border: 1px solid var(--border-color);
@@ -80,9 +61,9 @@
     }
 
     .product-grid-card:hover {
-        border-color: var(--accent-color);
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px -15px rgba(162, 56, 74, 0.1);
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px -8px rgba(30, 30, 29, 0.06);
     }
 
     .product-image-wrapper {
@@ -102,48 +83,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1.25rem; /* Inset padding for Museum Frame look */
     }
 
     .product-image-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* Shows entire figure outlines beautifully */
         transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .product-grid-card:hover .product-image-container img {
-        transform: scale(1.05);
-    }
-
-    /* Traditional Hanko verification stamp inside catalog card */
-    .product-stamp-seal {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 22px;
-        height: 22px;
-        border: 1.5px double rgba(162, 56, 74, 0.4);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Zen Old Mincho', serif;
-        font-size: 0.65rem;
-        font-weight: 700;
-        color: rgba(162, 56, 74, 0.5);
-        background-color: rgba(251, 250, 247, 0.85);
-        z-index: 10;
-        pointer-events: none;
-        user-select: none;
-        transform: rotate(-10deg);
-        transition: var(--transition-base);
-    }
-
-    .product-grid-card:hover .product-stamp-seal {
-        color: var(--accent-color);
-        border-color: var(--accent-color);
-        transform: rotate(-15deg) scale(1.05);
+        transform: scale(1.04);
     }
 
     .product-fallback-img {
@@ -167,27 +114,26 @@
     }
 
     .product-category-label {
-        font-size: 0.7rem;
+        font-size: 0.725rem;
         font-weight: 700;
         text-transform: uppercase;
         color: var(--text-muted);
-        letter-spacing: 0.08em;
-        margin-bottom: 0.35rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
     }
 
     .product-title {
-        font-family: 'Zen Old Mincho', serif;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--primary-color);
-        margin-bottom: 0.75rem;
-        line-height: 1.5;
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
         text-decoration: none;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        height: 2.7rem;
+        height: 2.8rem;
         transition: var(--transition-base);
     }
 
@@ -196,11 +142,9 @@
     }
 
     .product-price {
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 600;
-        font-size: 1.15rem;
-        color: var(--accent-color);
-        letter-spacing: -0.01em;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--primary-color);
     }
 
     /* Minimalist Form Select */
@@ -209,28 +153,27 @@
         background-color: var(--bg-subtle);
         border-radius: 3px;
         font-size: 0.85rem;
-        padding: 10px 12px;
+        padding: 8px 12px;
         transition: var(--transition-base);
     }
 
     .minimal-select:focus {
         outline: none;
-        border-color: var(--accent-color);
+        border-color: var(--primary-color);
         background-color: var(--bg-main);
     }
 
     .filter-sidebar h2 {
-        font-family: 'Zen Old Mincho', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        font-size: 1.35rem;
+        font-size: 1.8rem;
         letter-spacing: -0.01em;
     }
-    
-    .catalog-title {
-        font-family: 'Zen Old Mincho', serif;
+    .col-lg-9 h1 {
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        font-size: 2rem;
-        letter-spacing: -0.02em;
+        font-size: 2.2rem;
+        letter-spacing: -0.01em;
     }
 </style>
 @endsection
@@ -240,7 +183,7 @@
     <!-- Filter Sidebar (Left Column) -->
     <div class="col-lg-3">
         <div class="filter-sidebar">
-            <h2 class="h5 fw-bold text-dark mb-4 pb-2 border-bottom">Filter Produk</h2>
+            <h2 class="h5 fw-bold text-dark mb-4" style="letter-spacing: -0.03em;">Filter Produk</h2>
             
             <form action="{{ url('/products') }}" method="GET" id="filterForm">
                 <!-- Retain current filters during submit -->
@@ -252,9 +195,9 @@
                 <div class="mb-4">
                     <label class="filter-title">Pencarian</label>
                     <div class="input-group">
-                        <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Cari nama produk..." style="font-size: 0.85rem; padding: 10px; border-radius: 3px; border: 1px solid var(--border-color); background-color: var(--bg-subtle);">
+                        <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Cari nama produk..." style="font-size: 0.875rem; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color);">
                         @if(request('q'))
-                            <a href="{{ url('/products') . (request('category') ? '?category='.request('category') : '') . (request('sort') ? (request('category') ? '&' : '?').'sort='.request('sort') : '') }}" class="btn btn-outline-secondary d-flex align-items-center" style="border-color: var(--border-color); border-radius: 3px;">
+                            <a href="{{ url('/products') . (request('category') ? '?category='.request('category') : '') . (request('sort') ? (request('category') ? '&' : '?').'sort='.request('sort') : '') }}" class="btn btn-outline-secondary d-flex align-items-center" style="border-color: var(--border-color);">
                                 <i class="bi bi-x-lg"></i>
                             </a>
                         @endif
@@ -277,19 +220,13 @@
                 <label class="filter-title">Kategori</label>
                 <div class="d-flex flex-column">
                     <a href="{{ url('/products') . (request('q') ? '?q='.request('q') : '') . (request('sort') ? (request('q') ? '&' : '?').'sort='.request('sort') : '') }}" class="category-filter-link {{ !request('category') ? 'active' : '' }}">
-                        <span>全品 / Semua Kategori</span>
+                        <span>Semua Kategori</span>
                         <span class="badge bg-light text-dark border small fw-normal">{{ \App\Models\Product::count() }}</span>
                     </a>
                     
                     @foreach($categories as $category)
-                        @php
-                            $jpName = '';
-                            if ($category->slug === 'figures') $jpName = '人形 / ';
-                            elseif ($category->slug === 'model-kits') $jpName = '模型 / ';
-                            elseif ($category->slug === 'character-goods') $jpName = '雑貨 / ';
-                        @endphp
                         <a href="{{ url('/products?category=' . $category->slug) . (request('q') ? '&q='.request('q') : '') . (request('sort') ? '&sort='.request('sort') : '') }}" class="category-filter-link {{ request('category') == $category->slug ? 'active' : '' }}">
-                            <span>{{ $jpName }}{{ $category->name }}</span>
+                            <span>{{ $category->name }}</span>
                             <span class="badge bg-light text-dark border small fw-normal">{{ $category->products()->count() }}</span>
                         </a>
                     @endforeach
@@ -298,7 +235,7 @@
             
             <!-- Clear Filters Button -->
             @if(request('q') || request('category') || request('sort'))
-                <a href="{{ url('/products') }}" class="btn btn-minimal-secondary w-100 py-2.5 small d-inline-flex align-items-center justify-content-center gap-2">
+                <a href="{{ url('/products') }}" class="btn btn-minimal-secondary w-100 py-2 small d-inline-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-arrow-counterclockwise"></i>
                     <span>Hapus Semua Filter</span>
                 </a>
@@ -308,9 +245,9 @@
 
     <!-- Product Grid (Right Column) -->
     <div class="col-lg-9">
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-light">
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light">
             <div>
-                <h1 class="catalog-title text-dark mb-0">Katalog Produk</h1>
+                <h1 class="h3 fw-bold text-dark mb-0" style="letter-spacing: -0.03em;">Katalog Produk</h1>
                 <p class="text-muted small mb-0 mt-1">Menampilkan {{ $products->firstItem() ?? 0 }}–{{ $products->lastItem() ?? 0 }} dari {{ $products->total() }} produk</p>
             </div>
         </div>
@@ -320,12 +257,9 @@
                 <div class="col-sm-6 col-md-4 animate-fade-in-up stagger-{{ ($loop->index % 3) + 1 }}">
                     <div class="card product-grid-card">
                         <div class="product-image-wrapper">
-                            <!-- Verification Hanko stamp in top right -->
-                            <div class="product-stamp-seal">安</div>
-
                             <a href="{{ url('/products/' . $product->slug) }}" class="product-image-container">
                                 @if($product->image && file_exists(public_path($product->image)))
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-100 h-100 object-fit-cover">
                                 @else
                                     <div class="product-fallback-img">
                                         @if($product->category->slug === 'figures')
@@ -352,17 +286,17 @@
                             </div>
                             
                             <div>
-                                <div class="small text-muted mb-2.5">
+                                <div class="small text-muted mb-2">
                                     @if($product->stock > 0)
                                         <span>Stok: <strong class="text-dark">{{ $product->stock }}</strong></span>
                                     @else
                                         <span class="text-danger fw-semibold">Habis</span>
                                     @endif
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center pt-2.5 border-top border-light">
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top border-light">
                                     <span class="product-price">{{ $product->formatted_price }}</span>
-                                    <a href="{{ url('/products/' . $product->slug) }}" class="btn btn-minimal-secondary btn-sm py-1.5 px-3" style="font-size: 0.775rem;">
-                                        Tinjau
+                                    <a href="{{ url('/products/' . $product->slug) }}" class="btn btn-minimal-secondary btn-sm py-1 px-3" style="font-size: 0.8rem;">
+                                        Detail
                                     </a>
                                 </div>
                             </div>

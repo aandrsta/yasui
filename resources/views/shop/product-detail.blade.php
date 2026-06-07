@@ -23,37 +23,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2.5rem; /* Museum gallery display spacing */
     }
 
     .product-detail-image-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
         transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .product-detail-image-wrapper:hover .product-detail-image-container img {
         transform: scale(1.04);
-    }
-
-    /* Traditional Hanko Authenticity seal next to details */
-    .detail-stamp-seal {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        border: 1.5px double var(--accent-color);
-        border-radius: 50%;
-        font-family: 'Zen Old Mincho', serif;
-        font-size: 0.7rem;
-        font-weight: 700;
-        color: var(--accent-color);
-        transform: rotate(-12deg);
-        user-select: none;
-        pointer-events: none;
-        margin-right: 6px;
     }
 
     .detail-fallback-img {
@@ -77,18 +54,18 @@
     }
 
     .product-detail-title {
-        font-family: 'Zen Old Mincho', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        font-size: 2.2rem;
-        letter-spacing: -0.02em;
+        font-size: 2.8rem;
+        letter-spacing: -0.01em;
         color: var(--primary-color);
-        line-height: 1.25;
+        line-height: 1.1;
     }
 
     .product-detail-price {
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 600;
-        font-size: 2rem;
+        font-family: 'Zen Old Mincho', serif;
+        font-weight: 700;
+        font-size: 1.75rem;
         color: var(--accent-color);
         letter-spacing: -0.02em;
     }
@@ -108,8 +85,8 @@
     }
 
     .description-box {
-        font-size: 0.925rem;
-        line-height: 1.8;
+        font-size: 0.95rem;
+        line-height: 1.7;
         color: var(--text-main);
         border-top: 1px solid var(--border-color);
         border-bottom: 1px solid var(--border-color);
@@ -124,44 +101,12 @@
         border-radius: 3px;
         font-weight: 600;
         font-size: 0.95rem;
-        height: 42px;
     }
 
     .qty-input:focus {
         outline: none;
-        border-color: var(--accent-color);
+        border-color: var(--primary-color);
         background-color: var(--bg-main);
-    }
-
-    /* Curator Notes Callout Card */
-    .curator-note-box {
-        background-color: var(--bg-subtle);
-        border: 1px solid var(--border-color);
-        border-left: 3px solid var(--accent-color);
-        border-radius: 3px;
-        padding: 1.25rem 1.5rem;
-        margin-top: 2rem;
-    }
-
-    .curator-note-badge {
-        font-family: 'Zen Old Mincho', serif;
-        font-size: 0.725rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: var(--accent-color);
-        letter-spacing: 0.05em;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 0.5rem;
-    }
-
-    .curator-note-box p {
-        margin: 0;
-        font-size: 0.85rem;
-        line-height: 1.6;
-        color: var(--text-muted);
-        font-style: italic;
     }
 
     /* Related Products Grid */
@@ -177,9 +122,8 @@
     }
 
     .product-grid-card:hover {
-        border-color: var(--accent-color);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 30px -15px rgba(162, 56, 74, 0.1);
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
     }
 
     .related-image-wrapper {
@@ -198,13 +142,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1rem;
-    }
-
-    .related-image-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
     }
 
     .related-fallback-img {
@@ -228,27 +165,26 @@
     }
 
     .product-category-label {
-        font-size: 0.7rem;
+        font-size: 0.725rem;
         font-weight: 700;
         text-transform: uppercase;
         color: var(--text-muted);
-        letter-spacing: 0.08em;
+        letter-spacing: 0.05em;
         margin-bottom: 0.25rem;
     }
 
     .product-title-link {
-        font-family: 'Zen Old Mincho', serif;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--primary-color);
         margin-bottom: 0.5rem;
-        line-height: 1.5;
+        line-height: 1.4;
         text-decoration: none;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        height: 2.7rem;
+        height: 2.8rem;
     }
 
     .product-title-link:hover {
@@ -256,16 +192,15 @@
     }
 
     .product-price {
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 600;
-        font-size: 1.15rem;
-        color: var(--accent-color);
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--primary-color);
     }
 
     .related-products-title {
-        font-family: 'Zen Old Mincho', serif;
+        font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         letter-spacing: -0.01em;
         color: var(--primary-color);
     }
@@ -317,11 +252,11 @@
                 
                 <div class="status-indicator">
                     @if($product->stock > 0)
-                        <span class="detail-stamp-seal">安</span>
-                        <span class="text-success fw-semibold">Terotentikasi &bull; {{ $product->stock }} Item Tersedia</span>
+                        <span class="indicator-dot bg-success"></span>
+                        <span class="text-success">Tersedia (Stok: {{ $product->stock }})</span>
                     @else
                         <span class="indicator-dot bg-danger"></span>
-                        <span class="text-danger fw-semibold">Stok Habis</span>
+                        <span class="text-danger">Stok Habis</span>
                     @endif
                 </div>
             </div>
@@ -334,8 +269,8 @@
 
             <!-- Description -->
             <div class="description-box py-4 mb-4">
-                <h5 class="fw-bold text-dark mb-2.5 small text-uppercase tracking-wider">Deskripsi Produk</h5>
-                <p class="mb-0 text-muted" style="line-height: 1.85;">{{ $product->description }}</p>
+                <h5 class="fw-bold text-dark mb-2 small text-uppercase tracking-wider">Deskripsi Produk</h5>
+                <p class="mb-0 text-muted" style="line-height: 1.7;">{{ $product->description }}</p>
             </div>
         </div>
 
@@ -354,9 +289,11 @@
 
                         <div class="d-flex flex-column flex-sm-row gap-2 mt-2">
                             <button type="submit" class="btn-minimal-secondary py-3 flex-fill d-inline-flex align-items-center justify-content-center gap-2">
+
                                 <span class="fw-semibold">Tambah ke Keranjang</span>
                             </button>
                             <button type="submit" name="buy_now" value="1" class="btn-minimal-accent py-3 flex-fill d-inline-flex align-items-center justify-content-center gap-2">
+                          
                                 <span class="fw-semibold">Beli Sekarang</span>
                             </button>
                         </div>
@@ -380,14 +317,6 @@
                     <span class="fw-semibold">Stok Tidak Tersedia</span>
                 </button>
             @endif
-
-            <!-- Curator Notes Callout Card -->
-            <div class="curator-note-box">
-                <div class="curator-note-badge">
-                    <i class="bi bi-patch-check"></i> Catatan Kurasi Galeri
-                </div>
-                <p>Setiap item merchandise anime di YASSUI melewati kurasi fisik dan penilaian standar koleksi. Kami menjamin keaslian 100% dan orisinalitas langsung dari produsen resmi di Jepang.</p>
-            </div>
         </div>
     </div>
 </div>
@@ -398,7 +327,7 @@
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <span class="text-uppercase text-muted fw-semibold small letter-spacing-1">Produk Sejenis</span>
-                <h3 class="related-products-title mt-1 mb-0">Rekomendasi Terkait</h3>
+                <h3 class="related-products-title mt-1 mb-0">Produk Terkait</h3>
             </div>
         </div>
 
@@ -409,7 +338,7 @@
                         <div class="related-image-wrapper">
                             <a href="{{ url('/products/' . $related->slug) }}" class="related-image-container">
                                 @if($related->image && file_exists(public_path($related->image)))
-                                    <img src="{{ asset($related->image) }}" alt="{{ $related->name }}">
+                                    <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" class="w-100 h-100 object-fit-cover">
                                 @else
                                     <div class="related-fallback-img">
                                         @if($related->category->slug === 'figures')
@@ -434,10 +363,10 @@
                                 </a>
                             </div>
                             
-                            <div class="d-flex justify-content-between align-items-center mt-3 pt-2.5 border-top border-light">
+                            <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-light">
                                 <span class="product-price">{{ $related->formatted_price }}</span>
-                                <a href="{{ url('/products/' . $related->slug) }}" class="btn btn-minimal-secondary btn-sm py-1.5 px-3" style="font-size: 0.775rem;">
-                                    Tinjau
+                                <a href="{{ url('/products/' . $related->slug) }}" class="btn btn-minimal-secondary btn-sm py-1 px-3" style="font-size: 0.8rem;">
+                                    Detail
                                 </a>
                             </div>
                         </div>
@@ -486,3 +415,5 @@
     });
 </script>
 @endsection
+
+
