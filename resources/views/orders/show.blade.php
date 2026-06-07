@@ -192,10 +192,15 @@
                             <!-- Outlined circular frame representing traditional round seal -->
                             <circle cx="50" cy="50" r="42" stroke-width="5" />
                             <circle cx="50" cy="50" r="37" stroke-width="1.5" />
-                            <!-- Kanji right: "安" (Yasui / peace) -->
-                            <path d="M68 28 h-14 M60 28 v10 M52 38 h16 M54 46 c3-3 6-7 8-10 M57 46 l10 10 M54 66 c4-3 9-9 11-15 M60 55 v18" stroke-width="4.5" stroke-linecap="round" />
-                            <!-- Kanji left: "水" (Sui / water) -->
-                            <path d="M36 24 v48 c0 3-1.5 5-5 5 M36 46 c-3-3-8-6-10-6 M26 62 c3-2 6-5 8-8 M36 44 c3 3 8 8 11 11 M45 31 c-3 3-6 6-8 8" stroke-width="4.5" stroke-linecap="round" />
+                            <!-- Single centered Kanji: "安" (An / Yasu) representing YASSUI -->
+                            <!-- Roof radical (宀) -->
+                            <path d="M50 20 v6" stroke-width="5" stroke-linecap="round" />
+                            <path d="M30 30 c0 3-1.5 6-3.5 8.5" stroke-width="4.5" stroke-linecap="round" />
+                            <path d="M30 30 h40 v5.5 l-3 3" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <!-- Woman radical (女) -->
+                            <path d="M50 39 L34 66 h26" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M39 48 c8 5.5 16 13.5 25 21" stroke-width="4.5" stroke-linecap="round" />
+                            <path d="M22 56 h56" stroke-width="5" stroke-linecap="round" />
                         </g>
                     </svg>
                 </div>
