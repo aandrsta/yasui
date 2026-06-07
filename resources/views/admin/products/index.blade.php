@@ -208,12 +208,17 @@
         // Handle custom confirmation modals on product deletions
         document.querySelectorAll('.delete-product-form').forEach(form => {
             form.addEventListener('submit', function(e) {
+                if (form.dataset.confirmed === 'true') {
+                    return;
+                }
+                
                 e.preventDefault();
                 window.premiumConfirm(
                     'Apakah Anda yakin ingin menghapus produk ini dari katalog?',
                     'Hapus Produk'
                 ).then(confirmed => {
                     if (confirmed) {
+                        form.dataset.confirmed = 'true';
                         if (typeof form.requestSubmit === 'function') {
                             form.requestSubmit();
                         } else {

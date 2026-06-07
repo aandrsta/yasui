@@ -698,12 +698,17 @@
         const cancelForm = document.getElementById('cancel-order-form');
         if (cancelForm) {
             cancelForm.addEventListener('submit', function(e) {
+                if (cancelForm.dataset.confirmed === 'true') {
+                    return;
+                }
+                
                 e.preventDefault();
                 window.premiumConfirm(
                     'Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.',
                     'Batalkan Pesanan'
                 ).then(confirmed => {
                     if (confirmed) {
+                        cancelForm.dataset.confirmed = 'true';
                         if (typeof cancelForm.requestSubmit === 'function') {
                             cancelForm.requestSubmit();
                         } else {
@@ -717,12 +722,17 @@
         const completeForm = document.getElementById('complete-order-form');
         if (completeForm) {
             completeForm.addEventListener('submit', function(e) {
+                if (completeForm.dataset.confirmed === 'true') {
+                    return;
+                }
+                
                 e.preventDefault();
                 window.premiumConfirm(
                     'Apakah Anda yakin barang belanjaan Anda sudah diterima dengan baik? Tindakan ini akan menyelesaikan transaksi.',
                     'Konfirmasi Penerimaan'
                 ).then(confirmed => {
                     if (confirmed) {
+                        completeForm.dataset.confirmed = 'true';
                         if (typeof completeForm.requestSubmit === 'function') {
                             completeForm.requestSubmit();
                         } else {

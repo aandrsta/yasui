@@ -321,6 +321,10 @@
 
         if (form && overlay) {
             form.addEventListener('submit', function(e) {
+                if (form.dataset.confirmed === 'true') {
+                    return;
+                }
+                
                 e.preventDefault();
                 
                 // Check native HTML5 validation
@@ -335,6 +339,7 @@
                     'Konfirmasi Pesanan'
                 ).then(confirmed => {
                     if (confirmed) {
+                        form.dataset.confirmed = 'true';
                         overlay.classList.add('active');
                         if (typeof form.requestSubmit === 'function') {
                             form.requestSubmit();

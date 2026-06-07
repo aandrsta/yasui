@@ -183,12 +183,17 @@
         // Handle custom confirmation modals on category deletions
         document.querySelectorAll('.delete-category-form').forEach(form => {
             form.addEventListener('submit', function(e) {
+                if (form.dataset.confirmed === 'true') {
+                    return;
+                }
+                
                 e.preventDefault();
                 window.premiumConfirm(
                     'Apakah Anda yakin ingin menghapus kategori ini?',
                     'Hapus Kategori'
                 ).then(confirmed => {
                     if (confirmed) {
+                        form.dataset.confirmed = 'true';
                         if (typeof form.requestSubmit === 'function') {
                             form.requestSubmit();
                         } else {

@@ -158,6 +158,10 @@
         // Intercept fast update status forms with premiumConfirm
         document.querySelectorAll('.update-status-form').forEach(form => {
             form.addEventListener('submit', function(e) {
+                if (form.dataset.confirmed === 'true') {
+                    return;
+                }
+                
                 e.preventDefault();
                 const select = form.querySelector('select[name="status"]');
                 const statusText = select.options[select.selectedIndex].text;
@@ -167,6 +171,7 @@
                     'Konfirmasi Perubahan Status'
                 ).then(confirmed => {
                     if (confirmed) {
+                        form.dataset.confirmed = 'true';
                         if (typeof form.requestSubmit === 'function') {
                             form.requestSubmit();
                         } else {
