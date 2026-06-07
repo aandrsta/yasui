@@ -144,7 +144,7 @@
     .product-price {
         font-weight: 700;
         font-size: 1.05rem;
-        color: var(--primary-color);
+        color: var(--accent-color);
     }
 
     /* Minimalist Form Select */
