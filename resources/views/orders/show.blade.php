@@ -280,6 +280,16 @@
                     <i class="bi bi-arrow-clockwise"></i>
                     <span>Cek Status Pembayaran</span>
                 </a>
+
+                @if($order->status === \App\Models\Order::STATUS_PENDING)
+                    <!-- Cancel Order Button -->
+                    <form action="{{ route('orders.cancel', $order->id) }}" method="POST" class="mt-3" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.')">
+                        @csrf
+                        <button type="submit" class="btn btn-link text-danger small w-100 text-decoration-none fw-semibold text-center border-0 p-0" style="font-size: 0.825rem; transition: var(--transition-base);">
+                            <i class="bi bi-x-circle me-1"></i> Batalkan Pesanan
+                        </button>
+                    </form>
+                @endif
             @else
                 <button disabled class="btn-minimal-secondary w-100 py-3 d-inline-flex align-items-center justify-content-center gap-2 opacity-75 cursor-not-allowed">
                     <i class="bi bi-exclamation-triangle"></i>
@@ -293,11 +303,66 @@
                 <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Pesanan ini telah dibatalkan karena kegagalan pembayaran atau pembatalan manual.</p>
             </div>
         @else
-            <div class="text-center p-4 border border-success rounded bg-success bg-opacity-10 mb-0">
-                <i class="bi bi-patch-check-fill fs-2 text-success mb-2 d-block"></i>
-                <span class="fw-bold text-success d-block">Pembayaran Berhasil!</span>
-                <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Terima kasih atas pembelian Anda. Pesanan Anda akan segera diproses oleh penjual.</p>
-            </div>
+            @if($order->status === \App\Models\Order::STATUS_SHIPPED)
+                <div class="text-center p-4 border border-info rounded bg-info bg-opacity-10 mb-3">
+                    <i class="bi bi-truck fs-2 text-info mb-2 d-block"></i>
+                    <span class="fw-bold text-dark d-block">Pesanan Sedang Dikirim</span>
+                    <p class="small text-muted mb-3 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Pesanan Anda telah diserahkan ke kurir dan sedang dalam perjalanan. Silakan klik tombol di bawah untuk menyelesaikan pesanan jika Anda sudah menerima barang belanjaan Anda.</p>
+                    
+                    <form action="{{ route('orders.complete', $order->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin barang belanjaan Anda sudah diterima dengan baik? Tindakan ini akan menyelesaikan transaksi.')">
+                        @csrf
+                        <button type="submit" class="btn-minimal-accent w-100 py-2.5 border-0 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm fw-semibold">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Konfirmasi Pesanan Diterima</span>
+                        </button>
+                    </form>
+                </div>
+            @elseif($order->status === \App\Models\Order::STATUS_COMPLETED)
+                <div class="text-center p-4 border border-success rounded bg-success bg-opacity-10 mb-3">
+                    <i class="bi bi-patch-check-fill fs-2 text-success mb-2 d-block"></i>
+                    <span class="fw-bold text-success d-block">Pesanan Selesai!</span>
+                    <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Transaksi telah selesai. Terima kasih telah berbelanja di YASSUI!</p>
+                </div>
+            @else
+                <div class="text-center p-4 border border-success rounded bg-success bg-opacity-10 mb-3">
+                    <i class="bi bi-patch-check-fill fs-2 text-success mb-2 d-block"></i>
+                    <span class="fw-bold text-success d-block">Pembayaran Berhasil!</span>
+                    <p class="small text-muted mb-0 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Terima kasih atas pembelian Anda. Pesanan Anda sedang diproses oleh penjual.</p>
+                </div>
+            @endif
+
+            @if($order->payment)
+                @php
+                    $paymentMethods = [
+                        'credit_card' => 'Kartu Kredit',
+                        'gopay' => 'GoPay',
+                        'qris' => 'QRIS',
+                        'shopeepay' => 'ShopeePay',
+                        'bank_transfer' => 'Transfer Bank (VA)',
+                        'echannel' => 'Mandiri Bill Payment',
+                        'bca_klikpay' => 'BCA KlikPay',
+                        'brizzi' => 'BRIZZI',
+                        'akulaku' => 'Akulaku PayLater',
+                        'cstore' => 'Gerai Retail (Indomaret/Alfamart)',
+                    ];
+                    $friendlyMethod = $paymentMethods[$order->payment->payment_type] ?? strtoupper(str_replace('_', ' ', $order->payment->payment_type));
+                @endphp
+                <div class="p-3 border rounded bg-light" style="font-size: 0.825rem; border-color: var(--border-color) !important;">
+                    <span class="d-block text-muted small fw-semibold text-uppercase tracking-wider mb-2" style="letter-spacing: 0.05em;">Detail Pembayaran</span>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Metode:</span>
+                        <strong class="text-dark">{{ $friendlyMethod }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">ID Transaksi:</span>
+                        <span class="text-dark text-truncate ms-2" style="max-width: 155px;" title="{{ $order->payment->transaction_id }}">{{ $order->payment->transaction_id }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Waktu:</span>
+                        <span class="text-dark">{{ $order->payment->updated_at->format('d M Y, H:i') }}</span>
+                    </div>
+                </div>
+            @endif
         @endif
     </div>
 </div>

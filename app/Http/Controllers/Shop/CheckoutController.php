@@ -17,15 +17,22 @@ class CheckoutController extends Controller
      *
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cartItems = Cart::where('user_id', auth()->id())
-            ->with('product')
-            ->get();
+        $selectedIds = $request->input('items', []);
+
+        $query = Cart::where('user_id', auth()->id())
+            ->with('product');
+
+        if (!empty($selectedIds)) {
+            $query->whereIn('id', $selectedIds);
+        }
+
+        $cartItems = $query->get();
 
         // Redirect back if cart is empty
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong, tidak dapat melanjutkan ke checkout.');
+            return redirect()->route('cart.index')->with('error', 'Pilih minimal satu produk untuk melanjutkan ke checkout.');
         }
 
         // Calculate total
@@ -35,7 +42,7 @@ class CheckoutController extends Controller
 
         $formattedTotalPrice = 'Rp ' . number_format($totalPrice, 0, ',', '.');
 
-        return view('shop.checkout', compact('cartItems', 'totalPrice', 'formattedTotalPrice'));
+        return view('shop.checkout', compact('cartItems', 'totalPrice', 'formattedTotalPrice', 'selectedIds'));
     }
 
     /**
@@ -46,12 +53,19 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        $cartItems = Cart::where('user_id', auth()->id())
-            ->with('product')
-            ->get();
+        $selectedIds = $request->input('items', []);
+
+        $query = Cart::where('user_id', auth()->id())
+            ->with('product');
+
+        if (!empty($selectedIds)) {
+            $query->whereIn('id', $selectedIds);
+        }
+
+        $cartItems = $query->get();
 
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong.');
+            return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong atau tidak ada item terpilih.');
         }
 
         // Validate shipping details
@@ -108,8 +122,12 @@ class CheckoutController extends Controller
                     $item->product->decrement('stock', $item->quantity);
                 }
 
-                // 3. Clear the user's cart
-                Cart::where('user_id', auth()->id())->delete();
+                // 3. Clear only the purchased items from the user's cart
+                if (!empty($selectedIds)) {
+                    Cart::where('user_id', auth()->id())->whereIn('id', $selectedIds)->delete();
+                } else {
+                    Cart::where('user_id', auth()->id())->delete();
+                }
 
                 return $order;
             });

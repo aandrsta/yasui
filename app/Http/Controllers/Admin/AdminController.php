@@ -182,6 +182,9 @@ class AdminController extends Controller
      */
     public function ordersIndex(Request $request)
     {
+        // Cancel expired orders in real-time on load to keep data synced
+        \App\Console\Commands\CancelExpiredOrders::cancelExpired();
+
         $query = Order::with('user');
 
         // Filter by Status
@@ -203,6 +206,18 @@ class AdminController extends Controller
     }
 
     /**
+     * Display the specified order detail page for admin management.
+     */
+    public function ordersShow(Order $order)
+    {
+        // Cancel expired orders in real-time on load to keep data synced
+        \App\Console\Commands\CancelExpiredOrders::cancelExpired();
+        
+        $order->load(['user', 'items.product', 'payment']);
+        return view('admin.orders.show', compact('order'));
+    }
+
+    /**
      * Update the shipment/fulfillment status of an order.
      */
     public function ordersUpdateStatus(Request $request, Order $order)
@@ -216,6 +231,19 @@ class AdminController extends Controller
 
         if ($oldStatus === $newStatus) {
             return redirect()->back();
+        }
+
+        // Lock status changes for cancelled or completed orders
+        if ($oldStatus === Order::STATUS_CANCELLED) {
+            return redirect()->back()->with('error', 'Status pesanan yang sudah dibatalkan tidak dapat diubah lagi.');
+        }
+        if ($oldStatus === Order::STATUS_COMPLETED) {
+            return redirect()->back()->with('error', 'Status pesanan yang sudah selesai tidak dapat diubah lagi.');
+        }
+
+        // Lock shipped and completed statuses for unpaid orders
+        if ($order->payment_status !== Order::PAYMENT_PAID && in_array($newStatus, [Order::STATUS_SHIPPED, Order::STATUS_COMPLETED])) {
+            return redirect()->back()->with('error', 'Pesanan yang belum dibayar tidak dapat diubah statusnya menjadi Shipped atau Completed.');
         }
 
         DB::transaction(function () use ($order, $oldStatus, $newStatus) {

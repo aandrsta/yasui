@@ -31,6 +31,9 @@ class OrderController extends Controller
      */
     public function show($id)
     {
+        // Cancel expired orders in real-time on load to keep data synced
+        \App\Console\Commands\CancelExpiredOrders::cancelExpired();
+
         $order = Order::where('id', $id)
             ->where('user_id', auth()->id())
             ->with('items.product')
@@ -138,10 +141,74 @@ class OrderController extends Controller
      */
     public function index()
     {
+        // Cancel expired orders in real-time on load to keep data synced
+        \App\Console\Commands\CancelExpiredOrders::cancelExpired();
+
         $orders = Order::where('user_id', auth()->id())
             ->latest()
             ->paginate(10);
 
         return view('orders.index', compact('orders'));
+    }
+
+    /**
+     * Cancel the specified order (user self-cancel).
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function cancel(Order $order)
+    {
+        // Ensure user owns this order
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Can only cancel if order is pending and unpaid
+        if ($order->status !== Order::STATUS_PENDING || $order->payment_status !== Order::PAYMENT_UNPAID) {
+            return redirect()->back()->with('error', 'Pesanan ini tidak dapat dibatalkan.');
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($order) {
+            $order->load('items.product');
+            // Revert stock
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $item->product->increment('stock', $item->quantity);
+                }
+            }
+
+            $order->update([
+                'status' => Order::STATUS_CANCELLED,
+                'payment_status' => Order::PAYMENT_FAILED
+            ]);
+        });
+
+        return redirect()->back()->with('success', 'Pesanan Anda berhasil dibatalkan. Stok barang telah dikembalikan.');
+    }
+
+    /**
+     * Mark the specified order as completed (user confirms receipt).
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function complete(Order $order)
+    {
+        // Ensure user owns this order
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Can only complete if order is shipped
+        if ($order->status !== Order::STATUS_SHIPPED) {
+            return redirect()->back()->with('error', 'Status pesanan tidak valid untuk diselesaikan.');
+        }
+
+        $order->update([
+            'status' => Order::STATUS_COMPLETED
+        ]);
+
+        return redirect()->back()->with('success', 'Pesanan telah selesai! Terima kasih telah berbelanja di YASSUI.');
     }
 }

@@ -134,6 +134,9 @@
 
 <form action="{{ route('checkout.store') }}" method="POST">
     @csrf
+    @foreach($selectedIds as $selectedId)
+        <input type="hidden" name="items[]" value="{{ $selectedId }}">
+    @endforeach
     
     <div class="checkout-wrapper animate-fade-in-up">
         <!-- Left Side: Shipping Address Form -->

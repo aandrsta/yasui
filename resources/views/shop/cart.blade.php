@@ -223,109 +223,211 @@
         </div>
     </div>
 @else
-    <div class="cart-wrapper animate-fade-in-up">
-        <!-- Left Side: Cart Items List -->
-        <div class="cart-items-card">
-            @foreach($cartItems as $item)
-                <div class="cart-item-row">
-                    <!-- Product Image -->
-                    <div class="cart-image-wrapper">
-                        @if($item->product->image && file_exists(public_path($item->product->image)))
-                            <img src="{{ asset($item->product->image) }}" alt="{{ $item->product->name }}" class="w-100 h-100 object-fit-cover">
-                        @else
-                            <div class="cart-fallback-icon">
-                                @if($item->product->category->slug === 'figures')
-                                    <i class="bi bi-box-seam"></i>
-                                @elseif($item->product->category->slug === 'model-kits')
-                                    <i class="bi bi-tools"></i>
-                                @elseif($item->product->category->slug === 'character-goods')
-                                    <i class="bi bi-gem"></i>
-                                @else
-                                    <i class="bi bi-hearts"></i>
-                                @endif
+    <form action="{{ route('checkout.index') }}" method="GET" id="checkout-form">
+        <div class="cart-wrapper animate-fade-in-up">
+            <!-- Left Side: Cart Items List -->
+            <div class="cart-items-card">
+                <!-- Select All Header -->
+                <div class="p-3 border-bottom d-flex align-items-center gap-3 bg-light" style="border-radius: 3px 3px 0 0;">
+                    <input type="checkbox" id="select-all-cart" class="form-check-input" checked style="width: 17px; height: 17px; cursor: pointer; border-color: var(--text-muted); background-color: var(--bg-subtle);">
+                    <label for="select-all-cart" class="small fw-bold text-dark mb-0" style="cursor: pointer; font-size: 0.85rem; letter-spacing: -0.01em;">PILIH SEMUA PRODUK</label>
+                </div>
+
+                @foreach($cartItems as $item)
+                    <div class="cart-item-row">
+                        <!-- Select Item Checkbox -->
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" name="items[]" value="{{ $item->id }}" class="cart-item-checkbox form-check-input" checked style="width: 17px; height: 17px; cursor: pointer; border-color: var(--text-muted); background-color: var(--bg-subtle);" data-qty="{{ $item->quantity }}" data-subtotal="{{ $item->subtotal }}">
+                        </div>
+
+                        <!-- Product Image -->
+                        <div class="cart-image-wrapper">
+                            @if($item->product->image && file_exists(public_path($item->product->image)))
+                                <img src="{{ asset($item->product->image) }}" alt="{{ $item->product->name }}" class="w-100 h-100 object-fit-cover">
+                            @else
+                                <div class="cart-fallback-icon">
+                                    @if($item->product->category->slug === 'figures')
+                                        <i class="bi bi-box-seam"></i>
+                                    @elseif($item->product->category->slug === 'model-kits')
+                                        <i class="bi bi-tools"></i>
+                                    @elseif($item->product->category->slug === 'character-goods')
+                                        <i class="bi bi-gem"></i>
+                                    @else
+                                        <i class="bi bi-hearts"></i>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Product Description -->
+                        <div class="cart-info">
+                            <span class="cart-item-category">{{ $item->product->category->name }}</span>
+                            <a href="{{ url('/products/' . $item->product->slug) }}" class="cart-item-name">
+                                {{ $item->product->name }}
+                            </a>
+                            <span class="cart-item-price">{{ 'Rp ' . number_format($item->product->price, 0, ',', '.') }}</span>
+                            
+                            <!-- Stock warnings if low -->
+                            @if($item->product->stock < 5)
+                                <div class="text-warning small mt-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-exclamation-triangle"></i> Sisa stok sedikit! (Sisa: {{ $item->product->stock }})
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Quantity Input Trigger (Plain form components) -->
+                        <div>
+                            <div class="cart-qty-form">
+                                <input type="number" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="form-control cart-qty-input">
+                                <button type="button" class="btn btn-update-qty shadow-sm" title="Perbarui Jumlah" onclick="updateItemQuantity({{ $item->id }}, this)">
+                                    <i class="bi bi-check2"></i>
+                                </button>
                             </div>
-                        @endif
-                    </div>
+                        </div>
 
-                    <!-- Product Description -->
-                    <div class="cart-info">
-                        <span class="cart-item-category">{{ $item->product->category->name }}</span>
-                        <a href="{{ url('/products/' . $item->product->slug) }}" class="cart-item-name">
-                            {{ $item->product->name }}
-                        </a>
-                        <span class="cart-item-price">{{ 'Rp ' . number_format($item->product->price, 0, ',', '.') }}</span>
-                        
-                        <!-- Stock warnings if low -->
-                        @if($item->product->stock < 5)
-                            <div class="text-warning small mt-1" style="font-size: 0.75rem;">
-                                <i class="bi bi-exclamation-triangle"></i> Sisa stok sedikit! (Sisa: {{ $item->product->stock }})
-                            </div>
-                        @endif
-                    </div>
+                        <!-- Subtotal for this Item -->
+                        <div class="cart-subtotal-price">
+                            {{ $item->formatted_subtotal }}
+                        </div>
 
-                    <!-- Quantity Input Form -->
-                    <div>
-                        <form action="{{ route('cart.update', $item->id) }}" method="POST" class="cart-qty-form">
-                            @csrf
-                            @method('PATCH')
-                            <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="form-control cart-qty-input">
-                            <button type="submit" class="btn btn-update-qty shadow-sm" title="Perbarui Jumlah">
-                                <i class="bi bi-check2"></i>
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Subtotal for this Item -->
-                    <div class="cart-subtotal-price">
-                        {{ $item->formatted_subtotal }}
-                    </div>
-
-                    <!-- Delete Button Form -->
-                    <div>
-                        <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-cart-remove shadow-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')" title="Hapus Barang">
+                        <!-- Delete Button (Plain button component) -->
+                        <div>
+                            <button type="button" class="btn-cart-remove shadow-sm" title="Hapus Barang" onclick="deleteItem({{ $item->id }})">
                                 <i class="bi bi-trash"></i>
                             </button>
-                        </form>
+                        </div>
                     </div>
+                @endforeach
+            </div>
+
+            <!-- Right Side: Order Summary Panel -->
+            <div class="summary-card shadow-sm">
+                <h3 class="summary-title">Ringkasan Belanja</h3>
+                
+                <div class="summary-row">
+                    <span>Subtotal Barang (<span id="summary-total-qty">{{ $cartItems->sum('quantity') }}</span> unit)</span>
+                    <span class="fw-semibold text-dark" id="summary-subtotal-price">{{ $formattedTotalPrice }}</span>
                 </div>
-            @endforeach
-        </div>
+                
+                <div class="summary-row">
+                    <span>Estimasi Biaya Pengiriman</span>
+                    <span class="text-success fw-semibold">Gratis</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Pajak & Biaya Tambahan</span>
+                    <span>Rp 0</span>
+                </div>
 
-        <!-- Right Side: Order Summary Panel -->
-        <div class="summary-card shadow-sm">
-            <h3 class="summary-title">Ringkasan Belanja</h3>
-            
-            <div class="summary-row">
-                <span>Subtotal Barang ({{ $cartItems->sum('quantity') }} unit)</span>
-                <span class="fw-semibold text-dark">{{ $formattedTotalPrice }}</span>
-            </div>
-            
-            <div class="summary-row">
-                <span>Estimasi Biaya Pengiriman</span>
-                <span class="text-success fw-semibold">Gratis</span>
-            </div>
-            
-            <div class="summary-row">
-                <span>Pajak & Biaya Tambahan</span>
-                <span>Rp 0</span>
-            </div>
+                <div class="summary-row total-row">
+                    <span>Total Harga</span>
+                    <span id="summary-total-price">{{ $formattedTotalPrice }}</span>
+                </div>
 
-            <div class="summary-row total-row">
-                <span>Total Harga</span>
-                <span>{{ $formattedTotalPrice }}</span>
-            </div>
-
-            <a href="{{ route('checkout.index') }}" class="btn-minimal-accent w-100 py-3 text-center text-decoration-none fw-semibold d-inline-block shadow-sm">
-                Lanjutkan ke Checkout
-            </a>
-            
-            <div class="text-center mt-3 small text-muted">
-                <i class="bi bi-shield-check text-success"></i> Transaksi dijamin aman & tepercaya
+                <button type="submit" id="checkout-btn" class="btn-minimal-accent w-100 py-3 text-center border-0 fw-semibold shadow-sm d-inline-block">
+                    Lanjutkan ke Checkout
+                </button>
+                
+                <div class="text-center mt-3 small text-muted">
+                    <i class="bi bi-shield-check text-success"></i> Transaksi dijamin aman & tepercaya
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 @endif
+
+<!-- Hidden Forms for Update and Delete to avoid nested form tags -->
+<form id="update-form" method="POST" style="display:none;">
+    @csrf
+    @method('PATCH')
+    <input type="hidden" name="quantity" id="update-quantity">
+</form>
+
+<form id="delete-form" method="POST" style="display:none;">
+    @csrf
+    @method('DELETE')
+</form>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    function updateItemQuantity(itemId, buttonEl) {
+        const qtyInput = buttonEl.closest('.cart-qty-form').querySelector('.cart-qty-input');
+        const form = document.getElementById('update-form');
+        form.action = "{{ url('/cart') }}/" + itemId;
+        document.getElementById('update-quantity').value = qtyInput.value;
+        form.submit();
+    }
+
+    function deleteItem(itemId) {
+        if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
+            const form = document.getElementById('delete-form');
+            form.action = "{{ url('/cart') }}/" + itemId;
+            form.submit();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAllCheckbox = document.getElementById('select-all-cart');
+        const itemCheckboxes = document.querySelectorAll('.cart-item-checkbox');
+        const summaryTotalQty = document.getElementById('summary-total-qty');
+        const summarySubtotalPrice = document.getElementById('summary-subtotal-price');
+        const summaryTotalPrice = document.getElementById('summary-total-price');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        function formatRupiah(amount) {
+            return 'Rp ' + amount.toLocaleString('id-ID');
+        }
+
+        function updateTotals() {
+            let totalQty = 0;
+            let totalPrice = 0;
+            let checkedCount = 0;
+
+            itemCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    totalQty += parseInt(checkbox.dataset.qty);
+                    totalPrice += parseFloat(checkbox.dataset.subtotal);
+                    checkedCount++;
+                }
+            });
+
+            if (summaryTotalQty) summaryTotalQty.textContent = totalQty;
+            if (summarySubtotalPrice) summarySubtotalPrice.textContent = formatRupiah(totalPrice);
+            if (summaryTotalPrice) summaryTotalPrice.textContent = formatRupiah(totalPrice);
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = itemCheckboxes.length > 0 && checkedCount === itemCheckboxes.length;
+            }
+
+            if (checkoutBtn) {
+                if (checkedCount === 0) {
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        }
+
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                itemCheckboxes.forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+                updateTotals();
+            });
+        }
+
+        itemCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateTotals();
+            });
+        });
+
+        // Run once initially to configure button state
+        updateTotals();
+    });
+</script>
 @endsection

@@ -60,6 +60,9 @@ class MidtransService
                 'start_time' => date("Y-m-d H:i:s O"),
                 'unit' => 'hours',
                 'duration' => 24
+            ],
+            'callbacks' => [
+                'finish' => route('orders.check-status', $order->id),
             ]
         ];
 

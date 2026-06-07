@@ -17,9 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/*.md
-!/README.md
 /setup.sh
 /materi
 /.agents
-nmap_scan.xml
+/docs

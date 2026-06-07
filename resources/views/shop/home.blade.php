@@ -590,9 +590,9 @@
             <div class="p-4 border border-light border-opacity-10 rounded bg-white bg-opacity-5">
                 <h4 class="h5 fw-bold mb-2 font-mincho text-dark">Bergabung ke Guild Kolektor</h4>
                 <p class="small text-dark mb-4" style="opacity: 0.75;">Dapatkan pembaruan produk langka, penawaran kurasi khusus, dan newsletter premium langsung di inbox Anda.</p>
-                <form action="#" class="newsletter-form" onsubmit="event.preventDefault(); alert('Terima kasih! Anda telah bergabung ke newsletter guild YASSUI.');">
+                <form action="#" class="newsletter-form" id="newsletter-guild-form">
                     <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="Masukkan alamat email Anda" required>
+                        <input type="email" id="newsletter-email" class="form-control" placeholder="Masukkan alamat email Anda" required>
                     </div>
                     <button type="submit" class="btn btn-newsletter w-100">Daftar Sekarang</button>
                 </form>
@@ -600,4 +600,70 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.getElementById('newsletter-guild-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const emailInput = document.getElementById('newsletter-email');
+        if (emailInput && emailInput.value) {
+            showPremiumNewsletterToast(emailInput.value);
+            emailInput.value = '';
+        }
+    });
+
+    function showPremiumNewsletterToast(email) {
+        const existing = document.getElementById('newsletter-toast');
+        if (existing) {
+            existing.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.id = 'newsletter-toast';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '2rem';
+        toast.style.right = '2rem';
+        toast.style.zIndex = '9999';
+        toast.style.backgroundColor = '#1e1e1d';
+        toast.style.color = '#fbfaf7';
+        toast.style.borderLeft = '4px solid #a2384a';
+        toast.style.borderRadius = '3px';
+        toast.style.padding = '1rem 1.25rem';
+        toast.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+        toast.style.display = 'flex';
+        toast.style.alignItems = 'center';
+        toast.style.gap = '1rem';
+        toast.style.fontFamily = "'Instrument Sans', sans-serif";
+        toast.style.fontSize = '0.875rem';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(15px)';
+        toast.style.transition = 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+
+        toast.innerHTML = `
+            <div style="background-color: rgba(162, 56, 74, 0.1); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #a2384a; flex-shrink: 0;">
+                <i class="bi bi-envelope-heart"></i>
+            </div>
+            <div>
+                <strong style="display: block; color: #ffffff; font-family: 'Zen Old Mincho', serif; margin-bottom: 2px;">Berhasil Bergabung!</strong>
+                <span style="color: #cbd5e1; font-size: 0.8rem;">Terima kasih! Newsletter akan dikirimkan ke <strong>${email}</strong>.</span>
+            </div>
+        `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+        }, 50);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                toast.remove();
+            }, 400);
+        }, 5000);
+    }
+</script>
 @endsection

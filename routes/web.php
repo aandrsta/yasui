@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function () {
     // Order Routes (Daftar & Detail pesanan)
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::post('/orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
 
     // Rute Cek Status Pembayaran (Real-time Status Polling dari Midtrans API)
     Route::get('/orders/{order}/check-status', [PaymentController::class, 'checkStatus'])->name('orders.check-status');
@@ -82,6 +84,7 @@ Route::middleware('auth')->group(function () {
 
         // Kelola Pesanan Sederhana
         Route::get('/orders', [\App\Http\Controllers\Admin\AdminController::class, 'ordersIndex'])->name('orders.index');
+        Route::get('/orders/{order}', [\App\Http\Controllers\Admin\AdminController::class, 'ordersShow'])->name('orders.show');
         Route::patch('/orders/{order}/status', [\App\Http\Controllers\Admin\AdminController::class, 'ordersUpdateStatus'])->name('orders.update-status');
     });
 });

@@ -16,6 +16,19 @@ class LoginController extends Controller
         if (Auth::check()) {
             return redirect('/');
         }
+
+        $previousUrl = url()->previous();
+        $appUrl = config('app.url');
+
+        if ($previousUrl && 
+            str_starts_with($previousUrl, $appUrl) && 
+            !str_contains($previousUrl, '/login') && 
+            !str_contains($previousUrl, '/register') && 
+            !str_contains($previousUrl, '/logout')
+        ) {
+            session()->put('url.intended', $previousUrl);
+        }
+
         return view('auth.login');
     }
 

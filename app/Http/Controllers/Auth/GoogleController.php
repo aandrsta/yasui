@@ -44,7 +44,7 @@ class GoogleController extends Controller
                     \App\Models\Payment::whereIn('order_id', $orderIds)->delete();
                     \App\Models\Order::where('user_id', $existingUser->id)->delete();
                 }
-                return redirect('/')->with('success', 'Selamat datang kembali, ' . $existingUser->name . '!');
+                return redirect()->intended('/')->with('success', 'Selamat datang kembali, ' . $existingUser->name . '!');
             }
             
             // Or check if user with same email exists (but google_id is empty)
@@ -64,7 +64,7 @@ class GoogleController extends Controller
                     \App\Models\Payment::whereIn('order_id', $orderIds)->delete();
                     \App\Models\Order::where('user_id', $userByEmail->id)->delete();
                 }
-                return redirect('/')->with('success', 'Akun Google berhasil ditautkan. Selamat datang kembali, ' . $userByEmail->name . '!');
+                return redirect()->intended('/')->with('success', 'Akun Google berhasil ditautkan. Selamat datang kembali, ' . $userByEmail->name . '!');
             }
             
             // Create a brand new user
@@ -77,7 +77,7 @@ class GoogleController extends Controller
             ]);
             
             Auth::login($newUser);
-            return redirect('/')->with('success', 'Pendaftaran berhasil menggunakan akun Google. Selamat datang, ' . $newUser->name . '!');
+            return redirect()->intended('/')->with('success', 'Pendaftaran berhasil menggunakan akun Google. Selamat datang, ' . $newUser->name . '!');
             
         } catch (Exception $e) {
             return redirect('/login')->with('error', 'Gagal masuk menggunakan Google. Silakan coba lagi. (' . $e->getMessage() . ')');

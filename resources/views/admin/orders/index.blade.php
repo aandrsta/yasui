@@ -95,7 +95,7 @@
                         @forelse($orders as $order)
                             <tr>
                                 <td class="ps-4 fw-bold text-dark">
-                                    <a href="{{ route('orders.show', $order->id) }}" target="_blank" class="text-decoration-none text-primary">#{{ $order->order_number }}</a>
+                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="text-decoration-none text-primary">#{{ $order->order_number }}</a>
                                 </td>
                                 <td>
                                     <div class="fw-semibold text-dark">{{ $order->shipping_name }}</div>
