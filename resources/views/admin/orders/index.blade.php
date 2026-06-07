@@ -93,7 +93,7 @@
                     </thead>
                     <tbody>
                         @forelse($orders as $order)
-                            <tr>
+                            <tr class="animate-fade-in-up" style="animation-delay: {{ $loop->index * 0.05 }}s;">
                                 <td class="ps-4 fw-bold text-dark">
                                     <a href="{{ route('admin.orders.show', $order->id) }}" class="text-decoration-none text-primary">#{{ $order->order_number }}</a>
                                 </td>

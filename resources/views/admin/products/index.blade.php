@@ -121,7 +121,7 @@
                     </thead>
                     <tbody>
                         @forelse($products as $product)
-                            <tr>
+                            <tr class="animate-fade-in-up" style="animation-delay: {{ $loop->index * 0.04 }}s;">
                                 <td class="ps-4">
                                     @if($product->image && file_exists(public_path($product->image)))
                                         <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="product-thumb">

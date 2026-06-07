@@ -267,7 +267,7 @@
                 </div>
 
                 @foreach($cartItems as $item)
-                    <div class="cart-item-row">
+                    <div class="cart-item-row animate-fade-in-up" style="animation-delay: {{ $loop->index * 0.08 }}s;">
                         <!-- Select Item Checkbox -->
                         <div class="d-flex align-items-center">
                             <input type="checkbox" name="items[]" value="{{ $item->id }}" class="cart-item-checkbox form-check-input" checked data-qty="{{ $item->quantity }}" data-subtotal="{{ $item->subtotal }}">

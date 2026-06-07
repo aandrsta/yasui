@@ -110,7 +110,7 @@
                     </thead>
                     <tbody>
                         @forelse($categories as $category)
-                            <tr>
+                            <tr class="animate-fade-in-up" style="animation-delay: {{ $loop->index * 0.05 }}s;">
                                 <td class="ps-4">
                                     @if($category->image && file_exists(public_path($category->image)))
                                         <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" class="category-thumb">

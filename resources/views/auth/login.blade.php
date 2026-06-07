@@ -51,7 +51,7 @@
 @section('content')
 <div class="row justify-content-center py-4">
     <div class="col-md-6 col-lg-5 col-xl-4">
-        <div class="card auth-card p-4 p-md-5">
+        <div class="card auth-card p-4 p-md-5 animate-fade-in-up">
             <div class="card-body p-0">
                 <!-- Header -->
                 <div class="mb-4">

@@ -31,7 +31,7 @@
     @if($orders->count() > 0)
         <div class="d-flex flex-column gap-3 mb-4">
             @foreach($orders as $order)
-                <div class="order-card p-4 shadow-sm">
+                <div class="order-card p-4 shadow-sm animate-fade-in-up" style="animation-delay: {{ $loop->index * 0.08 }}s;">
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 border-bottom pb-3 mb-3">
                         <div>
                             <span class="text-muted small">Nomor Pesanan</span>
