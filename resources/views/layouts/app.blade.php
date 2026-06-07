@@ -735,6 +735,7 @@
                     <ul class="list-unstyled d-flex flex-column gap-2 small">
                         <li><a href="{{ url('/terms-of-service') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Terms of Service</a></li>
                         <li><a href="{{ url('/privacy-policy') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Privacy Policy</a></li>
+                        <li><a href="{{ url('/cara-pemesanan') }}" class="text-muted text-decoration-none hover-opacity" style="transition: var(--transition-base);">Cara Pemesanan</a></li>
                     </ul>
                 </div>
             </div>

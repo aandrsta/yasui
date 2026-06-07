@@ -47,4 +47,14 @@ class HomeController extends Controller
     {
         return view('pages.privacy');
     }
+
+    /**
+     * Display the Shopping Guide (Cara Pemesanan) page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function guide()
+    {
+        return view('pages.guide');
+    }
 }

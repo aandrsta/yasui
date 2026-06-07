@@ -95,3 +95,4 @@ Route::post('/payment/notification', [PaymentController::class, 'handleNotificat
 // Rute Halaman Kebijakan Hukum (Wajib Dosen)
 Route::get('/terms-of-service', [\App\Http\Controllers\Shop\HomeController::class, 'terms'])->name('pages.terms');
 Route::get('/privacy-policy', [\App\Http\Controllers\Shop\HomeController::class, 'privacy'])->name('pages.privacy');
+Route::get('/cara-pemesanan', [\App\Http\Controllers\Shop\HomeController::class, 'guide'])->name('pages.guide');
