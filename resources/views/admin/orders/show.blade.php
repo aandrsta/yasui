@@ -288,7 +288,7 @@
                         <i class="bi bi-lock-fill text-secondary me-1"></i> Status pesanan ini telah terkunci ({{ ucfirst($order->status) }}) dan tidak dapat diubah lagi.
                     </div>
                 @else
-                    <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST">
+                    <form id="update-status-detail-form" action="{{ route('admin.orders.update-status', $order->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
                         
@@ -311,4 +311,32 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('update-status-detail-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const select = form.querySelector('select[name="status"]');
+                const statusText = select.options[select.selectedIndex].text;
+                
+                window.premiumConfirm(
+                    `Apakah Anda yakin ingin mengubah status pesanan ini menjadi "${statusText}"?`,
+                    'Konfirmasi Perubahan Status'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
+            });
+        }
+    });
+</script>
 @endsection

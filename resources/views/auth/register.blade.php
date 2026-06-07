@@ -79,7 +79,7 @@
                     <!-- Name -->
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-semibold text-secondary">Nama Lengkap</label>
-                        <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required autofocus placeholder="Nama lengkap Anda" style="border-radius: 6px; padding: 8px 12px; font-size: 0.9rem; border-color: var(--border-color);">
+                        <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required autofocus minlength="3" pattern="[A-Za-z\s]+" title="Nama hanya boleh berisi huruf dan spasi" placeholder="Nama lengkap Anda" style="border-radius: 6px; padding: 8px 12px; font-size: 0.9rem; border-color: var(--border-color);">
                         @error('name')
                             <div class="invalid-feedback small">{{ $message }}</div>
                         @enderror
@@ -121,4 +121,17 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.getElementById('name');
+        if (nameInput) {
+            nameInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+        }
+    });
+</script>
 @endsection

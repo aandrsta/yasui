@@ -193,7 +193,7 @@
             <!-- Shipping Name -->
             <div class="mb-3">
                 <label for="shipping_name" class="form-label small fw-semibold text-secondary">Nama Lengkap Penerima</label>
-                <input type="text" name="shipping_name" id="shipping_name" class="form-control @error('shipping_name') is-invalid @enderror" value="{{ old('shipping_name', auth()->user()->name) }}" required placeholder="Masukkan nama lengkap penerima" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
+                <input type="text" name="shipping_name" id="shipping_name" class="form-control @error('shipping_name') is-invalid @enderror" value="{{ old('shipping_name', auth()->user()->name) }}" required minlength="3" maxlength="100" pattern="[A-Za-z\s]+" title="Nama hanya boleh berisi huruf dan spasi" placeholder="Masukkan nama lengkap penerima" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
                 @error('shipping_name')
                     <div class="invalid-feedback small">{{ $message }}</div>
                 @enderror
@@ -202,7 +202,7 @@
             <!-- Shipping Phone -->
             <div class="mb-3">
                 <label for="shipping_phone" class="form-label small fw-semibold text-secondary">Nomor Telepon Penerima</label>
-                <input type="number" name="shipping_phone" id="shipping_phone" class="form-control @error('shipping_phone') is-invalid @enderror" value="{{ old('shipping_phone') }}" required placeholder="Contoh: 081234567890" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
+                <input type="tel" name="shipping_phone" id="shipping_phone" class="form-control @error('shipping_phone') is-invalid @enderror" value="{{ old('shipping_phone') }}" required inputmode="numeric" pattern="[0-9]{9,15}" title="Nomor telepon harus berupa angka antara 9 sampai 15 digit" placeholder="Contoh: 081234567890" style="border-radius: 3px; padding: 10px; border-color: var(--border-color); background-color: var(--bg-subtle); font-size: 0.9rem;">
                 @error('shipping_phone')
                     <div class="invalid-feedback small">{{ $message }}</div>
                 @enderror
@@ -303,10 +303,46 @@
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('checkout-form');
         const overlay = document.getElementById('checkout-loading-overlay');
+        const phoneInput = document.getElementById('shipping_phone');
+        const nameInput = document.getElementById('shipping_name');
         
+        // Stricter real-time inputs restriction (Client-side)
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
+
+        if (nameInput) {
+            nameInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+        }
+
         if (form && overlay) {
-            form.addEventListener('submit', function() {
-                overlay.classList.add('active');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Check native HTML5 validation
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                // Uniform custom pop up confirmation
+                window.premiumConfirm(
+                    'Apakah Anda yakin data pengiriman sudah benar dan ingin memproses pesanan ini?',
+                    'Konfirmasi Pesanan'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        overlay.classList.add('active');
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
             });
         }
     });

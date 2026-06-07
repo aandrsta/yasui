@@ -68,11 +68,24 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong atau tidak ada item terpilih.');
         }
 
-        // Validate shipping details
+        // Validate shipping details with strict rules
         $request->validate([
-            'shipping_name' => 'required|string|max:255',
-            'shipping_phone' => 'required|string|max:50',
-            'shipping_address' => 'required|string',
+            'shipping_name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[a-zA-Z\s]+$/'],
+            'shipping_phone' => ['required', 'string', 'regex:/^[0-9]+$/', 'digits_between:9,15'],
+            'shipping_address' => ['required', 'string', 'min:10', 'max:1000'],
+        ], [
+            'shipping_name.required' => 'Nama lengkap penerima wajib diisi.',
+            'shipping_name.min' => 'Nama lengkap penerima minimal harus 3 karakter.',
+            'shipping_name.max' => 'Nama lengkap penerima tidak boleh lebih dari 100 karakter.',
+            'shipping_name.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
+            
+            'shipping_phone.required' => 'Nomor telepon wajib diisi.',
+            'shipping_phone.regex' => 'Nomor telepon hanya boleh berisi angka (0-9).',
+            'shipping_phone.digits_between' => 'Nomor telepon harus berupa angka dengan panjang antara 9 sampai 15 digit.',
+            
+            'shipping_address.required' => 'Alamat pengiriman wajib diisi.',
+            'shipping_address.min' => 'Alamat pengiriman minimal harus 10 karakter.',
+            'shipping_address.max' => 'Alamat pengiriman tidak boleh lebih dari 1000 karakter.',
         ]);
 
         // Double check stock for all items

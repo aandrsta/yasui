@@ -47,7 +47,7 @@
             <form action="{{ route('admin.orders.index') }}" method="GET" class="row g-3 align-items-end">
                 <div class="col-md-5">
                     <label for="status" class="form-label small fw-semibold text-muted mb-1">Filter Status Pengiriman</label>
-                    <select name="status" id="status" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                    <select name="status" id="status" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;">
                         <option value="">Semua Status</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Processing</option>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-md-5">
                     <label for="sort" class="form-label small fw-semibold text-muted mb-1">Urutan Pesanan</label>
-                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;">
                         <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Terbaru (Newest / Latest)</option>
                         <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Terlama (Oldest)</option>
                     </select>
@@ -116,7 +116,7 @@
                                 </td>
                                 <td class="text-end pe-4">
                                     <!-- Simple Fast Update Dropdown Form -->
-                                    <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="d-flex align-items-center justify-content-end gap-1">
+                                    <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="d-flex align-items-center justify-content-end gap-1 update-status-form">
                                         @csrf
                                         @method('PATCH')
                                         <select name="status" class="form-select form-select-sm" style="font-size: 0.8rem; border-radius: 4px; width: 130px; padding: 4px 8px;">
@@ -150,4 +150,49 @@
             </div>
         @endif
 </div>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Intercept fast update status forms with premiumConfirm
+        document.querySelectorAll('.update-status-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const select = form.querySelector('select[name="status"]');
+                const statusText = select.options[select.selectedIndex].text;
+                
+                window.premiumConfirm(
+                    `Apakah Anda yakin ingin mengubah status pesanan ini menjadi "${statusText}"?`,
+                    'Konfirmasi Perubahan Status'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Filter and sort select listeners to avoid inline handlers (CSP compliant)
+        ['status', 'sort'].forEach(id => {
+            const select = document.getElementById(id);
+            if (select) {
+                select.addEventListener('change', function() {
+                    const form = this.form;
+                    if (form) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
 @endsection
