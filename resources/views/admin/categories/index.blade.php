@@ -72,7 +72,7 @@
             <form action="{{ route('admin.categories.index') }}" method="GET" class="row g-3 align-items-end">
                 <div class="col-md-10">
                     <label for="sort" class="form-label small fw-semibold text-muted mb-1">Urutan Kategori</label>
-                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;">
                         <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Terbaru (Newest / Latest)</option>
                         <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Terlama (Oldest)</option>
                     </select>
@@ -147,7 +147,7 @@
                                         <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-outline-dark btn-sm fw-semibold" style="font-size: 0.75rem; border-radius: 4px; padding: 5px 10px;">
                                             <i class="bi bi-pencil"></i> Edit
                                         </a>
-                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');" class="d-inline">
+                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline delete-category-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold" style="font-size: 0.75rem; border-radius: 4px; padding: 5px 10px;">
@@ -175,4 +175,44 @@
         </div>
     @endif
 </div>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle custom confirmation modals on category deletions
+        document.querySelectorAll('.delete-category-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                window.premiumConfirm(
+                    'Apakah Anda yakin ingin menghapus kategori ini?',
+                    'Hapus Kategori'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Filter sort select listener to avoid inline handlers
+        const sortSelect = document.getElementById('sort');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function() {
+                const form = this.form;
+                if (form) {
+                    if (typeof form.requestSubmit === 'function') {
+                        form.requestSubmit();
+                    } else {
+                        form.submit();
+                    }
+                }
+            });
+        }
+    });
+</script>
 @endsection

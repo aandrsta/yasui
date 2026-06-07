@@ -72,7 +72,7 @@
             <form action="{{ route('admin.products.index') }}" method="GET" class="row g-3 align-items-end">
                 <div class="col-md-5">
                     <label for="category" class="form-label small fw-semibold text-muted mb-1">Filter Kategori</label>
-                    <select name="category" id="category" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                    <select name="category" id="category" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;">
                         <option value="">Semua Kategori</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-md-5">
                     <label for="sort" class="form-label small fw-semibold text-muted mb-1">Urutan Produk</label>
-                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;" onchange="this.form.submit()">
+                    <select name="sort" id="sort" class="form-select form-select-sm" style="border-radius: 4px; padding: 6px 12px;">
                         <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Terbaru (Newest / Latest)</option>
                         <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Terlama (Oldest)</option>
                     </select>
@@ -172,7 +172,7 @@
                                         <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-outline-dark btn-sm fw-semibold" style="font-size: 0.75rem; border-radius: 4px; padding: 5px 10px;">
                                             <i class="bi bi-pencil"></i> Edit
                                         </a>
-                                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini dari katalog?');" class="d-inline">
+                                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline delete-product-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold" style="font-size: 0.75rem; border-radius: 4px; padding: 5px 10px;">
@@ -200,4 +200,46 @@
             </div>
         @endif
 </div>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle custom confirmation modals on product deletions
+        document.querySelectorAll('.delete-product-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                window.premiumConfirm(
+                    'Apakah Anda yakin ingin menghapus produk ini dari katalog?',
+                    'Hapus Produk'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Filter and sort select listeners to avoid inline handlers
+        ['category', 'sort'].forEach(id => {
+            const select = document.getElementById(id);
+            if (select) {
+                select.addEventListener('change', function() {
+                    const form = this.form;
+                    if (form) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
 @endsection
