@@ -132,6 +132,38 @@
         font-size: 2.2rem;
         letter-spacing: -0.01em;
     }
+
+    /* Animated Japanese Hanko Stamp Styles */
+    @keyframes hankoStamp {
+        0% {
+            opacity: 0;
+            transform: scale(5) rotate(-35deg);
+            filter: blur(8px);
+        }
+        70% {
+            opacity: 1;
+            filter: none;
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+    }
+    @keyframes hankoRing {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    @keyframes cardImpact {
+        0% { transform: scale(1) translateY(0); }
+        40% { transform: scale(0.98) translateY(4px); }
+        100% { transform: scale(1) translateY(0); }
+    }
+
+    .hanko-stamp-wrapper {
+        box-shadow: 0 0 20px rgba(162, 56, 74, 0.05);
+        border-radius: 50%;
+        display: inline-block;
+    }
 </style>
 @endsection
 
@@ -141,12 +173,33 @@
     <div id="checkout-success-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-main); z-index: 10200; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
         <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
         
-        <div class="text-center animate-fade-in-up" style="max-width: 480px; padding: 2rem; z-index: 10205;">
-            <!-- Animated SVG Checkmark -->
-            <svg class="success-checkmark" viewBox="0 0 52 52" style="width: 80px; height: 80px; color: var(--accent-color); margin: 0 auto 2rem; display: block;">
-                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="currentColor" stroke-width="2" style="stroke-dasharray: 166; stroke-dashoffset: 166; animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;"/>
-                <path class="checkmark-check" fill="none" stroke="currentColor" stroke-width="3" d="M14.1 27.2l7.1 7.2 16.7-16.8" style="stroke-dasharray: 48; stroke-dashoffset: 48; animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards; stroke-linecap: round; stroke-linejoin: round;"/>
-            </svg>
+        <div class="text-center animate-fade-in-up" style="max-width: 480px; padding: 2rem; z-index: 10205; transition: transform 0.15s ease-in-out;">
+            <!-- Animated Japanese Hanko Seal (印鑑) -->
+            <div class="hanko-container mb-4" style="position: relative; width: 120px; height: 120px; margin: 0 auto;">
+                <!-- Red ink splatter / ring behind -->
+                <div class="hanko-ring" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px dashed rgba(162, 56, 74, 0.2); border-radius: 50%; animation: hankoRing 2.5s linear infinite;"></div>
+                
+                <!-- The actual stamp -->
+                <div class="hanko-stamp-wrapper" style="animation: hankoStamp 0.5s cubic-bezier(0.25, 1, 0.5, 1.2) forwards; transform-origin: center;">
+                    <svg class="hanko-seal" viewBox="0 0 100 100" style="width: 120px; height: 120px; color: var(--accent-color);">
+                        <defs>
+                            <filter id="hanko-rough-ink">
+                                <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="3" result="noise" />
+                                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+                            </filter>
+                        </defs>
+                        <g filter="url(#hanko-rough-ink)" fill="none" stroke="currentColor">
+                            <!-- Outlined circular frame representing traditional round seal -->
+                            <circle cx="50" cy="50" r="42" stroke-width="5" />
+                            <circle cx="50" cy="50" r="37" stroke-width="1.5" />
+                            <!-- Kanji right: "安" (Yasui / peace) -->
+                            <path d="M68 28 h-14 M60 28 v10 M52 38 h16 M54 46 c3-3 6-7 8-10 M57 46 l10 10 M54 66 c4-3 9-9 11-15 M60 55 v18" stroke-width="4.5" stroke-linecap="round" />
+                            <!-- Kanji left: "水" (Sui / water) -->
+                            <path d="M36 24 v48 c0 3-1.5 5-5 5 M36 46 c-3-3-8-6-10-6 M26 62 c3-2 6-5 8-8 M36 44 c3 3 8 8 11 11 M45 31 c-3 3-6 6-8 8" stroke-width="4.5" stroke-linecap="round" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
             
             <h2 style="font-family: 'Zen Old Mincho', serif; font-size: 2.20rem; color: var(--primary-color); margin-bottom: 1rem;">Pembayaran Berhasil!</h2>
             
@@ -165,15 +218,6 @@
             </button>
         </div>
     </div>
-    
-    <style>
-        @keyframes strokeCircle {
-            to { stroke-dashoffset: 0; }
-        }
-        @keyframes strokeCheck {
-            to { stroke-dashoffset: 0; }
-        }
-    </style>
 @endif
 
 <!-- Back to Shopping -->
@@ -508,7 +552,7 @@
                 });
             }
 
-            // Confetti Animation Logic
+            // Japanese Sakura Petals Falling & Bursting Animation
             const canvas = document.getElementById('confetti-canvas');
             if (canvas) {
                 const ctx = canvas.getContext('2d');
@@ -520,37 +564,62 @@
                     height = canvas.height = canvas.offsetHeight;
                 });
                 
-                const colors = ['#a2384a', '#852b3a', '#1e1e1d', '#75726a', '#e7e4dc'];
-                const confettiCount = 140;
+                // Delicate sakura palette: deep crimson, sakura pinks, white
+                const colors = ['#ffb7c5', '#ffa6b9', '#f08080', '#a2384a', '#ffffff'];
                 const particles = [];
                 
-                class Confetti {
-                    constructor() {
-                        this.x = width / 2;
-                        this.y = height / 2 - 80; // center on the checkmark
+                class SakuraParticle {
+                    constructor(x, y, type) {
+                        this.type = type; // 'burst' or 'drift'
+                        this.x = x;
+                        this.y = y;
                         this.size = Math.random() * 6 + 4;
                         this.color = colors[Math.floor(Math.random() * colors.length)];
-                        
-                        const angle = Math.random() * Math.PI * 2;
-                        const force = Math.random() * 10 + 3;
-                        this.vx = Math.cos(angle) * force;
-                        this.vy = Math.sin(angle) * force - 3; // slight upward force
-                        
-                        this.rotation = Math.random() * 360;
-                        this.rotationSpeed = Math.random() * 10 - 5;
                         this.opacity = 1;
-                        this.gravity = 0.2;
-                        this.drag = 0.96;
+                        this.rotation = Math.random() * 360;
+                        this.rotationSpeed = Math.random() * 4 - 2;
+                        
+                        if (this.type === 'burst') {
+                            const angle = Math.random() * Math.PI * 2;
+                            const force = Math.random() * 8 + 3;
+                            this.vx = Math.cos(angle) * force;
+                            this.vy = Math.sin(angle) * force - 2; // initial upward velocity
+                            this.gravity = 0.12;
+                            this.drag = 0.95;
+                            this.decay = Math.random() * 0.007 + 0.005;
+                        } else {
+                            // Gentle background drift
+                            this.vx = Math.random() * 0.8 - 0.4;
+                            this.vy = Math.random() * 1.2 + 0.8; // fall speed
+                            this.swayTime = Math.random() * 100;
+                            this.swaySpeed = Math.random() * 0.02 + 0.01;
+                            this.swayAmount = Math.random() * 1.2 + 0.4;
+                            this.decay = 0;
+                        }
                     }
                     
                     update() {
-                        this.vx *= this.drag;
-                        this.vy *= this.drag;
-                        this.vy += this.gravity;
-                        this.x += this.vx;
-                        this.y += this.vy;
-                        this.rotation += this.rotationSpeed;
-                        this.opacity -= 0.008;
+                        if (this.type === 'burst') {
+                            this.vx *= this.drag;
+                            this.vy *= this.drag;
+                            this.vy += this.gravity;
+                            this.x += this.vx;
+                            this.y += this.vy;
+                            this.opacity -= this.decay;
+                            this.rotation += this.rotationSpeed;
+                        } else {
+                            // Background drift sway physics
+                            this.swayTime += this.swaySpeed;
+                            this.x += this.vx + Math.sin(this.swayTime) * this.swayAmount;
+                            this.y += this.vy;
+                            this.rotation += this.rotationSpeed * 0.2;
+                            
+                            // Re-wrap background drifting petals to the top
+                            if (this.y > height + 20) {
+                                this.y = -20;
+                                this.x = Math.random() * width;
+                            }
+                        }
                     }
                     
                     draw() {
@@ -559,13 +628,22 @@
                         ctx.rotate(this.rotation * Math.PI / 180);
                         ctx.globalAlpha = Math.max(0, this.opacity);
                         ctx.fillStyle = this.color;
-                        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                        
+                        // Draw Japanese Sakura Petal
+                        ctx.beginPath();
+                        ctx.moveTo(0, -this.size);
+                        ctx.bezierCurveTo(-this.size * 1.2, -this.size * 0.5, -this.size * 0.8, this.size * 0.8, 0, this.size);
+                        ctx.bezierCurveTo(this.size * 0.8, this.size * 0.8, this.size * 1.2, -this.size * 0.5, 0, -this.size);
+                        ctx.closePath();
+                        ctx.fill();
+                        
                         ctx.restore();
                     }
                 }
                 
-                for (let i = 0; i < confettiCount; i++) {
-                    particles.push(new Confetti());
+                // 1. Pre-initialize background drifting sakura petals
+                for (let i = 0; i < 35; i++) {
+                    particles.push(new SakuraParticle(Math.random() * width, Math.random() * height, 'drift'));
                 }
                 
                 function animate() {
@@ -573,22 +651,38 @@
                     
                     let alive = false;
                     particles.forEach(p => {
-                        if (p.opacity > 0) {
-                            p.update();
-                            p.draw();
+                        p.update();
+                        p.draw();
+                        // If there are burst particles, we keep animating. Drifting background always stays alive
+                        if (p.type === 'burst' && p.opacity > 0) {
                             alive = true;
                         }
                     });
                     
-                    if (alive) {
+                    // Always animate drifting background petals, or if bursts are still alive
+                    if (alive || particles.some(p => p.type === 'drift')) {
                         requestAnimationFrame(animate);
                     }
                 }
                 
-                // Delay burst slightly for checkmark draw animation
+                // Start animation immediately for background drift
+                animate();
+                
+                // 2. Trigger Hanko stamp thud card shake and sakura burst at impact (500ms)
                 setTimeout(() => {
-                    animate();
-                }, 400);
+                    // Impact shake on card container
+                    const overlayContent = document.querySelector('#checkout-success-overlay .text-center');
+                    if (overlayContent) {
+                        overlayContent.style.animation = 'cardImpact 0.25s ease-in-out';
+                    }
+                    
+                    // Spawn exploding sakura confetti particles
+                    const burstCount = 100;
+                    const centerPointY = (height / 2) - 80;
+                    for (let i = 0; i < burstCount; i++) {
+                        particles.push(new SakuraParticle(width / 2, centerPointY, 'burst'));
+                    }
+                }, 500);
             }
         });
     </script>
