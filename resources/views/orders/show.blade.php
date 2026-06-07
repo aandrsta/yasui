@@ -136,6 +136,46 @@
 @endsection
 
 @section('content')
+@if(session('success') && strpos(session('success'), 'berhasil dibuat') !== false)
+    <!-- Checkout Success Animation Overlay -->
+    <div id="checkout-success-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-main); z-index: 10200; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
+        <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+        
+        <div class="text-center animate-fade-in-up" style="max-width: 480px; padding: 2rem; z-index: 10205;">
+            <!-- Animated SVG Checkmark -->
+            <svg class="success-checkmark" viewBox="0 0 52 52" style="width: 80px; height: 80px; color: var(--accent-color); margin: 0 auto 2rem; display: block;">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="currentColor" stroke-width="2" style="stroke-dasharray: 166; stroke-dashoffset: 166; animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;"/>
+                <path class="checkmark-check" fill="none" stroke="currentColor" stroke-width="3" d="M14.1 27.2l7.1 7.2 16.7-16.8" style="stroke-dasharray: 48; stroke-dashoffset: 48; animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards; stroke-linecap: round; stroke-linejoin: round;"/>
+            </svg>
+            
+            <h2 style="font-family: 'Zen Old Mincho', serif; font-size: 2.20rem; color: var(--primary-color); margin-bottom: 1rem;">Pesanan Berhasil Dibuat</h2>
+            
+            <!-- Red Japanese Seal Stamp visual -->
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-4 border border-danger border-opacity-25" style="border-radius: 3px; background-color: rgba(162, 56, 74, 0.03); border-color: rgba(162, 56, 74, 0.2) !important;">
+                <span class="d-block rounded-circle" style="width: 6px; height: 6px; background-color: var(--accent-color);"></span>
+                <span class="small font-mincho fw-bold text-uppercase" style="font-size: 0.65rem; color: var(--accent-color); letter-spacing: 0.15rem;">YASSUI 創立二〇二六</span>
+            </div>
+
+            <p class="text-muted mb-4" style="line-height: 1.7; font-size: 0.95rem;">
+                Terima kasih atas pesanan Anda. Kami telah merekam detail pembelian dengan nomor <strong class="text-dark">#{{ $order->order_number }}</strong>. Silakan selesaikan pembayaran untuk memproses barang kurasi Anda.
+            </p>
+            
+            <button id="close-success-overlay" class="btn-minimal-accent px-5 py-3 w-100 fw-semibold" style="letter-spacing: 0.1em;">
+                LANJUTKAN KE PEMBAYARAN
+            </button>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes strokeCircle {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes strokeCheck {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+@endif
+
 <!-- Back to Shopping -->
 <div class="mb-4">
     <a href="{{ url('/products') }}" class="text-secondary small text-decoration-none d-inline-flex align-items-center gap-1">
@@ -453,19 +493,146 @@
     </script>
 @endif
 
+@if(session('success') && strpos(session('success'), 'berhasil dibuat') !== false)
+    <script type="text/javascript" nonce="{{ app('csp-nonce') }}">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dismiss Overlay
+            const successOverlay = document.getElementById('checkout-success-overlay');
+            const closeBtn = document.getElementById('close-success-overlay');
+            if (successOverlay && closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    successOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        successOverlay.remove();
+                    }, 600);
+                });
+            }
+
+            // Confetti Animation Logic
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let width = canvas.width = canvas.offsetWidth;
+                let height = canvas.height = canvas.offsetHeight;
+                
+                window.addEventListener('resize', () => {
+                    width = canvas.width = canvas.offsetWidth;
+                    height = canvas.height = canvas.offsetHeight;
+                });
+                
+                const colors = ['#a2384a', '#852b3a', '#1e1e1d', '#75726a', '#e7e4dc'];
+                const confettiCount = 140;
+                const particles = [];
+                
+                class Confetti {
+                    constructor() {
+                        this.x = width / 2;
+                        this.y = height / 2 - 80; // center on the checkmark
+                        this.size = Math.random() * 6 + 4;
+                        this.color = colors[Math.floor(Math.random() * colors.length)];
+                        
+                        const angle = Math.random() * Math.PI * 2;
+                        const force = Math.random() * 10 + 3;
+                        this.vx = Math.cos(angle) * force;
+                        this.vy = Math.sin(angle) * force - 3; // slight upward force
+                        
+                        this.rotation = Math.random() * 360;
+                        this.rotationSpeed = Math.random() * 10 - 5;
+                        this.opacity = 1;
+                        this.gravity = 0.2;
+                        this.drag = 0.96;
+                    }
+                    
+                    update() {
+                        this.vx *= this.drag;
+                        this.vy *= this.drag;
+                        this.vy += this.gravity;
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        this.rotation += this.rotationSpeed;
+                        this.opacity -= 0.008;
+                    }
+                    
+                    draw() {
+                        ctx.save();
+                        ctx.translate(this.x, this.y);
+                        ctx.rotate(this.rotation * Math.PI / 180);
+                        ctx.globalAlpha = Math.max(0, this.opacity);
+                        ctx.fillStyle = this.color;
+                        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                        ctx.restore();
+                    }
+                }
+                
+                for (let i = 0; i < confettiCount; i++) {
+                    particles.push(new Confetti());
+                }
+                
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    let alive = false;
+                    particles.forEach(p => {
+                        if (p.opacity > 0) {
+                            p.update();
+                            p.draw();
+                            alive = true;
+                        }
+                    });
+                    
+                    if (alive) {
+                        requestAnimationFrame(animate);
+                    }
+                }
+                
+                // Delay burst slightly for checkmark draw animation
+                setTimeout(() => {
+                    animate();
+                }, 400);
+            }
+        });
+    </script>
+@endif
+
 <script type="text/javascript" nonce="{{ app('csp-nonce') }}">
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('cancel-order-form')?.addEventListener('submit', function(e) {
-            if (!confirm('Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.')) {
+        const cancelForm = document.getElementById('cancel-order-form');
+        if (cancelForm) {
+            cancelForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-            }
-        });
+                window.premiumConfirm(
+                    'Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.',
+                    'Batalkan Pesanan'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        if (typeof cancelForm.requestSubmit === 'function') {
+                            cancelForm.requestSubmit();
+                        } else {
+                            cancelForm.submit();
+                        }
+                    }
+                });
+            });
+        }
 
-        document.getElementById('complete-order-form')?.addEventListener('submit', function(e) {
-            if (!confirm('Apakah Anda yakin barang belanjaan Anda sudah diterima dengan baik? Tindakan ini akan menyelesaikan transaksi.')) {
+        const completeForm = document.getElementById('complete-order-form');
+        if (completeForm) {
+            completeForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-            }
-        });
+                window.premiumConfirm(
+                    'Apakah Anda yakin barang belanjaan Anda sudah diterima dengan baik? Tindakan ini akan menyelesaikan transaksi.',
+                    'Konfirmasi Penerimaan'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        if (typeof completeForm.requestSubmit === 'function') {
+                            completeForm.requestSubmit();
+                        } else {
+                            completeForm.submit();
+                        }
+                    }
+                });
+            });
+        }
     });
 </script>
 @endsection

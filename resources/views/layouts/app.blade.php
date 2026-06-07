@@ -539,6 +539,15 @@
             background-color: var(--accent-color);
             width: 100%;
         }
+
+        /* Custom Confirmation Modal */
+        #premium-confirm-modal.active {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+        #premium-confirm-modal.active #premium-confirm-box {
+            transform: scale(1) !important;
+        }
     </style>
     @yield('styles')
     
@@ -562,6 +571,18 @@
 
     <!-- Floating Toast Container -->
     <div id="toast-container"></div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="premium-confirm-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 29, 0.4); backdrop-filter: blur(4px); z-index: 10500; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;">
+        <div id="premium-confirm-box" style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 3px; max-width: 440px; width: calc(100% - 3rem); padding: 2rem; box-shadow: 0 20px 50px rgba(30, 30, 29, 0.15); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <h3 id="premium-confirm-title" style="font-family: 'Zen Old Mincho', serif; font-size: 1.25rem; color: var(--primary-color); margin-bottom: 0.75rem;">Konfirmasi</h3>
+            <p id="premium-confirm-message" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.75rem;">Apakah Anda yakin ingin melakukan tindakan ini?</p>
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button id="premium-confirm-btn-cancel" class="btn-minimal-secondary" style="padding: 8px 18px; font-size: 0.8rem; border-radius: 3px;">Batal</button>
+                <button id="premium-confirm-btn-confirm" class="btn-minimal-accent" style="padding: 8px 18px; font-size: 0.8rem; border-radius: 3px;">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Minimalist Navbar -->
     <nav class="navbar navbar-expand-lg">
@@ -819,6 +840,50 @@
                         spinner.setAttribute('aria-hidden', 'true');
                         submitBtn.prepend(spinner);
                     }
+                }
+            });
+
+            // 4. Custom Confirmation Modal System
+            let confirmResolve = null;
+            const confirmModal = document.getElementById('premium-confirm-modal');
+            const confirmBox = document.getElementById('premium-confirm-box');
+            const confirmTitle = document.getElementById('premium-confirm-title');
+            const confirmMessage = document.getElementById('premium-confirm-message');
+            const confirmBtnCancel = document.getElementById('premium-confirm-btn-cancel');
+            const confirmBtnConfirm = document.getElementById('premium-confirm-btn-confirm');
+
+            window.premiumConfirm = function(message, title = 'Konfirmasi') {
+                return new Promise((resolve) => {
+                    if (!confirmModal || !confirmBox) {
+                        // Fallback to native confirm
+                        resolve(confirm(message));
+                        return;
+                    }
+
+                    confirmTitle.textContent = title;
+                    confirmMessage.textContent = message;
+                    confirmResolve = resolve;
+
+                    confirmModal.classList.add('active');
+                });
+            };
+
+            const closeConfirm = function(result) {
+                if (confirmModal) {
+                    confirmModal.classList.remove('active');
+                }
+                if (confirmResolve) {
+                    confirmResolve(result);
+                    confirmResolve = null;
+                }
+            };
+
+            confirmBtnCancel?.addEventListener('click', () => closeConfirm(false));
+            confirmBtnConfirm?.addEventListener('click', () => closeConfirm(true));
+            
+            confirmModal?.addEventListener('click', function(e) {
+                if (e.target === confirmModal) {
+                    closeConfirm(false);
                 }
             });
         });

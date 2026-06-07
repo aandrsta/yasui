@@ -444,17 +444,22 @@
         document.querySelectorAll('.btn-delete-cart-item').forEach(button => {
             button.addEventListener('click', function() {
                 const itemId = this.dataset.id;
-                if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
-                    const row = this.closest('.cart-item-row');
-                    if (row) {
-                        row.classList.add('cart-item-fade-out');
+                window.premiumConfirm(
+                    'Apakah Anda yakin ingin menghapus produk ini dari keranjang?',
+                    'Hapus Barang'
+                ).then(confirmed => {
+                    if (confirmed) {
+                        const row = this.closest('.cart-item-row');
+                        if (row) {
+                            row.classList.add('cart-item-fade-out');
+                        }
+                        setTimeout(() => {
+                            const form = document.getElementById('delete-form');
+                            form.action = "{{ url('/cart') }}/" + itemId;
+                            form.submit();
+                        }, 350);
                     }
-                    setTimeout(() => {
-                        const form = document.getElementById('delete-form');
-                        form.action = "{{ url('/cart') }}/" + itemId;
-                        form.submit();
-                    }, 350);
-                }
+                });
             });
         });
 
