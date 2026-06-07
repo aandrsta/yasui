@@ -207,7 +207,7 @@
                 <!-- Sort Order -->
                 <div class="mb-4">
                     <label class="filter-title">Urutkan</label>
-                    <select name="sort" class="form-select minimal-select w-100" onchange="this.form.submit()">
+                    <select name="sort" id="sort-select" class="form-select minimal-select w-100">
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Harga: Terendah ke Tertinggi</option>
                         <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Harga: Tertinggi ke Terendah</option>
@@ -323,4 +323,14 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('sort-select')?.addEventListener('change', function() {
+            document.getElementById('filterForm')?.submit();
+        });
+    });
+</script>
 @endsection
