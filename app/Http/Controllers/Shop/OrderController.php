@@ -137,12 +137,25 @@ class OrderController extends Controller
     /**
      * Display a listing of the user's orders.
      *
-     * @return \Illuminate\View\View
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         // Cancel expired orders in real-time on load to keep data synced
         \App\Console\Commands\CancelExpiredOrders::cancelExpired();
+
+        // Redirect to detail page if Midtrans redirects here with order_id query param
+        if ($request->filled('order_id')) {
+            $orderNumber = $request->input('order_id');
+            $order = Order::where('order_number', $orderNumber)
+                ->where('user_id', auth()->id())
+                ->first();
+            
+            if ($order) {
+                return redirect()->route('orders.show', $order->id);
+            }
+        }
 
         $orders = Order::where('user_id', auth()->id())
             ->latest()
