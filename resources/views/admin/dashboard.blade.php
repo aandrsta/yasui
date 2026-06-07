@@ -140,7 +140,9 @@
                     <tbody>
                         @forelse($recentOrders as $order)
                             <tr>
-                                <td class="ps-4 fw-bold text-dark">#{{ $order->order_number }}</td>
+                                <td class="ps-4 fw-bold text-dark">
+                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="text-decoration-none text-primary">#{{ $order->order_number }}</a>
+                                </td>
                                 <td>
                                     <div class="fw-semibold text-dark">{{ $order->user->name }}</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">{{ $order->user->email }}</div>
@@ -159,7 +161,7 @@
                                     </span>
                                 </td>
                                 <td class="text-end pe-4">
-                                    <a href="{{ route('orders.show', $order->id) }}" target="_blank" class="btn btn-outline-dark btn-sm fw-semibold" style="font-size: 0.75rem; border-radius: 4px;">
+                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-outline-dark btn-sm fw-semibold" style="font-size: 0.75rem; border-radius: 4px;">
                                         Lihat Detail
                                     </a>
                                 </td>

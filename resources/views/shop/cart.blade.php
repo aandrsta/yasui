@@ -195,6 +195,25 @@
         font-size: 1.15rem;
         color: var(--primary-color);
     }
+
+    /* Kustom Checkbox Visual Premium (Cherry / Sakura Rose) */
+    .form-check-input {
+        width: 19px;
+        height: 19px;
+        cursor: pointer;
+        border: 1.5px solid var(--text-muted) !important;
+        background-color: var(--bg-subtle);
+        transition: var(--transition-base);
+    }
+    .form-check-input:checked {
+        background-color: var(--accent-color) !important;
+        border-color: var(--accent-color) !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fbfaf7' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+    }
+    .form-check-input:focus {
+        box-shadow: 0 0 0 3px rgba(162, 56, 74, 0.15) !important;
+        border-color: var(--accent-color) !important;
+    }
 </style>
 @endsection
 
@@ -229,7 +248,7 @@
             <div class="cart-items-card">
                 <!-- Select All Header -->
                 <div class="p-3 border-bottom d-flex align-items-center gap-3 bg-light" style="border-radius: 3px 3px 0 0;">
-                    <input type="checkbox" id="select-all-cart" class="form-check-input" checked style="width: 17px; height: 17px; cursor: pointer; border-color: var(--text-muted); background-color: var(--bg-subtle);">
+                    <input type="checkbox" id="select-all-cart" class="form-check-input" checked>
                     <label for="select-all-cart" class="small fw-bold text-dark mb-0" style="cursor: pointer; font-size: 0.85rem; letter-spacing: -0.01em;">PILIH SEMUA PRODUK</label>
                 </div>
 
@@ -237,7 +256,7 @@
                     <div class="cart-item-row">
                         <!-- Select Item Checkbox -->
                         <div class="d-flex align-items-center">
-                            <input type="checkbox" name="items[]" value="{{ $item->id }}" class="cart-item-checkbox form-check-input" checked style="width: 17px; height: 17px; cursor: pointer; border-color: var(--text-muted); background-color: var(--bg-subtle);" data-qty="{{ $item->quantity }}" data-subtotal="{{ $item->subtotal }}">
+                            <input type="checkbox" name="items[]" value="{{ $item->id }}" class="cart-item-checkbox form-check-input" checked data-qty="{{ $item->quantity }}" data-subtotal="{{ $item->subtotal }}">
                         </div>
 
                         <!-- Product Image -->
@@ -279,7 +298,7 @@
                         <div>
                             <div class="cart-qty-form">
                                 <input type="number" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="form-control cart-qty-input">
-                                <button type="button" class="btn btn-update-qty shadow-sm" title="Perbarui Jumlah" onclick="updateItemQuantity({{ $item->id }}, this)">
+                                <button type="button" class="btn btn-update-qty shadow-sm btn-update-cart-qty" data-id="{{ $item->id }}" title="Perbarui Jumlah">
                                     <i class="bi bi-check2"></i>
                                 </button>
                             </div>
@@ -292,7 +311,7 @@
 
                         <!-- Delete Button (Plain button component) -->
                         <div>
-                            <button type="button" class="btn-cart-remove shadow-sm" title="Hapus Barang" onclick="deleteItem({{ $item->id }})">
+                            <button type="button" class="btn-cart-remove shadow-sm btn-delete-cart-item" data-id="{{ $item->id }}" title="Hapus Barang">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -351,22 +370,6 @@
 
 @section('scripts')
 <script nonce="{{ app('csp-nonce') }}">
-    function updateItemQuantity(itemId, buttonEl) {
-        const qtyInput = buttonEl.closest('.cart-qty-form').querySelector('.cart-qty-input');
-        const form = document.getElementById('update-form');
-        form.action = "{{ url('/cart') }}/" + itemId;
-        document.getElementById('update-quantity').value = qtyInput.value;
-        form.submit();
-    }
-
-    function deleteItem(itemId) {
-        if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
-            const form = document.getElementById('delete-form');
-            form.action = "{{ url('/cart') }}/" + itemId;
-            form.submit();
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
         const selectAllCheckbox = document.getElementById('select-all-cart');
         const itemCheckboxes = document.querySelectorAll('.cart-item-checkbox');
@@ -410,6 +413,30 @@
                 }
             }
         }
+
+        // Quantity updates without inline JavaScript handlers (CSP Safe)
+        document.querySelectorAll('.btn-update-cart-qty').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.dataset.id;
+                const qtyInput = this.closest('.cart-qty-form').querySelector('.cart-qty-input');
+                const form = document.getElementById('update-form');
+                form.action = "{{ url('/cart') }}/" + itemId;
+                document.getElementById('update-quantity').value = qtyInput.value;
+                form.submit();
+            });
+        });
+
+        // Item deletion without inline JavaScript handlers (CSP Safe)
+        document.querySelectorAll('.btn-delete-cart-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.dataset.id;
+                if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
+                    const form = document.getElementById('delete-form');
+                    form.action = "{{ url('/cart') }}/" + itemId;
+                    form.submit();
+                }
+            });
+        });
 
         if (selectAllCheckbox) {
             selectAllCheckbox.addEventListener('change', function() {

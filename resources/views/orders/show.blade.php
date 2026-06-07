@@ -283,7 +283,7 @@
 
                 @if($order->status === \App\Models\Order::STATUS_PENDING)
                     <!-- Cancel Order Button -->
-                    <form action="{{ route('orders.cancel', $order->id) }}" method="POST" class="mt-3" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.')">
+                    <form action="{{ route('orders.cancel', $order->id) }}" method="POST" class="mt-3" id="cancel-order-form">
                         @csrf
                         <button type="submit" class="btn btn-link text-danger small w-100 text-decoration-none fw-semibold text-center border-0 p-0" style="font-size: 0.825rem; transition: var(--transition-base);">
                             <i class="bi bi-x-circle me-1"></i> Batalkan Pesanan
@@ -309,7 +309,7 @@
                     <span class="fw-bold text-dark d-block">Pesanan Sedang Dikirim</span>
                     <p class="small text-muted mb-3 mt-2" style="font-size: 0.75rem; line-height: 1.4;">Pesanan Anda telah diserahkan ke kurir dan sedang dalam perjalanan. Silakan klik tombol di bawah untuk menyelesaikan pesanan jika Anda sudah menerima barang belanjaan Anda.</p>
                     
-                    <form action="{{ route('orders.complete', $order->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin barang belanjaan Anda sudah diterima dengan baik? Tindakan ini akan menyelesaikan transaksi.')">
+                    <form action="{{ route('orders.complete', $order->id) }}" method="POST" id="complete-order-form">
                         @csrf
                         <button type="submit" class="btn-minimal-accent w-100 py-2.5 border-0 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm fw-semibold">
                             <i class="bi bi-check-circle"></i>
@@ -452,4 +452,20 @@
         }
     </script>
 @endif
+
+<script type="text/javascript" nonce="{{ app('csp-nonce') }}">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('cancel-order-form')?.addEventListener('submit', function(e) {
+            if (!confirm('Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.')) {
+                e.preventDefault();
+            }
+        });
+
+        document.getElementById('complete-order-form')?.addEventListener('submit', function(e) {
+            if (!confirm('Apakah Anda yakin barang belanjaan Anda sudah diterima dengan baik? Tindakan ini akan menyelesaikan transaksi.')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
 @endsection
