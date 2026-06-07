@@ -136,8 +136,8 @@
 @endsection
 
 @section('content')
-@if(session('success') && strpos(session('success'), 'berhasil dibuat') !== false)
-    <!-- Checkout Success Animation Overlay -->
+@if(session('success') && strpos(session('success'), 'berhasil dikonfirmasi') !== false)
+    <!-- Checkout Success Celebration Overlay -->
     <div id="checkout-success-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-main); z-index: 10200; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
         <canvas id="confetti-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
         
@@ -148,7 +148,7 @@
                 <path class="checkmark-check" fill="none" stroke="currentColor" stroke-width="3" d="M14.1 27.2l7.1 7.2 16.7-16.8" style="stroke-dasharray: 48; stroke-dashoffset: 48; animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards; stroke-linecap: round; stroke-linejoin: round;"/>
             </svg>
             
-            <h2 style="font-family: 'Zen Old Mincho', serif; font-size: 2.20rem; color: var(--primary-color); margin-bottom: 1rem;">Pesanan Berhasil Dibuat</h2>
+            <h2 style="font-family: 'Zen Old Mincho', serif; font-size: 2.20rem; color: var(--primary-color); margin-bottom: 1rem;">Pembayaran Berhasil!</h2>
             
             <!-- Red Japanese Seal Stamp visual -->
             <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-4 border border-danger border-opacity-25" style="border-radius: 3px; background-color: rgba(162, 56, 74, 0.03); border-color: rgba(162, 56, 74, 0.2) !important;">
@@ -157,11 +157,11 @@
             </div>
 
             <p class="text-muted mb-4" style="line-height: 1.7; font-size: 0.95rem;">
-                Terima kasih atas pesanan Anda. Kami telah merekam detail pembelian dengan nomor <strong class="text-dark">#{{ $order->order_number }}</strong>. Silakan selesaikan pembayaran untuk memproses barang kurasi Anda.
+                Terima kasih atas pembayaran Anda. Transaksi pembayaran untuk pesanan <strong class="text-dark">#{{ $order->order_number }}</strong> telah berhasil terkonfirmasi secara aman. Kami akan memproses pesanan Anda sesegera mungkin.
             </p>
             
             <button id="close-success-overlay" class="btn-minimal-accent px-5 py-3 w-100 fw-semibold" style="letter-spacing: 0.1em;">
-                LANJUTKAN KE PEMBAYARAN
+                TUTUP DAN LIHAT DETAIL
             </button>
         </div>
     </div>
@@ -493,7 +493,7 @@
     </script>
 @endif
 
-@if(session('success') && strpos(session('success'), 'berhasil dibuat') !== false)
+@if(session('success') && strpos(session('success'), 'berhasil dikonfirmasi') !== false)
     <script type="text/javascript" nonce="{{ app('csp-nonce') }}">
         document.addEventListener('DOMContentLoaded', function() {
             // Dismiss Overlay
